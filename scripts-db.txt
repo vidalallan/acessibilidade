@@ -1,0 +1,59 @@
+composer create-project laravel/laravel accessibility-issues
+
+dbaccessibilityissues
+
+create table tbDevice(
+    idDevice int primary key AUTO_INCREMENT,
+    device varchar(500),
+    deleted tinyint		
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+create table tbIssue(
+	idIssue int primary key AUTO_INCREMENT,
+	creationDate date,
+	deleted tinyint,
+	title varchar(255),
+	description varchar(5000),	
+	appTitle varchar(255),	
+	appFieldId varchar(500),
+	appFieldName varchar(500),	
+	printScreen varchar(2000),
+	idDevice int,
+	pattern varchar(255),
+	patternVersion varchar(255),
+	patternVersionDetailts varchar(5000),
+	devideModel varchar(500),
+	version varchar(255),	
+	linkApp varchar(1000),
+	origin varchar(500),	
+	userId bigint(20),        
+	FOREIGN KEY (idDevice) references tbDevice(idDevice)	
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+
+create table tbAssessment(
+	idAssessment int primary key auto_increment,
+	creationDate date,
+	deleted tinyint,
+	idIssue int,
+	problem tinyint,
+	justification varchar(5000),
+	userId bigint(20),
+	FOREIGN KEY (idIssue) references tbIssue(idIssue),
+	FOREIGN KEY (userId) references Users(id)
+);
+
+
+
+
+insert into tbdevice values (null, 'Android');
+insert into tbdevice values (null, 'iOS');
+
+insert into tbIssues values(null,'2023-01-08',0,'título do problema','descrição do problema','print',1,'versão','título do app','link do app');
+
+
+drop table tbassessment;
+drop table tbissue;
+drop table tbdevice;
+drop table tbPattern;
