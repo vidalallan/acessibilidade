@@ -35,6 +35,17 @@
   <!-- CSS Files -->
   <link id="pagestyle" href="../assets/css/material-dashboard.css?v=3.0.4" rel="stylesheet" />
 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+  <script>
+    $(document).ready(function(){
+      setTimeout(function(){
+        $(".alert").fadeOut("slow",function(){
+          $(this).alert('close');
+        });
+      },2000);
+    });    
+  </script>
   
 </head>
 
@@ -60,6 +71,14 @@
           </a>
         </li>
         <li class="nav-item">
+          <a class="nav-link text-white" href="/avaliacoes">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">note_add</i>
+            </div>
+            <span class="nav-link-text ms-1"> Avaliações </span>
+          </a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link text-white" href="/dispositivos">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               
@@ -69,6 +88,9 @@
             </div>
             <span class="nav-link-text ms-1">Dispositivos</span>
           </a>
+        </li>
+        <li class="nav-item mt-3">
+          <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Problemas</h6>
         </li>
         <li class="nav-item">
           <a class="nav-link text-white" href="/problemas-adicionar">
@@ -89,19 +111,19 @@
         <li class="nav-item">
           <a class="nav-link text-white" href="/problemas-avaliados">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10"> search </i>
+            </div>
+            <span class="nav-link-text ms-1"> Pesquisar Problemas </span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="/problemas-avaliados">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <i class="material-icons opacity-10"> quiz </i>
             </div>
             <span class="nav-link-text ms-1"> Problemas Avaliados </span>
           </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white" href="/avaliacoes">
-            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">note_add</i>
-            </div>
-            <span class="nav-link-text ms-1"> Avaliações </span>
-          </a>
-        </li>
+        </li>        
         
         <!--
         <li class="nav-item">
@@ -194,3 +216,7 @@
 </body>
 
 </html>
+
+<!--   Core JS Files   -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>

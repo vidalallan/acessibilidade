@@ -11,6 +11,13 @@
             </div>           
 
             <div class="card-body pt-4 pb-3">
+
+                @if(session('mensagemExclusao'))
+                  <div class="alert alert-danger">
+                      <p style="color:#fff;">{{session('mensagemExclusao')}}</p>
+                  </div>
+                @endif
+
               <h6 class="text-uppercase text-sm font-weight-bolder opacity-7">
                 Total de avaliações realizadas: {{App\Http\Controllers\AssessmentController::countAssessmentView()}} 
               </h6>
@@ -56,17 +63,53 @@
                       </td>
                       
                       <td>                     
-                        <a href="{{url('/problema-detalhado')}}/{{$a->idIssue}}" title="Mais detalhes sobre o problema" class="btn btn-info" style="padding: 5px 10px;">
+                        <a href="{{url('/problema-detalhado')}}/{{$a->issueId}}" title="Mais detalhes sobre o problema" class="btn btn-info" style="padding: 5px 10px;">
                           <p class="text-xs font-weight mb-0">
                             Detalhes
                           </p>                        
                         </a>                       
 
-                        <a href="/avaliacoes/{{$a->idAssessment}}" class="btn btn-danger btn-round" style="padding: 5px 10px;">
-                          <p class="text-xs font-weight-bold mb-0">
-                            <i class="material-icons opacity-10">close</i>                            
-                          </p>                        
-                        </a>                   
+                        <a href="/avaliacoes/{{$a->id}}" class="btn btn-danger btn-round" style="padding: 5px 10px;"
+                           data-toggle="modal" data-target="#exampleModal"
+                           onclick="setaDadosModal({{$a->id}},'{{$a->title}}')">
+
+                            <p class="text-xs font-weight-bold mb-0">
+                              <i class="material-icons opacity-10">close</i>                            
+                            </p>                        
+                        </a> 
+                        
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Atenção</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <p id="textoExclusao"></p>
+                              </div>
+                              <div class="modal-footer">                                                                                      
+                                <a href="" id="link-excluir" class="btn btn-danger"> Sim </a>
+                                <a href="#" class="btn bg-gradient-info" data-dismiss="modal"> Não </a>                                
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <script>
+                          function setaDadosModal(idProblema,titulo) {
+                              texto = document.getElementById('textoExclusao');                              
+                              texto.innerHTML = "Deseja realmente excluir a avaliação para a questão "+ titulo + "?";
+
+                              a = document.querySelector("#link-excluir");
+                              a.href = "/avaliacoes/"+idProblema;
+                          }
+                        </script>
+                        
+
                       </td>                      
                     </tr>
                     @endforeach

@@ -16,6 +16,7 @@
                     Home
                   </a>
                 </li>
+                <!--
                 <li class="nav-item">
                   <a class="nav-link me-2" href="/questions">                    
                     <i class="fa fa-question-circle-o opacity-6 text-dark me-1"></i>
@@ -26,8 +27,9 @@
                   <a class="nav-link me-2" href="/consultar-questoes">                    
                     <i class="fa fa-search opacity-6 text-dark me-1"></i>
                     Consultar Questões
-                  </a>
+                  </a>                
                 </li>
+                -->
                 <li class="nav-item">
                   <a class="nav-link me-2" href="/inscrever-usuario">                  
                   <i class="fa fa-user-plus opacity-6 text-dark me-1"></i>

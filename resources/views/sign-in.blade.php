@@ -40,11 +40,22 @@
                 </div>
               </div>
               <div class="card-body">
+
+                @if ($errors->any())
+                  <div class="alert alert-danger">
+                      <ul>
+                          @foreach ($errors->all() as $error)
+                              <li style="color:#fff;">{{ $error }}</li>
+                          @endforeach
+                      </ul>
+                  </div>
+                @endif
+
                 <form role="form" class="text-start" action="/login" method="post">
                   @csrf                  
                   <div class="input-group input-group-outline my-3">
-                    <label class="form-label">E-mail</label>
-                    <input type="email" name="email" class="form-control">
+                    <!-- <label class="form-label">E-mail</label> -->
+                    <input type="email" name="email" class="form-control" placeholder="E-mail">
                   </div>
                   <div class="input-group input-group-outline mb-3">
                     <!-- <label class="form-label">Senha</label> -->

@@ -33,10 +33,14 @@ Route::post('/padroes','App\Http\Controllers\PatternController@storeView')->midd
 Route::get('/padroes/{idPattern}','App\Http\Controllers\PatternController@destroyView')->middleware(Authenticate::class);
 
 Route::get('/problemas','App\Http\Controllers\IssueController@indexView')->middleware(Authenticate::class);
-Route::post('/problemas','App\Http\Controllers\IssueController@storeView')->middleware(Authenticate::class);
+
 Route::post('/problemas','App\Http\Controllers\IssueController@storeView')->middleware(Authenticate::class);
 Route::get('/problemas/{idIssue}','App\Http\Controllers\IssueController@destroyView')->middleware(Authenticate::class);
 Route::get('/problemas-avaliados','App\Http\Controllers\IssueController@indexAvaliacoesView')->middleware(Authenticate::class);
+Route::get('/query-filter','App\Http\Controllers\IssueController@queryFilter')->middleware(Authenticate::class);
+
+Route::get('/dashboard','App\Http\Controllers\IssueController@indexViewDashboard')->middleware(Authenticate::class);
+
 Route::get('/problemas-adicionar','App\Http\Controllers\IssueController@indexView2');
 
 Route::get('/avaliacoes','App\Http\Controllers\AssessmentController@indexView')->middleware(Authenticate::class);

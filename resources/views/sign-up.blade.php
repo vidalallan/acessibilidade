@@ -51,25 +51,58 @@
               </div>
             </div>
             <div class="col-xl-4 col-lg-5 col-md-7 d-flex flex-column ms-auto me-auto ms-lg-auto me-lg-5">
-              <div class="card card-plain">
+              <div class="card card-plain">                
                 <div class="card-header">
+
+                @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li style="color:#fff;">{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+
+                @if(session('mensagem'))
+                  <div class="alert alert-success">
+                      <p style="color:#fff;">{{session('mensagem')}}</p>
+                  </div>
+                @endif
+
+                <script>
+                  $(document).ready(function(){
+                    setTimeout(function(){
+                      $(".alert").fadeOut("slow",function(){
+                        $(this).alert('close');
+                      });
+                    },2000);	
+                  });
+                </script>
+                  
                   <h4 class="font-weight-bolder"> Crie sua conta </h4>
                   <p class="mb-0">Digite seu nome, e-mail e senha para se cadastrar.</p>
                 </div>
                 <div class="card-body">
                   <form role="form" action="criar-usuario" method="post">
                     @csrf
+
+                    <p class="mb-2 text-sm mx-auto" style="color:#fb8c00;">
+                      Campos com * são de preenchimento obrigatório.                      
+                    </p>
+
+                    <div class="input-group input-group-outline mb-3">                      
+                      <input type="text" name="name" class="form-control" placeholder=" * Nome" value="{{old('name')}}" />
+                    </div>
                     <div class="input-group input-group-outline mb-3">
-                      <!-- <label class="form-label">Nome</label> -->
-                      <input type="text" name="name" class="form-control" placeholder="Nome" />
+                      <input type="email" name="email" class="form-control" placeholder=" * E-mail" value="{{old('email')}}" />
                     </div>
                     <div class="input-group input-group-outline mb-3">                      
-                      <!-- <label class="form-label">E-mail</label> -->
-                      <input type="email" name="email" class="form-control" placeholder="E-mail" />
+                      <input type="password" name="password" class="form-control" placeholder=" * Senha" id="password" />
                     </div>
-                    <div class="input-group input-group-outline mb-3">
-                      <!-- <label class="form-label">Senha</label -->
-                      <input type="password" name="password" class="form-control" placeholder="Senha">
+
+                    <div class="input-group input-group-outline mb-3">                      
+                      <input type="password" name="confirm_password" class="form-control" placeholder=" *  Confirmar Senha" id="confirm_password" />
                     </div>
                     
                     <div class="text-center">
@@ -96,6 +129,23 @@
   <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
   <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
   <script>
+
+var password = document.getElementById("password")
+  , confirm_password = document.getElementById("confirm_password");
+
+function validatePassword(){
+  if(password.value != confirm_password.value) {
+    confirm_password.setCustomValidity("Senhas diferentes!");
+  } else {
+    confirm_password.setCustomValidity('');
+  }
+}
+
+password.onchange = validatePassword;
+confirm_password.onkeyup = validatePassword;
+
+
+
     var win = navigator.platform.indexOf('Win') > -1;
     if (win && document.querySelector('#sidenav-scrollbar')) {
       var options = {

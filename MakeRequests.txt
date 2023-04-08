@@ -1,0 +1,33 @@
+php artisan make:request UserFormRequest
+php artisan make:request DeviceFormRequest
+php artisan make:request LoginFormRequest
+php artisan make:request ProblemFormRequest
+
+--------------------------------------------------------------
+no método store e update 
+
+$request->validate([
+            'name' => ['required','min:2'],
+            'email' => ['required','email'],
+            'password' => ['required','min:6'],
+            'confirm_password' => ['required','min:6']
+        ]);
+
+-------------------------------------------------------------
+
+Na view para exibir as mensagens de erro das validações
+
+@if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+
+-------------------------------------------------------------
+
+
+

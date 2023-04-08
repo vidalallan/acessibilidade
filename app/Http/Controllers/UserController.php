@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\UserFormRequest;
 
 
 class UserController extends Controller
@@ -54,6 +55,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+     
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
@@ -62,8 +64,10 @@ class UserController extends Controller
         $user ->save();
     }
 
-    public function storeView(Request $request)
+    public function storeView(UserFormRequest $request)
     {
+       
+
         $data = $request->except(['_token']);
         $data['password'] = Hash::make($data['password']);
         $data['deleted'] = 0;
@@ -72,7 +76,7 @@ class UserController extends Controller
 
         Auth::login($user);
 
-        return redirect('/dashboard');
+        return redirect('/dashboard')->with('mensagem', 'Usuário adicionado com sucesso!');;
     }
 
     /**
@@ -124,7 +128,7 @@ class UserController extends Controller
     public function destroyView($id)
     {
         User::where('id', $id)->update(['deleted' => 1]);        
-        return redirect('/usuarios'); 
+        return redirect('/usuarios')->with('mensagemExclusao', 'Usuário removido com sucesso!'); 
     }
 
 }

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Http\Requests\LoginFormRequest;
 
 class LoginController extends Controller
 {
@@ -49,7 +50,7 @@ class LoginController extends Controller
             'code'=>200]]);
     }    
 
-    public function loginView(Request $request){
+    public function loginView(LoginFormRequest $request){
         if(!Auth::attempt($request->only(['email','password']))){
             //return redirect()->back()->withErrors(['Usuário e/ou senha inválidos']);            
             return redirect('/login');

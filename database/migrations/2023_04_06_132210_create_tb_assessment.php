@@ -18,8 +18,9 @@ return new class extends Migration
             $table->date('creationDate');
             $table->tinyInteger('deleted');
             $table->unsignedBigInteger('issueId'); 
-            $table->tinyInteger('problem');            
-            $table->string('justification');                                  
+            $table->tinyInteger('problem')->nullable();            
+            $table->string('justification')->nullable();                                  
+            $table->string('severity')->nullable();
             $table->unsignedBigInteger('userId'); 
             $table->foreign('issueId')->references('id')->on('tbIssue');                                             
             $table->foreign('userId')->references('id')->on('users');

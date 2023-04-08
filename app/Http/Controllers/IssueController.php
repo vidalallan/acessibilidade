@@ -3,13 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Models\Issue;
 use App\Models\Device;
-//use App\Models\Pattern;
 use App\Models\Assessment;
 use App\Models\User;
-
+use App\Http\Requests\ProblemFormRequest;
 use Illuminate\Support\Facades\DB;
 
 class IssueController extends Controller
@@ -42,7 +40,7 @@ class IssueController extends Controller
 
     public function indexAvaliacoesView(){         
         
-        $sql = 'SELECT i.id, i.title, i.idDevice, d.device,i.appTitle, 
+        $sql = 'SELECT i.id, i.title, i.idDevice, d.device,i.appTitle,i.pattern, 
         SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", 
         SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no",         
         count(i.id) "total"
@@ -51,8 +49,92 @@ class IssueController extends Controller
         on a.issueId = i.id 
         inner join tbDevice d 
         on i.idDevice = d.idDevice         
-        where i.deleted=0
+        where i.deleted=0 and
+        a.deleted=0 
         group by a.issueId';        
+        
+        $issues = DB::select($sql);   
+       
+        return view('panel.problemas-avaliados', compact('issues'));
+    }
+
+    public function indexViewDashboard(){         
+        
+        $sql = 'SELECT i.id, i.title, i.idDevice, d.device,i.appTitle,i.pattern, 
+        SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", 
+        SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no",         
+        count(i.id) "total"
+        from tbassessment a 
+        inner join tbissue i 
+        on a.issueId = i.id 
+        inner join tbDevice d 
+        on i.idDevice = d.idDevice         
+        where i.deleted=0 and
+        a.deleted=0 
+        group by a.issueId
+        order by count(i.id) desc
+        limit 10';        
+        
+        $issues = DB::select($sql);
+        
+        $sqlApp = 'SELECT i.id, i.title, i.idDevice, d.device,i.appTitle,i.pattern, 
+        SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", 
+        SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no",         
+        count(i.appTitle) "total"
+        from tbassessment a 
+        inner join tbissue i 
+        on a.issueId = i.id 
+        inner join tbDevice d 
+        on i.idDevice = d.idDevice         
+        where i.deleted=0 and
+        a.deleted=0 
+        group by i.appTitle
+        order by count(i.appTitle) desc
+        limit 10';        
+        
+        $issuesApp = DB::select($sqlApp);
+       
+        return view('panel.dashboard', compact('issues','issuesApp'));
+    }
+
+    
+
+    public function queryFilter(Request $request){
+        //dd($request->searchBy . " " . $request->searchField);
+
+        $filter = '';
+        if($request->searchBy == 0){
+            $filter = ''; 
+        }
+        elseif($request->searchBy == 1){
+            $filter = ' and i.title =' . "'$request->searchField'";            
+        }
+        elseif($request->searchBy == 2){            
+            $filter = ' and d.device =' . "'$request->searchField'";            
+        }
+        elseif($request->searchBy == 3){            
+            $filter = ' and i.appTitle =' . "'$request->searchField'";            
+        }
+        elseif($request->searchBy == 4){            
+            $filter = ' and i.pattern =' . "'$request->searchField'";            
+        }
+
+
+
+        $sql = 'SELECT i.id, i.title, i.idDevice, d.device,i.appTitle,i.pattern, 
+        SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", 
+        SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no",         
+        count(i.id) "total"
+        from tbassessment a 
+        inner join tbissue i 
+        on a.issueId = i.id 
+        inner join tbDevice d 
+        on i.idDevice = d.idDevice         
+        where i.deleted=0 ' .
+        $filter .
+        ' group by a.issueId';        
+
+        //dd($sql);
         
         $issues = DB::select($sql);   
        
@@ -114,7 +196,7 @@ class IssueController extends Controller
 
         $assessments = Assessment::where('issueId','=',$idIssue)->get();
 
-        $sql = 'SELECT i.id, i.title, i.idDevice, d.device, ';
+        $sql = 'SELECT i.id, i.title, i.idDevice, d.device,a.severity, ';
         $sql .= 'SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", ';
         $sql .= 'SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no", ';        
         $sql .= 'count(i.id) "total" ';
@@ -205,7 +287,7 @@ class IssueController extends Controller
     }
 
 
-    public function storeView(Request $request)
+    public function storeView(ProblemFormRequest $request)
     {
         $issue = new Issue();
         
@@ -215,7 +297,6 @@ class IssueController extends Controller
         $issue -> description = $request-> description;
         $issue -> appFieldId = $request->appFieldId;
         $issue -> appFieldName = $request->appFieldName;
-
         
         $image = $request->file('printScreen');
 
@@ -223,9 +304,7 @@ class IssueController extends Controller
             $path = "";
         }else{
             $path = $image->store('images','public');
-        }
-
-        
+        }        
 
         //php artisan storage:link
         //$path ="imagem";
@@ -247,7 +326,7 @@ class IssueController extends Controller
 
         $issue ->save();
 
-        return redirect('/questions');
+        return redirect('/questions')->with('mensagem', 'Problema adicionado com sucesso!');
     }
 
     /**
@@ -298,6 +377,6 @@ class IssueController extends Controller
     public function destroyView($idIssue)
     {
         Issue::where('id', $idIssue)->update(['deleted' => 1]);        
-        return redirect('/problemas'); 
+        return redirect('/problemas')->with('mensagemExclusao', 'Problema removido com sucesso!'); 
     }
 }

@@ -13,7 +13,15 @@
             <div class="card-body pt-4 pb-3">
 
             <div class="row">
-                <div class="col-sm">
+
+                  @if(session('mensagemExclusao'))
+                    <div class="alert alert-danger">
+                        <p style="color:#fff;">{{session('mensagemExclusao')}}</p>
+                    </div>
+                  @endif
+
+                <div class="col-sm">                  
+                  
                   <h6 class="text-uppercase text-sm font-weight-bolder opacity-7">
                     Total de problemas cadastrados: {{App\Http\Controllers\IssueController::countIssueView()}} 
                   </h6>               
@@ -61,25 +69,53 @@
                         </a>                                                 
 
                         <a href="{{url('/problema-detalhado')}}/{{$issue->id}}#evaluation" class="btn btn btn-warning btn-round" title="Avaliar o problema" style="padding: 3px 10px;">
-                          <i class="material-icons opacity-10">note_add</i>  
-                          <!--
-                          <p class="text-xs font-weight mb-0">
-                            Avaliar
-                          </p>
-                          -->                        
+                          <i class="material-icons opacity-10">note_add</i>                                                   
                         </a>
 
                         <a href="/problemas/{{$issue->id}}" class="btn btn-success btn-round" title="Editar o problema" style="padding: 5px 10px;">
-                            <p class="text-xs font-weight-bold mb-0">
-                              <i class="material-icons opacity-10">edit</i>                            
-                            </p>                        
-                          </a>                        
+                          <p class="text-xs font-weight-bold mb-0">
+                            <i class="material-icons opacity-10">edit</i>                            
+                          </p>                        
+                        </a>                        
 
-                          <a href="/problemas/{{$issue->id}}" class="btn btn-danger btn-round" title="Excluir o problema" style="padding: 5px 10px;">
-                            <p class="text-xs font-weight-bold mb-0">
-                              <i class="material-icons opacity-10">close</i>                            
-                            </p>                        
-                          </a>
+                        <a href="/problemas/{{$issue->id}}" class="btn btn-danger btn-round" title="Excluir o problema" style="padding: 5px 10px;"
+                        data-toggle="modal" data-target="#exampleModal"
+                        onclick="setaDadosModal({{$issue->id}},'{{$issue->title}}')">
+                          <p class="text-xs font-weight-bold mb-0">
+                            <i class="material-icons opacity-10">close</i>                            
+                          </p>                        
+                        </a>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Atenção</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <p id="textoExclusao"></p>
+                              </div>
+                              <div class="modal-footer">                                                                                      
+                                <a href="" id="link-excluir" class="btn btn-danger"> Sim </a>
+                                <a href="#" class="btn bg-gradient-info" data-dismiss="modal"> Não </a>                                
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <script>
+                          function setaDadosModal(idProblema,problema) {
+                              texto = document.getElementById('textoExclusao');                              
+                              texto.innerHTML = "Deseja realmente excluir o problema "+ problema + "?";
+
+                              a = document.querySelector("#link-excluir");
+                              a.href = "/problemas/"+idProblema;
+                          }
+                        </script>
 
                       </td>                      
                     </tr>

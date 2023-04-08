@@ -16,7 +16,7 @@ class AssessmentController extends Controller
     public function index()
     {
 
-        $sql = "select a.*,i.title from tbassessment a inner join tbissue i on a.issueId = i.id where a.deleted=0";
+        $sql = "select a.*,i.title,i.pattern from tbassessment a inner join tbissue i on a.issueId = i.id where a.deleted=0";
         $assessment = DB::select($sql);    
         
         return $assessment;
@@ -44,6 +44,7 @@ class AssessmentController extends Controller
 	    $assessment -> issueId = $request -> idIssue;
 	    $assessment -> problem = $request -> problem;
 	    $assessment -> justification = $request -> justification;
+        $assessment -> severity = $request -> severity;
         $assessment -> userId = auth()->user()->id;
         $assessment -> save();        
     }
@@ -55,6 +56,7 @@ class AssessmentController extends Controller
 	    $assessment -> issueId = $request -> idIssue;
 	    $assessment -> problem = $request -> problem;
 	    $assessment -> justification = $request -> justification;
+        $assessment -> severity = $request -> severity;
         $assessment -> userId = auth()->user()->id;
 
         $assessment -> save();
@@ -62,7 +64,7 @@ class AssessmentController extends Controller
         $issues = Issue::all();        
         
         
-        return redirect("/problema-detalhado/".$request->idIssue);         
+        return redirect("/problema-detalhado/".$request->idIssue); 
     }
 
     public function queryAssessmentEvaluation($idIssue){
@@ -91,7 +93,7 @@ class AssessmentController extends Controller
 
     public function countYesNoIdIssue(){        
 
-        $sql = 'SELECT i.id, i.title, i.idDevice, d.device,';
+        $sql = 'SELECT i.id, i.title, i.idDevice, d.device, i.pattern,';
         $sql .= 'SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", ';
         $sql .= 'SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no", ';
         $sql .= 'count(i.id) "total"';
@@ -109,7 +111,7 @@ class AssessmentController extends Controller
 
     public function countYesNoIdIssueView(){        
 
-        $sql = 'SELECT i.id, i.title, i.idDevice, d.device,';
+        $sql = 'SELECT i.id, i.title, i.idDevice, d.device, i.pattern,';
         $sql .= 'SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", ';
         $sql .= 'SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no", ';
         $sql .= 'count(i.id) "total" ';
@@ -128,7 +130,7 @@ class AssessmentController extends Controller
 
     public function countYesNoByIdIssue(Request $request){        
 
-        $sql = 'SELECT i.id, i.title, i.idDevice, d.device, ';
+        $sql = 'SELECT i.id, i.title, i.idDevice, d.device, i.pattern, ';
         $sql .= 'SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", ';
         $sql .= 'SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no", ';        
         $sql .= 'count(i.id) "total" ';
@@ -148,7 +150,7 @@ class AssessmentController extends Controller
 
     public function countYesNoByIdDevice(Request $request){        
 
-        $sql = 'SELECT i.id, i.title, i.idDevice, d.device, ';
+        $sql = 'SELECT i.id, i.title, i.idDevice, d.device, i.pattern, ';
         $sql .= 'SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", ';
         $sql .= 'SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no", ';        
         $sql .= 'count(i.id) "total" ';
@@ -167,7 +169,7 @@ class AssessmentController extends Controller
 
     public function countYesNoByDevice(Request $request){        
 
-        $sql = 'SELECT i.id, i.title, i.idDevice, d.device, ';
+        $sql = 'SELECT i.id, i.title, i.idDevice, d.device, i.pattern, ';
         $sql .= 'SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", ';
         $sql .= 'SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no", ';        
         $sql .= 'count(i.id) "total"';
@@ -186,7 +188,7 @@ class AssessmentController extends Controller
 
     public function countYesNoByDeviceModel(Request $request){        
 
-        $sql = 'SELECT i.id, i.title, i.idDevice, d.device, i.devideModel, ';
+        $sql = 'SELECT i.id, i.title, i.idDevice, d.device, i.devideModel, i.pattern, ';
         $sql .= 'SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", ';
         $sql .= 'SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no", ';        
         $sql .= 'count(i.id) "total" ';
@@ -205,8 +207,8 @@ class AssessmentController extends Controller
 
     public function destroyView($idAssessment)
     {
-        Assessment::where('idAssessment', $idAssessment)->update(['deleted' => 1]);        
-        return redirect('/avaliacoes'); 
+        Assessment::where('id', $idAssessment)->update(['deleted' => 1]);        
+        return redirect('/avaliacoes')->with('mensagemExclusao', 'Avaliação removida com sucesso!'); 
     }
 
 }

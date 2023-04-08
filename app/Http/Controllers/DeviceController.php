@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Device;
+use App\Http\Requests\DeviceFormRequest;
 
 class DeviceController extends Controller
 {
@@ -52,7 +53,7 @@ class DeviceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(DeviceFormRequest $request)
     {
         $device = new Device();
         $device->device = $request->device;
@@ -62,14 +63,14 @@ class DeviceController extends Controller
         
     }
 
-    public function storeView(Request $request){
+    public function storeView(DeviceFormRequest $request){
 
         $device = new Device();
         $device->device = $request->device;
         $device->deleted = 0;
         $device ->save();
 
-        return redirect('/dispositivos');
+        return redirect('/dispositivos')->with('mensagem', 'Dispositivo adicionado com sucesso!');
 
     }
 
@@ -141,6 +142,6 @@ class DeviceController extends Controller
     public function destroyView($idDevice)
     {
         Device::where('idDevice', $idDevice)->update(['deleted' => 1]);        
-        return redirect('/dispositivos'); 
+        return redirect('/dispositivos')->with('mensagemExclusao', 'Dispositivo removido com sucesso!'); 
     }
 }

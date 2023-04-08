@@ -2895,14 +2895,15 @@ textarea.form-control-lg {
   line-height: 1.5rem;
   color: #495057;
   background-color: transparent;
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='15 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
   background-repeat: no-repeat;
   background-position: right 0 center;
-  background-size: 16px 12px;
+  background-size: 40px 12px;
   border: 1px solid #d2d6da;
   border-radius: 0.375rem;
   transition: 0.2s ease;
   appearance: none;
+  padding-right: 40px;
 }
 
 @media (prefers-reduced-motion: reduce) {

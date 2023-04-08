@@ -15,7 +15,7 @@
             <div class="card-body pt-4 pb-3">  
               
 
-               @foreach($issues as $issue)
+            @foreach($issues as $issue)
             <div class="container">
               <div class="row">
                 <div class="col-sm" style="background:#f0f2f5;">
@@ -158,6 +158,10 @@
                             <textarea class="form-control" placeholder="Justificar opção escolhida" name="justification" style="height:100px"></textarea>  
                           </div>
 
+                          <div class="input-group input-group-outline my-3">                    
+                            <input type="text" class="form-control" name="severity" placeholder="Nível de criticidade">
+                          </div>
+
                           <div class="d-flex justify-content-end mb-3">                        
                               <button type="submit" class="btn bg-gradient-info"> Avaliar </button>                            
                           </div>
@@ -238,6 +242,7 @@
                       <tr>
                         <th class="text-uppercase text-sm font-weight-bolder opacity-7">É um problema de acessibilidade?</th>
                         <th class="text-uppercase text-sm font-weight-bolder opacity-7 ps-2"> Justificativa </th>                      
+                        <th class="text-uppercase text-sm font-weight-bolder opacity-7 ps-2"> Criticidade </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -258,6 +263,13 @@
                             -
                             @else
                               {{$a->justification}}  
+                            @endif                                                    
+                        </td>
+                        <td>
+                          @if($a->severity == null)
+                            -
+                            @else
+                              {{$a->severity}}  
                             @endif                                                    
                         </td>
                       </tr>

@@ -11,6 +11,13 @@
             </div>           
 
             <div class="card-body pt-4 pb-3">
+
+              @if(session('mensagemExclusao'))
+                <div class="alert alert-danger">
+                    <p style="color:#fff;">{{session('mensagemExclusao')}}</p>
+                </div>
+              @endif
+
               <h6 class="text-uppercase text-sm font-weight-bolder opacity-7">
                 Total de Usuários cadastrados: {{App\Http\Controllers\UserController::countUserView()}} 
               </h6>
@@ -56,11 +63,46 @@
                           </p>                        
                         </a>                        
 
-                        <a href="/usuarios/{{$user->id}}" class="btn btn-danger btn-round" style="padding: 5px 10px;">
-                          <p class="text-xs font-weight-bold mb-0">
-                            <i class="material-icons opacity-10">close</i>                            
-                          </p>                        
-                        </a>                        
+                        <a href="/usuarios/{{$user->id}}" class="btn btn-danger btn-round" style="padding: 5px 10px;"
+                           data-toggle="modal" data-target="#exampleModal"
+                           onclick="setaDadosModal({{$user->id}},'{{$user->name}}')">
+
+                            <p class="text-xs font-weight-bold mb-0">
+                              <i class="material-icons opacity-10">close</i>                            
+                            </p>                        
+                        </a> 
+                        
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Atenção</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <p id="textoExclusao"></p>
+                              </div>
+                              <div class="modal-footer">                                                                                      
+                                <a href="" id="link-excluir" class="btn btn-danger"> Sim </a>
+                                <a href="#" class="btn bg-gradient-info" data-dismiss="modal"> Não </a>                                
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <script>
+                          function setaDadosModal(idUsuario,usuario) {
+                              texto = document.getElementById('textoExclusao');                              
+                              texto.innerHTML = "Deseja realmente excluir o usuário "+ usuario + "?";
+
+                              a = document.querySelector("#link-excluir");
+                              a.href = "/usuarios/"+idUsuario;
+                          }
+                        </script>
+
                       </td>                      
                     </tr>
                     @endforeach

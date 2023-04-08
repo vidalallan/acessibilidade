@@ -1,0 +1,61 @@
+@if(session('mensagem'))
+                  <div class="alert alert-success">
+                      <p style="color:#fff;">{{session('mensagem')}}</p>
+                  </div>
+                @endif 
+
+
+->with('mensagem', 'Dispositivo adicionado com sucesso com sucesso!');
+
+
+
+-------------------------------------
+
+
+EXCLUSÃO
+
+data-toggle="modal" data-target="#exampleModal"
+onclick="setaDadosModal({{$device->idDevice}},'{{$device->device}}')"
+
+
+->with('mensagemExclusao', 'Problema removido com sucesso!');
+
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Atenção</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <p id="textoExclusao"></p>
+                              </div>
+                              <div class="modal-footer">                                                                                      
+                                <a href="" id="link-excluir" class="btn btn-danger"> Sim </a>
+                                <a href="#" class="btn bg-gradient-info" data-dismiss="modal"> Não </a>                                
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <script>
+                          function setaDadosModal(idDispositivo,dispositivo) {
+                              texto = document.getElementById('textoExclusao');                              
+                              texto.innerHTML = "Deseja realmente excluir o dispositivo "+ dispositivo + "?";
+
+                              a = document.querySelector("#link-excluir");
+                              a.href = "/dispositivos/"+idDispositivo;
+                          }
+                        </script>
+
+
+
+@if(session('mensagemExclusao'))
+                  <div class="alert alert-danger">
+                      <p style="color:#fff;">{{session('mensagemExclusao')}}</p>
+                  </div>
+                @endif

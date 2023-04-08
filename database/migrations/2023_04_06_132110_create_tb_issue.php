@@ -13,30 +13,28 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tbIssue', function (Blueprint $table) {
-            
+        Schema::create('tbIssue', function (Blueprint $table) {            
             $table->id();            
             $table->date('creationDate');
             $table->tinyInteger('deleted');
-            $table->string('title'); 
-            $table->string('description',2000);
-            $table->string('appTitle');
-            $table->string('appFieldId');
-            $table->string('appFieldName');
-            $table->string('printScreen',2000);
+            $table->string('title')->nullable(); 
+            $table->string('description',2000)->nullable();
+            $table->string('appTitle')->nullable();
+            $table->string('appFieldId')->nullable();
+            $table->string('appFieldName')->nullable();
+            $table->string('printScreen',2000)->nullable();
             $table->integer('idDevice');
-            $table->string('pattern');
-            $table->string('patternVersion');
-            $table->string('patternVersionDetailts',2000);
-            $table->string('devideModel');
-            $table->string('version');
-            $table->string('linkApp',2000);
-            $table->string('origin');  
+            $table->string('pattern')->nullable();
+            $table->string('patternVersion')->nullable();
+            $table->string('patternVersionDetailts',2000)->nullable();
+            $table->string('devideModel')->nullable();
+            $table->string('version')->nullable();
+            $table->string('linkApp',2000)->nullable();
+            $table->string('origin')->nullable();  
             $table->unsignedBigInteger('userId');          
             $table->foreign('idDevice')->references('idDevice')->on('tbDevice');
             $table->foreign('userId')->references('id')->on('users');
             $table->timestamps();
-
         });
     }
 
