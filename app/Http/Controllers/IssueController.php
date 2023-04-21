@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Issue;
 use App\Models\Device;
 use App\Models\Assessment;
+use App\Models\Pattern;
 use App\Models\User;
+use App\Models\Problem;
 use App\Http\Requests\ProblemFormRequest;
 use Illuminate\Support\Facades\DB;
 
@@ -26,9 +28,9 @@ class IssueController extends Controller
     public function indexView(){
 
         $sql = 'select * from tbIssue i 
-        inner join tbdevice d
+        inner join tbDevice d
         on i.idDevice = d.idDevice        
-        where i.deleted=0';
+        where i.deleted=0 order by creationDate desc';
        
         $issues = DB::select($sql);
         
@@ -40,18 +42,19 @@ class IssueController extends Controller
 
     public function indexAvaliacoesView(){         
         
-        $sql = 'SELECT i.id, i.title, i.idDevice, d.device,i.appTitle,i.pattern, 
+        $sql = 'SELECT i.id, i.title, i.idDevice, d.device,i.appTitle,i.pattern,i.creationDate, 
         SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", 
         SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no",         
         count(i.id) "total"
-        from tbassessment a 
-        inner join tbissue i 
+        from tbAssessment a 
+        inner join tbIssue i 
         on a.issueId = i.id 
         inner join tbDevice d 
         on i.idDevice = d.idDevice         
         where i.deleted=0 and
         a.deleted=0 
-        group by a.issueId';        
+        group by a.issueId 
+        order by i.creationDate desc';        
         
         $issues = DB::select($sql);   
        
@@ -64,8 +67,8 @@ class IssueController extends Controller
         SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", 
         SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no",         
         count(i.id) "total"
-        from tbassessment a 
-        inner join tbissue i 
+        from tbAssessment a 
+        inner join tbIssue i 
         on a.issueId = i.id 
         inner join tbDevice d 
         on i.idDevice = d.idDevice         
@@ -81,8 +84,8 @@ class IssueController extends Controller
         SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", 
         SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no",         
         count(i.appTitle) "total"
-        from tbassessment a 
-        inner join tbissue i 
+        from tbAssessment a 
+        inner join tbIssue i 
         on a.issueId = i.id 
         inner join tbDevice d 
         on i.idDevice = d.idDevice         
@@ -99,8 +102,7 @@ class IssueController extends Controller
 
     
 
-    public function queryFilter(Request $request){
-        //dd($request->searchBy . " " . $request->searchField);
+    public function queryFilter(Request $request){       
 
         $filter = '';
         if($request->searchBy == 0){
@@ -119,9 +121,7 @@ class IssueController extends Controller
             $filter = ' and i.pattern =' . "'$request->searchField'";            
         }
 
-
-
-        $sql = 'SELECT i.id, i.title, i.idDevice, d.device,i.appTitle,i.pattern, 
+        $sql = 'SELECT i.id, i.title,i.creationDate, i.idDevice, d.device,i.appTitle,i.pattern, 
         SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", 
         SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no",         
         count(i.id) "total"
@@ -130,7 +130,7 @@ class IssueController extends Controller
         on a.issueId = i.id 
         inner join tbDevice d 
         on i.idDevice = d.idDevice         
-        where i.deleted=0 ' .
+        where i.deleted=0 and a.deleted=0 ' .
         $filter .
         ' group by a.issueId';        
 
@@ -143,8 +143,10 @@ class IssueController extends Controller
 
     public function indexView2(){
         $issues = $this->index();
-        $devices = Device::where('deleted','=',0)->get();                
-        return view('panel.problemas-adicionar', compact('issues', 'devices'));        
+        $devices = Device::where('deleted','=',0)->get();  
+        $patterns = Pattern::where('deleted','=',0)->get(); 
+        $problems = Problem::where('deleted','=',0)->orderBy('problem')->get();    
+        return view('panel.problemas-adicionar', compact('issues', 'devices','patterns','problems'));        
     }
 
     public function queryQuestionsWithOutParameter(){
@@ -188,7 +190,7 @@ class IssueController extends Controller
 
     public function queryQuestionsPanelbyParameter($idIssue){
         $sql = "select * from tbIssue i 
-        inner join tbdevice d
+        inner join tbDevice d
         on i.idDevice = d.idDevice                
         where i.deleted=0 and i.id=$idIssue";
        
@@ -200,8 +202,8 @@ class IssueController extends Controller
         $sql .= 'SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", ';
         $sql .= 'SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no", ';        
         $sql .= 'count(i.id) "total" ';
-        $sql .= 'from tbassessment a ';
-        $sql .= 'inner join tbissue i ';
+        $sql .= 'from tbAssessment a ';
+        $sql .= 'inner join tbIssue i ';
         $sql .= 'on a.issueId = i.id ';
         $sql .= 'inner join tbDevice d ';
         $sql .= 'on i.idDevice = d.idDevice ';
@@ -320,6 +322,16 @@ class IssueController extends Controller
         $issue -> version = $request-> version;
         $issue -> appTitle = $request-> appTitle;
         $issue -> linkApp = $request-> linkApp;
+        
+        $issue -> problemId = $request->problemId;
+        $issue -> patternId = $request->patternId;
+        
+        $issue -> tool_problem = $request-> tool_problem;
+        $issue -> tool_problem_version = $request-> tool_problem_version;
+        $issue -> flow_identify_problem = $request-> flow_identify_problem;
+        $issue -> assistive_technology_tool = $request-> assistive_technology_tool;
+        $issue -> tool_assistive = $request-> tool_assistive;
+        $issue -> tool_assistive_version = $request-> tool_assistive_version;        
 
         $issue -> origin = "web";
         $issue -> userId = auth()->user()->id;        

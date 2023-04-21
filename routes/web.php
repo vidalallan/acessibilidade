@@ -21,10 +21,12 @@ Route::get('/dashboard', function () {
     return view('panel.dashboard');
 })->middleware(Authenticate::class);
 
+Route::get('dispositivos/{idDevice}/editar','App\Http\Controllers\DeviceController@edit')->middleware(Authenticate::class);
 Route::get('/dispositivos','App\Http\Controllers\DeviceController@indexView')->middleware(Authenticate::class);
 Route::post('/dispositivos','App\Http\Controllers\DeviceController@storeView')->middleware(Authenticate::class);
 Route::get('/dispositivos/{idDevice}','App\Http\Controllers\DeviceController@destroyView')->middleware(Authenticate::class);
 
+Route::get('/usuarios/{id}/editar','App\Http\Controllers\UserController@edit')->middleware(Authenticate::class);
 Route::get('/usuarios','App\Http\Controllers\UserController@indexView')->middleware(Authenticate::class);
 Route::get('/usuarios/{id}','App\Http\Controllers\UserController@destroyView')->middleware(Authenticate::class);
 

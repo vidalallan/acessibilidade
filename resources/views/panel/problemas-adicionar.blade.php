@@ -36,16 +36,66 @@
               Campos com * são de preenchimento obrigatório.                      
             </p>
 
-            <div class="input-group input-group-outline my-3">                    
+            <div class="input-group input-group-outline my-3 form-control">                                                  
+              <select class="form-select form-select-lg" name="problemId" style="border: 1px solid #d2d6da;border-radius: 0.375rem;padding-left: 10px;">
+                <option value="0"> Escolha uma das opções para o título do problema </option>                
+                @foreach($problems as $problem)                                    
+                  <option value="{{$problem->id}}" @if(old('id')==$problem->id) {{'selected'}} @endif > {{$problem->problem}} </option>                                        
+                @endforeach                        
+              </select>
+            </div>
+
+
+            <script>
+
+              function cadastrarInstituicaoX() {
+                  var instituicao = document.getElementById("instituicao").value;
+
+                  if (instituicao === 'novaInstituicao') {
+                      
+                      
+                      document.getElementById("titleId").style.display = "flex";
+                      document.getElementById("descrTitleId").style.display = "flex";
+                  } else {
+                      
+                      
+                      document.getElementById("titleId").style.display = "none";
+                      document.getElementById("descrTitleId").style.display = "none";
+                  }
+              }
+
+            </script>
+
+            <label for="instituicao">A unidade pertence a qual instituição?</label>
+            <select name="instituicao" id="instituicao" onchange="cadastrarInstituicaoX()">
+                <option value="1">Instituição 1</option>
+                <option value="2">Instituição 2</option>
+                <option value="3">Instituição 3</option>
+                <option id="novaInstituicao" value="novaInstituicao">Instituição não encontrada</option>
+            </select><br>
+
+            
+
+            <div class="input-group input-group-outline my-3" id="titleId" style="display: none;">                    
               <input type="text" class="form-control" name="title" placeholder=" * Título do problema" value="{{old('title')}}">
             </div>
 
-            <div class="input-group input-group-outline my-3">                    
+            <div class="input-group input-group-outline my-3" id="descrTitleId" style="display: none;">                    
               <input type="text" class="form-control" name="description" placeholder="Descrição do problema" value="{{old('description')}}">
             </div>
 
             <div class="input-group input-group-outline my-3">                    
-              <input type="text" class="form-control" name="pattern" placeholder="Padrão" value="{{old('pattern')}}">              
+              <!-- Padrão de acessibilidade -->
+              <input type="text" class="form-control" name="pattern" placeholder="Guia de acessibilidade " value="{{old('pattern')}}">              
+            </div>
+
+            <div class="input-group input-group-outline my-3 form-control">                                                  
+              <select class="form-select form-select-lg" name="patternId" style="border: 1px solid #d2d6da;border-radius: 0.375rem;padding-left: 10px;">
+                <option value="0"> Escolha um Guia de acessibilidade </option>                
+                @foreach($patterns as $pattern)                                    
+                  <option value="{{$pattern->id}}" @if(old('id')==$pattern->id) {{'selected'}} @endif > {{$pattern->pattern}} </option>                                        
+                @endforeach                        
+              </select>
             </div>
 
             <div class="input-group input-group-outline my-3">                    
@@ -66,7 +116,11 @@
 
             <div class="input-group input-group-outline my-3">                    
               <input type="text" class="form-control" name="appFieldName" placeholder="Nome do Campo do Aplicativo" value="{{old('appFieldName')}}">
-            </div>           
+            </div>  
+            
+            <div class="input-group input-group-outline my-3">                    
+              <input type="text" class="form-control" name="linkApp"  placeholder="Link do Aplicativo" value="{{old('linkApp')}}">
+            </div>
             
             <div class="input-group input-group-outline my-3">                                    
               <!-- <input type="file" title="Print da Tela do Aplicativo" name="printScreen" class="form-control inputFileHidden" id="" />-->
@@ -124,10 +178,41 @@
                 }
               </script>
 
-            </div>              
+            </div>           
+            
+            <div class="input-group input-group-outline my-3">                    
+              <input type="text" class="form-control" name="tool_problem" placeholder="Ferramenta que identificou o problema" value="{{old('tool_problem')}}">
+            </div>
+
+            <div class="input-group input-group-outline my-3">                    
+              <input type="text" class="form-control" name="tool_problem_version" placeholder="Versão da Ferramenta que identificou o problema" value="{{old('tool_problem_version')}}">
+            </div>
+
+            <div class="input-group input-group-outline my-3">                    
+              <input type="text" class="form-control" name="flow_identify_problem" placeholder="Descreva o fluxo utilizado para encontrar o problema" value="{{old('flow_identify_problem')}}">
+            </div>
+
+            <div class="input-group input-group-outline my-3" style="border: 1px solid #d2d6da;border-radius: 0.375rem;padding-left: 10px;">                                  
+              <fieldset class="input-group input-group-outline my-3">             
+              <label> Utilizou alguma ferramenta de tecnologia assistiva? </label>                 
+                  <legend style="font-size: 1rem;">
+                    <input type="radio" name="assistive_technology_tool" value="0" checked /> <span style="color:#000;"> NÃO </span>
+                    <input type="radio" name="assistive_technology_tool" value="1" style="margin-left:20px;" /> <span style="color:#000;"> SIM </span>
+                  </legend>
+              </fieldset>
+            </div>
+
+            <div class="input-group input-group-outline my-3">                    
+              <input type="text" class="form-control" name="tool_assistive" placeholder="Ferramenta de tecnologia assistiva" value="{{old('tool_assistive')}}">
+            </div>
+
+            <div class="input-group input-group-outline my-3">                    
+              <input type="text" class="form-control" name="tool_assistive_version" placeholder="Versão da ferramenta de tecnologia assistiva" value="{{old('tool_assistive_version')}}">
+            </div>
+            
             
             <div class="input-group input-group-outline my-3 form-control">                                                  
-              <select class="form-select form-select-lg" name="idDevice">
+              <select class="form-select form-select-lg" name="idDevice" style="border: 1px solid #d2d6da;border-radius: 0.375rem;padding-left: 10px;">
                 <option value="0"> Escolha um dispositivo </option>
                 @foreach($devices as $device)                                    
                   <option value="{{$device->idDevice}}" @if(old('idDevice')==$device->idDevice) {{'selected'}} @endif > {{$device->device}} </option>                                        
@@ -143,9 +228,7 @@
               <input type="text" class="form-control" name="version" placeholder="Versão do Dispositivo" value="{{old('version')}}">
             </div>
 
-            <div class="input-group input-group-outline my-3">                    
-              <input type="text" class="form-control" name="linkApp"  placeholder="Link do Aplicativo" value="{{old('linkApp')}}">
-            </div>        
+                    
                                                 
             <div class="d-flex justify-content-end mb-3">
               <button type="submit" class="btn bg-gradient-info"> Salvar </button>

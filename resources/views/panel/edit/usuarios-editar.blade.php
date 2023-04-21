@@ -18,6 +18,67 @@
                 </div>
               @endif
 
+
+             
+              @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li style="color:#fff;">{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+              @endif 
+
+              @if(session('mensagem'))
+                <div class="alert alert-success">
+                    <p style="color:#fff;">{{session('mensagem')}}</p>
+                </div>
+              @endif
+
+
+              <form role="form" class="text-start" action="#" method="post">
+              @csrf
+              <p class="mb-2 text-sm mx-auto" style="color:#fb8c00;">
+                  Campo com * é de preenchimento obrigatório.                      
+                </p>
+              <div class="input-group input-group-outline my-3">                    
+                <input type="text" 
+                        name="device" 
+                        class="form-control" 
+                        placeholder=" * Digite o nome do usuário" 
+                        value=  "{{$user->name}}" 
+                />                
+              </div>
+
+              <div class="input-group input-group-outline my-3">
+              <input type="text" 
+                        name="email" 
+                        class="form-control" 
+                        placeholder=" * Digite o e-mail do usuário" 
+                        value=  "{{$user->email}}" 
+                />
+              </div>  
+
+              <div class="input-group input-group-outline my-3">
+              <input type="text" 
+                        name="level" 
+                        class="form-control" 
+                        placeholder="Escolha o Nível de acesso do usuário" 
+                        value=  "{{$user->level}}" 
+                />
+              </div> 
+                                                  
+              <div class="d-flex justify-content-end mb-3">
+                <button type="submit" class="btn bg-gradient-info"> Salvar </button>
+              </div>                  
+              </form>             
+
+
+
+
+
+
               <h6 class="text-uppercase text-sm font-weight-bolder opacity-7">
                 Total de Usuários cadastrados: {{App\Http\Controllers\UserController::countUserView()}} 
               </h6>
@@ -61,7 +122,7 @@
                           <p class="text-xs font-weight-bold mb-0">
                             <i class="material-icons opacity-10">edit</i>                            
                           </p>                        
-                        </a>    
+                        </a>                       
 
                         <a href="/usuarios/{{$user->id}}" class="btn btn-danger btn-round" style="padding: 5px 10px;"
                            data-toggle="modal" data-target="#exampleModal"

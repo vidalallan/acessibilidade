@@ -60,23 +60,27 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = $request->password;
+        $user->created_at = date('Y-m-d');
+        $user->updated_at = date('Y-m-d');
+        $user->level = 'administrador';
 
         $user ->save();
     }
 
     public function storeView(UserFormRequest $request)
     {
-       
-
         $data = $request->except(['_token']);
         $data['password'] = Hash::make($data['password']);
-        $data['deleted'] = 0;
+        $data['deleted'] = 0;        
+        $data['created_at'] = date('Y-m-d');
+        $data['updated_at'] = date('Y-m-d');
+        $data['level'] = 'administrador';        
 
         $user = User::create($data);
 
         Auth::login($user);
 
-        return redirect('/dashboard')->with('mensagem', 'Usuário adicionado com sucesso!');;
+       return redirect('/dashboard')->with('mensagem', 'Usuário adicionado com sucesso!');;
     }
 
     /**
@@ -98,7 +102,11 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::where('id','=',$id)->first();        
+        
+        $users = User::where('deleted','=',0)->get();
+        
+        return view('panel.edit.usuarios-editar',compact('user','users'));
     }
 
     /**
@@ -129,6 +137,6 @@ class UserController extends Controller
     {
         User::where('id', $id)->update(['deleted' => 1]);        
         return redirect('/usuarios')->with('mensagemExclusao', 'Usuário removido com sucesso!'); 
-    }
+    } 
 
 }

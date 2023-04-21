@@ -16,7 +16,7 @@ class AssessmentController extends Controller
     public function index()
     {
 
-        $sql = "select a.*,i.title,i.pattern from tbassessment a inner join tbissue i on a.issueId = i.id where a.deleted=0";
+        $sql = "select a.*,i.title,i.pattern from tbAssessment a inner join tbIssue i on a.issueId = i.id where a.deleted=0";
         $assessment = DB::select($sql);    
         
         return $assessment;
@@ -97,8 +97,8 @@ class AssessmentController extends Controller
         $sql .= 'SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", ';
         $sql .= 'SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no", ';
         $sql .= 'count(i.id) "total"';
-        $sql .= 'from tbassessment a ';
-        $sql .= 'inner join tbissue i ';
+        $sql .= 'from tbAssessment a ';
+        $sql .= 'inner join tbIssue i ';
         $sql .= 'on a.issueId = i.idIssue ';
         $sql .= 'inner join tbDevice d ';
         $sql .= 'on i.idDevice = d.idDevice ';
@@ -115,8 +115,8 @@ class AssessmentController extends Controller
         $sql .= 'SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", ';
         $sql .= 'SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no", ';
         $sql .= 'count(i.id) "total" ';
-        $sql .= 'from tbassessment a ';
-        $sql .= 'inner join tbissue i ';
+        $sql .= 'from tbAssessment a ';
+        $sql .= 'inner join tbIssue i ';
         $sql .= 'on a.issueId = i.id ';
         $sql .= 'inner join tbDevice d ';
         $sql .= 'on i.idDevice = d.idDevice ';
@@ -134,7 +134,7 @@ class AssessmentController extends Controller
         $sql .= 'SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", ';
         $sql .= 'SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no", ';        
         $sql .= 'count(i.id) "total" ';
-        $sql .= 'from tbassessment a ';
+        $sql .= 'from tbAssessment a ';
         $sql .= 'inner join tbissue i ';
         $sql .= 'on a.issueId = i.id ';
         $sql .= 'inner join tbDevice d ';
@@ -154,8 +154,8 @@ class AssessmentController extends Controller
         $sql .= 'SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", ';
         $sql .= 'SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no", ';        
         $sql .= 'count(i.id) "total" ';
-        $sql .= 'from tbassessment a ';
-        $sql .= 'inner join tbissue i ';
+        $sql .= 'from tbAssessment a ';
+        $sql .= 'inner join tbIssue i ';
         $sql .= 'on a.issueId = i.id ';
         $sql .= 'inner join tbDevice d ';
         $sql .= 'on i.idDevice = d.idDevice ';
@@ -173,8 +173,8 @@ class AssessmentController extends Controller
         $sql .= 'SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", ';
         $sql .= 'SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no", ';        
         $sql .= 'count(i.id) "total"';
-        $sql .= 'from tbassessment a ';
-        $sql .= 'inner join tbissue i ';
+        $sql .= 'from tbAssessment a ';
+        $sql .= 'inner join tbIssue i ';
         $sql .= 'on a.issueId = i.id ';
         $sql .= 'inner join tbDevice d ';
         $sql .= 'on i.idDevice = d.idDevice ';
@@ -192,7 +192,7 @@ class AssessmentController extends Controller
         $sql .= 'SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", ';
         $sql .= 'SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no", ';        
         $sql .= 'count(i.id) "total" ';
-        $sql .= 'from tbassessment a ';
+        $sql .= 'from tbAssessment a ';
         $sql .= 'inner join tbissue i ';
         $sql .= 'on a.issueId = i.id ';
         $sql .= 'inner join tbDevice d ';

@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Problem;
 
-use App\Models\Pattern;
-
-class PatternController extends Controller
+class ProblemController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,14 +13,8 @@ class PatternController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {        
-        $patterns = Pattern::where('deleted','=',0)->get();
-        return $patterns;
-    }
-
-    public function indexView(){        
-        $patterns = $this->index();
-        return view('panel.padrao', compact('patterns'));
+    {
+        $problem = Problem::where('deleted','=','false')->get();
     }
 
     /**
@@ -42,23 +35,7 @@ class PatternController extends Controller
      */
     public function store(Request $request)
     {
-        $pattern = new Pattern();        
-        $pattern -> pattern = $request->pattern;
-        $pattern -> deleted = 0;
-        $pattern -> save();
-    }
-
-    public function storeView(Request $request)
-    {
-        $pattern = new Pattern();        
-        $pattern -> pattern = $request->pattern;
-        $pattern -> description = $request -> description;
-        $pattern -> userId = auth()->user()->id;
-        $pattern -> deleted = 0;
-        $pattern -> created_at = date('Y-m-d');
-        $pattern -> updated_at = date('Y-m-d');
-        $pattern -> save();
-        return redirect('/padroes');
+        //
     }
 
     /**
@@ -104,19 +81,5 @@ class PatternController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function destroyView($idPattern)
-    {
-        Pattern::where('idPattern', $idPattern)->update(['deleted' => 1]);        
-        return redirect('/padroes'); 
-    }
-
-    public static function  countPatternView(){
-        $pattern = new Pattern();
-
-        $total = $pattern::where('deleted','=',0)->count();
-        
-        return $total;               
     }
 }

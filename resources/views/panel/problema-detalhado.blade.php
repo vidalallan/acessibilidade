@@ -18,43 +18,47 @@
             @foreach($issues as $issue)
             <div class="container">
               <div class="row">
-                <div class="col-sm" style="background:#f0f2f5;">
-                  <h5 class="title text-center" style="color:#F56565;margin-top: 12px;"> Título do Problema: {{$issue->title}} </h5>                                
-                  <p class="text-center"> {{$issue->description}} </p>                  
+                <div class="col-sm" style="background:#f0f2f5; border-radius: 7px;">
+                  <strong class="title" style="font-size:1.1rem;color:#000;margin-top: 15px;"> 
+                    Título do Problema: 
+                    <span style="font-weight: 300;}"> {{$issue->title}} </span> 
+                  </strong>
+                  <br />
+                  <strong class="title" style="color:#344767;">Descrição:  <span style="font-weight: 300;}">{{$issue->description}} </span> </strong>                  
                 </div>
               </div>
             </div>
 
             <br />
 
-            <div class="container">
-              <div class="row">
+            <div class="container" style="border-radius: 7px;">
+              <div class="row" >
                 <div class="col-sm" style="background:#f0f2f5;">
-                <h6 class="title"> Aplicativo </h5>                
-                <p>  {{$issue->appTitle}} </p>
+                <strong class="title" style="color:#344767;"> Aplicativo </strong>                
+                <p style="color:#000;">  {{$issue->appTitle}} </p>
                 </div>
 
                 <div class="col-sm" style="background:#f0f2f5;">
-                <h6 class="title"> Id do Campo do Aplicativo  </h5>                
-                <p>  {{$issue->appFieldId}}  </p>
+                <strong class="title" style="color:#344767;"> Id do Campo do Aplicativo  </strong>                
+                <p style="color:#000;">  {{$issue->appFieldId}}  </p>
                 </div>
 
                 <div class="col-sm" style="background:#f0f2f5;">
-                <h6 class="title"> Nome Campo   </h5>                
-                <p> {{$issue->appFieldName}}  </p>
+                <strong class="title" style="color:#344767;"> Nome Campo </strong>                
+                <p style="color:#000;"> {{$issue->appFieldName}}  </p>
                 </div>
 
                 <div class="col-sm" style="background:#f0f2f5;">                  
-                  <h6 class="title"> Link do Aplicativo </h5>                
-                  <p> <a href="{{$issue->linkApp}}" target="_blank" style="color:#1A73E8;font-weight:300;"> Aplicativo {{$issue->appTitle}} </a> </p>
+                  <strong class="title" style="color:#344767;"> Link do Aplicativo </strong>                
+                  <p> <a href="{{$issue->linkApp}}" target="_blank" style="color:#1b21e9;font-weight:300;"> Aplicativo {{$issue->appTitle}} </a> </p>
                 </div>
 
                 <div class="col-sm" style="background:#f0f2f5;">
-                  <h6 class="title">  Print da tela com problema </h5>                
+                <strong class="title" style="color:#344767;">  Print da tela com problema </strong>                
                   <p> 
-                    <a href="{{asset('storage/'.$issue->printScreen)}}" download style="color:#1A73E8;font-weight:300;"> Download </a>
+                    <a href="{{asset('storage/'.$issue->printScreen)}}" download style="color:#1b21e9;font-weight:300;"> Download </a>
                     &nbsp;&nbsp;
-                    <a href="{{asset('storage/'.$issue->printScreen)}}" target="_blank" style="color:#1A73E8;font-weight:300;"> Visualizar </a> 
+                    <a href="{{asset('storage/'.$issue->printScreen)}}" target="_blank" style="color:#1b21e9;font-weight:300;"> Visualizar </a> 
                   </p>
                 </div>
 
@@ -66,18 +70,18 @@
             <div class="container">
               <div class="row">
                 <div class="col-sm" style="background:#f0f2f5;">
-                  <h6 class="title"> Dispositivo  </h5>                
-                  <p> {{$issue->device}} </p>
+                  <strong class="title" style="color:#344767;"> Dispositivo  </strong>                
+                  <p style="color:#000;"> {{$issue->device}} </p>
                 </div>
 
                 <div class="col-sm" style="background:#f0f2f5;">                  
-                  <h6 class="title"> Modelo  </h5>                
-                  <p> {{$issue->devideModel}} </p>
+                  <strong class="title" style="color:#344767;"> Modelo  </strong>                
+                  <p style="color:#000;"> {{$issue->devideModel}} </p>
                 </div>
 
                 <div class="col-sm" style="background:#f0f2f5;">
-                  <h6 class="title"> Versão do SO  </h5>                
-                  <p> {{$issue->version}} </p>
+                  <strong class="title" style="color:#344767;"> Versão do SO  </strong>                
+                  <p style="color:#000;"> {{$issue->version}} </p>
                 </div>                                
               </div>
             </div>
@@ -87,24 +91,24 @@
             <div class="container">
               <div class="row">
                   <div class="col-sm" style="background:#f0f2f5;">
-                  <h6 class="title"> Padrão de Acessibilidade </h5>                
-                  <p> {{$issue->pattern}} </p>
+                  <strong class="title" style="color:#344767;"> Padrão de Acessibilidade </strong>                
+                  <p style="color:#000;"> {{$issue->pattern}} </p>
                 </div>
 
                 <div class="col-sm" style="background:#f0f2f5;">
                   
-                <h6 class="title"> Versão do Padrão  </h5>                
-                <p> {{$issue->patternVersion}} </p>
+                <strong class="title" style="color:#344767;"> Versão do Padrão </strong>                
+                  <p style="color:#000;"> {{$issue->patternVersion}} </p>
                 </div>
 
                 <div class="col-sm" style="background:#f0f2f5;">                 
-                  <h6 class="title"> Detalhes do Padrão  </h5>                
-                  <p> {{$issue->patternVersionDetailts}} </p>
+                  <strong class="title" style="color:#344767;"> Detalhes do Padrão </strong>                
+                  <p style="color:#000;"> {{$issue->patternVersionDetailts}} </p>
                 </div>                                
 
                 <div class="col-sm" style="background:#f0f2f5;">                 
-                  <h6 class="title"> Origin </h5>                
-                  <p> {{$issue->origin}} </p>       
+                  <strong class="title" style="color:#344767;"> Origem </strong>                
+                  <p style="color:#000;"> {{$issue->origin}} </p>       
                 </div>                                
 
               </div>
@@ -129,7 +133,7 @@
             <div class="card my-4">
               <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                 <div class="shadow-primary border-radius-lg pt-4 pb-3" style="background-image: linear-gradient(195deg, #adb5bd 0%, #495057 100%);">
-                  <h6 class="text-white ps-3 text-center"> Avalie o problema descrito acima </h6>
+                  <h6 class="text-white ps-3"> Avalie o problema descrito acima </h6>
                 </div>
               </div>
                     
@@ -138,7 +142,7 @@
                     
                   <div class="card-body pt-4 pb-3">                                
                       @if(App\Http\Controllers\IssueController::totalVotesUser(Request::segment(2))>0)
-                        <h6> Já realizou a votação! </h6>
+                        <h6> Já realizou a avaliação! </h6>
                       @else
                         <form role="form" class="text-start" action="/avaliar-problema" method="post">
                           @csrf
@@ -147,12 +151,12 @@
 
                           <input type="hidden" name="idIssue" value="{{Request::segment(2)}}"/>
 
-                          <div class="input-group input-group-outline my-3">
-                              <p>
-                                <input type="radio" name="problem" value="0" checked /> <span> NÃO </span>
-                                <input type="radio" name="problem" value="1" style="margin-left:20px;" /> <span> SIM </span>
-                              </p>
-                          </div>
+                          <fieldset class="input-group input-group-outline my-3">                              
+                              <legend style="font-size: 1rem;">
+                                <input type="radio" name="problem" value="0" checked /> <span style="color:#000;"> NÃO </span>
+                                <input type="radio" name="problem" value="1" style="margin-left:20px;" /> <span style="color:#000;"> SIM </span>
+                              </legend>
+                          </fieldset>
 
                           <div class="input-group input-group-outline my-3">
                             <textarea class="form-control" placeholder="Justificar opção escolhida" name="justification" style="height:100px"></textarea>  
@@ -183,7 +187,7 @@
             <div class="card my-4">
               <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                 <div class="shadow-primary border-radius-lg pt-4 pb-3" style="background-image: linear-gradient(195deg, #adb5bd 0%, #495057 100%);">
-                  <h6 class="text-white ps-3 text-center"> Justificativas das avaliações realizadas </h6>
+                  <h6 class="text-white ps-3"> Justificativas das avaliações realizadas </h6>
                 </div>
               </div>
                     
@@ -194,10 +198,10 @@
 
                     <div class="table-responsive card-body pt-4 pb-3">
                       <p class="">
-                        <span style=""> Total de avaliações Realizadas: <span style="font-weight:500;"> @foreach($total as $t){{$t->yes + $t->no}} @endforeach </span> </span>                        
-                        <span style="color:#F44335;margin:0px 10px;"> 
+                        <span style="color:#000;"> Total de avaliações Realizadas: <span style="font-weight:500;"> @foreach($total as $t){{$t->yes + $t->no}} @endforeach </span> </span>                        
+                        <span style="color:#cf0404;margin:0px 10px;"> 
                           Total de avaliações com Sim: 
-                          <span style="font-weight:500;"> 
+                          <span style="color:#cf0404;font-weight:500;"> 
                             @foreach($total as $t)
                               {{$t->yes}} - 
                               <!-- {{$t->yes / ($t->yes + $t->no) *100}}% -->
@@ -205,7 +209,7 @@
                           </span>
                         </span>                                                
                         
-                        <span style="color:#4CAF50;"> 
+                        <span style="color:#018906;"> 
                           Total de avaliações com NÃO: 
                           <span style="font-weight:500;"> 
                             @foreach($total as $t)
@@ -217,7 +221,7 @@
                       </p>
 
                       <p class="">                                                
-                        <span style="color:#F44335;">                           
+                        <span style="color:#cf0404;">                           
                           <span style="font-weight:500;"> 
                             @foreach($total as $t)                              
                               Sim: {{number_format($t->yes/$t->total * 100,0)}}% 
@@ -225,7 +229,7 @@
                           </span>
                         </span>                                                
                         <br />
-                        <span style="color:#4CAF50;">                           
+                        <span style="color:#018906;">                           
                           <span style="font-weight:500;"> 
                             @foreach($total as $t)                              
                               Não: {{number_format($t->no/$t->total * 100,0)}}% 
@@ -251,9 +255,9 @@
                         <td>
                           <div class="d-flex px-3 py-1">                         
                             @if($a->problem == 0)
-                              <h6 class="mb-0 text-sm" style="color:#4CAF50;"> <i class="material-icons opacity-10"> sentiment_very_satisfied </i> NÃO</h6>      
+                              <p class="mb-0 text-sm" style="color:#018906;"> <i class="material-icons opacity-10"> sentiment_very_satisfied </i> NÃO</p>      
                             @else
-                              <h6 class="mb-0 text-sm" style="color:#F44335;"> <i class="material-icons opacity-10"> mood_bad </i> SIM</h6>      
+                              <p class="mb-0 text-sm" style="color:#F44335;"> <i class="material-icons opacity-10"> mood_bad </i> SIM</p>      
                             @endif                                                    
                           </div>
                         </td>
@@ -262,15 +266,15 @@
                           @if($a->justification == null)
                             -
                             @else
-                              {{$a->justification}}  
+                              <p style="color:#000;"> {{$a->justification}} </p>  
                             @endif                                                    
                         </td>
                         <td>
                           @if($a->severity == null)
-                            -
-                            @else
-                              {{$a->severity}}  
-                            @endif                                                    
+                            <p style="color:#000;"> - </p>
+                          @else
+                            <p style="color:#000;">{{$a->severity}} </p> 
+                          @endif                                                    
                         </td>
                       </tr>
                       @endforeach

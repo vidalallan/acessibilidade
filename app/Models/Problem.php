@@ -1,0 +1,14 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Problem extends Model
+{
+    use HasFactory;
+    protected $table = "tbProblem";
+    protected $fillable = ['id','deleted','problem','description','userId'];    
+    public $timestamps = true;
+}

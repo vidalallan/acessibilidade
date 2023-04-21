@@ -59,8 +59,6 @@ class DeviceController extends Controller
         $device->device = $request->device;
         $device->deleted = 0; 
         $device ->save();
-        
-        
     }
 
     public function storeView(DeviceFormRequest $request){
@@ -107,9 +105,14 @@ class DeviceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($idDevice)
     {
-        //
+        $device = Device::where('idDevice','=',$idDevice)->first();
+        //dd($devices);
+        $devices = Device::where('deleted','=',0)->get();
+        
+        return view('panel.edit.dispositivos-editar',compact('device','devices'));
+        
     }
 
     /**

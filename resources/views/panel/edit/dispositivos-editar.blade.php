@@ -33,13 +33,18 @@
                   </div>
                 @endif
 
-                <form role="form" class="text-start" action="/dispositivos" method="post">
+                <form role="form" class="text-start" action="#" method="post">
                 @csrf
                 <p class="mb-2 text-sm mx-auto" style="color:#fb8c00;">
                     Campo com * é de preenchimento obrigatório.                      
                   </p>
                 <div class="input-group input-group-outline my-3">                    
-                  <input type="text" name="device" class="form-control" placeholder=" * Digite o nome do dispositivo que deseja cadastrar" value="{{old('device')}}" />
+                  <input type="text" 
+                          name="device" 
+                          class="form-control" 
+                          placeholder=" * Digite o nome do dispositivo que deseja cadastrar" 
+                          value=  "{{$device->device}}" 
+                  />
                 </div>
                                                     
                 <div class="d-flex justify-content-end mb-3">
@@ -48,11 +53,7 @@
               </form>              
             </div>
 
-            <div class="card-body pt-4 pb-3">
-              <h6 class="text-uppercase text-sm font-weight-bolder opacity-7">
-                Total de Dispositivos cadastrados: {{App\Http\Controllers\DeviceController::countDeviceView()}} 
-              </h6>
-            </div>
+            
 
             <div class="card-body px-0 pb-2">
               <div class="table-responsive p-0">
@@ -128,6 +129,9 @@
                 </table>
               </div>
             </div>
+
+
+            
           </div>
         </div>
       </div>    
