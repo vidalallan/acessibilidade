@@ -27,15 +27,17 @@ class IssueController extends Controller
 
     public function indexView(){
 
-        $sql = 'select * from tbIssue i 
+        $sql = 'select *,p.problem from tbIssue i 
         inner join tbDevice d
-        on i.idDevice = d.idDevice        
+        on i.idDevice = d.idDevice
+        inner join tbProblem p
+        on i.problemId = p.id
         where i.deleted=0 order by creationDate desc';
        
         $issues = DB::select($sql);
         
         $devices = Device::all();        
-        $assessments = Assessment::all();
+        $assessments = Assessment::all();        
 
         return view('panel.problemas', compact('issues', 'devices','assessments'));        
     }
@@ -142,7 +144,12 @@ class IssueController extends Controller
     }
 
     public function indexView2(){
-        $issues = $this->index();
+        $issues = DB::table('tbIssue')
+                    ->join('tbProblem','tbIssue.problemId','=','tbProblem.id')
+                    ->where('tbProblem.deleted', '=', 0)
+                    ->select('tbIssue.*','tbProblem.id','tbProblem.problem','tbProblem.description')
+                    ->get();
+
         $devices = Device::where('deleted','=',0)->get();  
         $patterns = Pattern::where('deleted','=',0)->get(); 
         $problems = Problem::where('deleted','=',0)->orderBy('problem')->get();    
@@ -292,6 +299,23 @@ class IssueController extends Controller
     public function storeView(ProblemFormRequest $request)
     {
         $issue = new Issue();
+
+        $issue -> problemId = $request->problemId; //novaInstituicao
+
+        if($issue -> problemId == -1){
+            $problem = new Problem();
+            $problem -> problem = $request-> title;
+            $problem -> description = $request -> description;
+            $problem -> deleted = 0;
+            $problem -> userId = auth()->user()->id;
+            $problem -> created_at = date('Y-m-d H:i:s');
+            $problem -> updated_at = date('Y-m-d H:i:s');
+            $problem -> save();
+            
+            //pegar último id
+            $lastId = Problem::where('id', $problem->id)->orderBy('created_at', 'desc')->first();
+            $issue -> problemId = $lastId->id;            
+        }                
         
         $issue -> creationDate = date('Y-m-d');
         $issue -> deleted = 0;
@@ -308,9 +332,7 @@ class IssueController extends Controller
             $path = $image->store('images','public');
         }        
 
-        //php artisan storage:link
-        //$path ="imagem";
-
+     
         $issue -> printScreen = $path;
         
         $issue -> pattern = $request -> pattern;
@@ -323,7 +345,7 @@ class IssueController extends Controller
         $issue -> appTitle = $request-> appTitle;
         $issue -> linkApp = $request-> linkApp;
         
-        $issue -> problemId = $request->problemId;
+        
         $issue -> patternId = $request->patternId;
         
         $issue -> tool_problem = $request-> tool_problem;

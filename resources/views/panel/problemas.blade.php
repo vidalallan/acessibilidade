@@ -57,7 +57,7 @@
                     @foreach($issues as $issue)                   
                     <tr>
                       <td> <div class="d-flex px-3 py-1"> <h6 class="mb-0 text-sm">  {{date( 'd/m/Y',strtotime($issue->creationDate))}} </h6></div> </td>
-                      <td> <div class="d-flex px-3 py-1"> <h6 class="mb-0 text-sm"> {{$issue->title}} </h6></div> </td>                         
+                      <td> <div class="d-flex px-3 py-1"> <h6 class="mb-0 text-sm"> {{$issue->problem}} </h6></div> </td>                         
                       <td> <div class="d-flex px-3 py-1"><h6 class="mb-0 text-sm"> {{$issue->device}} </h6></div> </td>                      
                       <td> <div class="d-flex px-3 py-1"><h6 class="mb-0 text-sm"> {{$issue->appTitle}} </h6></div> </td>                      
                       <td> <div class="d-flex px-3 py-1"><h6 class="mb-0 text-sm"> {{$issue->pattern}} </h6> </div></td>
@@ -74,12 +74,16 @@
                           <i class="material-icons opacity-10">note_add</i>                                                   
                         </a>
 
+                        @AdminOnly
                         <a href="/problemas/{{$issue->id}}" class="btn btn-success btn-round" title="Editar o problema" style="padding: 5px 10px;">
                           <p class="text-xs font-weight-bold mb-0">
                             <i class="material-icons opacity-10">edit</i>                            
                           </p>                        
                         </a>                        
+                        @endAdminOnly
 
+
+                        @AdminOnly
                         <a href="/problemas/{{$issue->id}}" class="btn btn-danger btn-round" title="Excluir o problema" style="padding: 5px 10px;"
                         data-toggle="modal" data-target="#exampleModal"
                         onclick="setaDadosModal({{$issue->id}},'{{$issue->title}}')">
@@ -87,6 +91,7 @@
                             <i class="material-icons opacity-10">close</i>                            
                           </p>                        
                         </a>
+                        @endAdminOnly
 
                         <!-- Modal -->
                         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

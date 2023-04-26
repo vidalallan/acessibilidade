@@ -43,7 +43,7 @@
   <script>
     $(document).ready(function(){
       setTimeout(function(){
-        $(".alert").fadeOut("slow",function(){
+        $(".alert-success").fadeOut("slow",function(){
           $(this).alert('close');
         });
       },2000);
@@ -82,6 +82,8 @@
             <span class="nav-link-text ms-1"> Avaliações </span>
           </a>
         </li>
+
+        @AdminOnly
         <li class="nav-item">
           <a class="nav-link text-white" href="/dispositivos">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -92,7 +94,10 @@
             </div>
             <span class="nav-link-text ms-1">Dispositivos</span>
           </a>
-        </li>         
+        </li>  
+        @endAdminOnly
+        
+        @AdminOnly
         <li class="nav-item">
           <a class="nav-link text-white" href="/padroes">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -100,7 +105,8 @@
             </div>
             <span class="nav-link-text ms-1"> Padrões </span>
           </a>
-        </li>        
+        </li>     
+        @endAdminOnly   
         <li class="nav-item mt-3">
           <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Problemas</h6>
         </li>
@@ -138,10 +144,13 @@
         </li>        
         
               
-        
+        @AdminOnly
         <li class="nav-item mt-3">
           <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Páginas dos Usuários</h6>
         </li>
+        @endAdminOnly
+
+        @AdminOnly
         <li class="nav-item">
           <a class="nav-link text-white " href="/usuarios">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -149,7 +158,8 @@
             </div>
             <span class="nav-link-text ms-1">Usuários</span>
           </a>
-        </li>        
+        </li>
+        @endAdminOnly        
         <li class="nav-item">
           <a class="nav-link text-white " href="/logout">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">

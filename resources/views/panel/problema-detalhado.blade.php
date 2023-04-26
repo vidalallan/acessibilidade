@@ -34,18 +34,18 @@
             <div class="container" style="border-radius: 7px;">
               <div class="row" >
                 <div class="col-sm" style="background:#f0f2f5;">
-                <strong class="title" style="color:#344767;"> Aplicativo </strong>                
-                <p style="color:#000;">  {{$issue->appTitle}} </p>
+                  <strong class="title" style="color:#344767;"> Aplicativo </strong>                
+                  <p style="color:#000;"> {{$issue->appTitle}} </p>
                 </div>
 
                 <div class="col-sm" style="background:#f0f2f5;">
-                <strong class="title" style="color:#344767;"> Id do Campo do Aplicativo  </strong>                
-                <p style="color:#000;">  {{$issue->appFieldId}}  </p>
+                  <strong class="title" style="color:#344767;"> Id do Campo do Aplicativo  </strong>                
+                  <p style="color:#000;"> {{$issue->appFieldId}} </p>
                 </div>
 
                 <div class="col-sm" style="background:#f0f2f5;">
-                <strong class="title" style="color:#344767;"> Nome Campo </strong>                
-                <p style="color:#000;"> {{$issue->appFieldName}}  </p>
+                  <strong class="title" style="color:#344767;"> Nome Campo </strong>                
+                  <p style="color:#000;"> {{$issue->appFieldName}}  </p>
                 </div>
 
                 <div class="col-sm" style="background:#f0f2f5;">                  
@@ -80,7 +80,7 @@
                 </div>
 
                 <div class="col-sm" style="background:#f0f2f5;">
-                  <strong class="title" style="color:#344767;"> Versão do SO  </strong>                
+                  <strong class="title" style="color:#344767;"> Versão do Dispositivo  </strong>                
                   <p style="color:#000;"> {{$issue->version}} </p>
                 </div>                                
               </div>
@@ -91,7 +91,7 @@
             <div class="container">
               <div class="row">
                   <div class="col-sm" style="background:#f0f2f5;">
-                  <strong class="title" style="color:#344767;"> Padrão de Acessibilidade </strong>                
+                  <strong class="title" style="color:#344767;"> Guia de Acessibilidade </strong>                
                   <p style="color:#000;"> {{$issue->pattern}} </p>
                 </div>
 
@@ -113,6 +113,29 @@
 
               </div>
             </div>
+
+            <br />
+
+            <div class="container">
+              <div class="row">
+                <div class="col-sm" style="background:#f0f2f5;">
+                  <strong class="title" style="color:#344767;"> Utilizou ferramenta de tecnologia assistiva?  </strong>                
+                  <p style="color:#000;"> {{$issue->assistive_technology_tool}} </p>
+                </div>
+
+                <div class="col-sm" style="background:#f0f2f5;">                  
+                  <strong class="title" style="color:#344767;"> Qual ferramenta de tecnologia assistiva?  </strong>                
+                  <p style="color:#000;"> {{$issue->tool_assistive}} </p>
+                </div>
+
+                <div class="col-sm" style="background:#f0f2f5;">
+                  <strong class="title" style="color:#344767;"> Versão da ferramenta de tecnologia assistiva  </strong>                
+                  <p style="color:#000;"> {{$issue->tool_assistive_version}} </p>
+                </div>                                
+              </div>
+            </div>
+
+            <br />
           
             @endforeach
                   

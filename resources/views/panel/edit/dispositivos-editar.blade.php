@@ -33,7 +33,7 @@
                   </div>
                 @endif
 
-                <form role="form" class="text-start" action="#" method="post">
+                <form role="form" class="text-start" action="/dispositivo/update/{{$device->idDevice}}" method="post">
                 @csrf
                 <p class="mb-2 text-sm mx-auto" style="color:#fb8c00;">
                     Campo com * é de preenchimento obrigatório.                      

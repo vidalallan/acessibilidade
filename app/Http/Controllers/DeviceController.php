@@ -124,7 +124,8 @@ class DeviceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Device::where('idDevice','=',$request->id)->update($request->except(['_token', '_method']));
+        return redirect('/dispositivos')->with('mensagem', 'Dispositivo alterado com sucesso!');
     }
 
     /**

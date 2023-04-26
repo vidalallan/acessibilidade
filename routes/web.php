@@ -21,21 +21,21 @@ Route::get('/dashboard', function () {
     return view('panel.dashboard');
 })->middleware(Authenticate::class);
 
-Route::get('dispositivos/{idDevice}/editar','App\Http\Controllers\DeviceController@edit')->middleware(Authenticate::class);
-Route::get('/dispositivos','App\Http\Controllers\DeviceController@indexView')->middleware(Authenticate::class);
+Route::get('dispositivos/{idDevice}/editar','App\Http\Controllers\DeviceController@edit')->middleware(['only.admin']);
+Route::get('/dispositivos','App\Http\Controllers\DeviceController@indexView')->middleware(['only.admin']);
 Route::post('/dispositivos','App\Http\Controllers\DeviceController@storeView')->middleware(Authenticate::class);
-Route::get('/dispositivos/{idDevice}','App\Http\Controllers\DeviceController@destroyView')->middleware(Authenticate::class);
+Route::get('/dispositivos/{idDevice}','App\Http\Controllers\DeviceController@destroyView')->middleware(['only.admin']);
+Route::post('/dispositivo/update/{id}','App\Http\Controllers\DeviceController@update')->middleware(['only.admin']);
 
-Route::get('/usuarios/{id}/editar','App\Http\Controllers\UserController@edit')->middleware(Authenticate::class);
-Route::get('/usuarios','App\Http\Controllers\UserController@indexView')->middleware(Authenticate::class);
-Route::get('/usuarios/{id}','App\Http\Controllers\UserController@destroyView')->middleware(Authenticate::class);
+Route::get('/usuarios/{id}/editar','App\Http\Controllers\UserController@edit')->middleware(['only.admin']);
+Route::get('/usuarios','App\Http\Controllers\UserController@indexView')->middleware(['only.admin']);
+Route::get('/usuarios/{id}','App\Http\Controllers\UserController@destroyView')->middleware(['only.admin']);
 
-Route::get('/padroes','App\Http\Controllers\PatternController@indexView')->middleware(Authenticate::class);
-Route::post('/padroes','App\Http\Controllers\PatternController@storeView')->middleware(Authenticate::class);
-Route::get('/padroes/{idPattern}','App\Http\Controllers\PatternController@destroyView')->middleware(Authenticate::class);
+Route::get('/padroes','App\Http\Controllers\PatternController@indexView')->middleware(['only.admin']);
+Route::post('/padroes','App\Http\Controllers\PatternController@storeView')->middleware(['only.admin']);
+Route::get('/padroes/{idPattern}','App\Http\Controllers\PatternController@destroyView')->middleware(['only.admin']);
 
 Route::get('/problemas','App\Http\Controllers\IssueController@indexView')->middleware(Authenticate::class);
-
 Route::post('/problemas','App\Http\Controllers\IssueController@storeView')->middleware(Authenticate::class);
 Route::get('/problemas/{idIssue}','App\Http\Controllers\IssueController@destroyView')->middleware(Authenticate::class);
 Route::get('/problemas-avaliados','App\Http\Controllers\IssueController@indexAvaliacoesView')->middleware(Authenticate::class);

@@ -62,21 +62,33 @@ class UserController extends Controller
         $user->password = $request->password;
         $user->created_at = date('Y-m-d');
         $user->updated_at = date('Y-m-d');
-        $user->level = 'administrador';
+        $user->level = 'admin';
 
         $user ->save();
     }
 
     public function storeView(UserFormRequest $request)
     {
+        /*
         $data = $request->except(['_token']);
         $data['password'] = Hash::make($data['password']);
         $data['deleted'] = 0;        
         $data['created_at'] = date('Y-m-d');
         $data['updated_at'] = date('Y-m-d');
-        $data['level'] = 'administrador';        
+        $data['level'] = 'admin';        
 
         $user = User::create($data);
+        */
+
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user -> password = Hash::make($request->password);
+        $user -> deleted = 0;
+        $user->created_at = date('Y-m-d');
+        $user->updated_at = date('Y-m-d');
+        $user->level = 'user';
+        $user ->save();
 
         Auth::login($user);
 
