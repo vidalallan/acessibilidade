@@ -65,7 +65,7 @@ Route::get('/login', function () {
 Route::post('/login','App\Http\Controllers\LoginController@loginView')->name('login');
 Route::get('/logout','App\Http\Controllers\LoginController@logoutView');
 
-Route::get('/questions','App\Http\Controllers\IssueController@indexView2');
+//Route::get('/questions','App\Http\Controllers\IssueController@indexView2');
 
 Route::get('/consultar-questoes','App\Http\Controllers\IssueController@queryQuestionsWithOutParameter');
 Route::get('/questao-detalhada/{idIssue}','App\Http\Controllers\IssueController@queryQuestionsbyParameter');

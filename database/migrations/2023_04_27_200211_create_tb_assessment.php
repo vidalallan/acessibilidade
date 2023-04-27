@@ -19,10 +19,11 @@ return new class extends Migration
             $table->tinyInteger('deleted');
             $table->unsignedBigInteger('issueId'); 
             $table->tinyInteger('problem')->nullable();            
-            $table->string('justification')->nullable();                                  
-            $table->string('severity')->nullable();
+            $table->string('justification')->nullable();                                              
+            $table->unsignedBigInteger('severityId'); 
             $table->unsignedBigInteger('userId'); 
-            $table->foreign('issueId')->references('id')->on('tbIssue');                                             
+            $table->foreign('issueId')->references('id')->on('tbIssue');
+            $table->foreign('severityId')->references('id')->on('tbSeverityLevel');                                             
             $table->foreign('userId')->references('id')->on('users');
             $table->timestamps();
         });

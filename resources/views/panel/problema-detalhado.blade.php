@@ -12,16 +12,16 @@
               </div>
             </div>            
 
-            <div class="card-body pt-4 pb-3">  
-              
+            <div class="card-body pt-4 pb-3">                
 
             @foreach($issues as $issue)
             <div class="container">
               <div class="row">
                 <div class="col-sm" style="background:#f0f2f5; border-radius: 7px;">
-                  <strong class="title" style="font-size:1.1rem;color:#000;margin-top: 15px;"> 
+                
+                  <strong class="title" style="color:#344767;"> Título do Problema: </strong> 
                     Título do Problema: 
-                    <span style="font-weight: 300;}"> {{$issue->title}} </span> 
+                    <span style="font-weight: 300;color:#000;"> {{$issue->problem}} </span> 
                   </strong>
                   <br />
                   <strong class="title" style="color:#344767;">Descrição:  <span style="font-weight: 300;}">{{$issue->description}} </span> </strong>                  
@@ -34,7 +34,7 @@
             <div class="container" style="border-radius: 7px;">
               <div class="row" >
                 <div class="col-sm" style="background:#f0f2f5;">
-                  <strong class="title" style="color:#344767;"> Aplicativo </strong>                
+                  <strong class="title" style="color:#344767;"> Aplicativo Móvel </strong>                
                   <p style="color:#000;"> {{$issue->appTitle}} </p>
                 </div>
 
@@ -44,7 +44,7 @@
                 </div>
 
                 <div class="col-sm" style="background:#f0f2f5;">
-                  <strong class="title" style="color:#344767;"> Nome Campo </strong>                
+                  <strong class="title" style="color:#344767;"> Nome do Campo do Aplicativo </strong>                
                   <p style="color:#000;"> {{$issue->appFieldName}}  </p>
                 </div>
 
@@ -54,33 +54,51 @@
                 </div>
 
                 <div class="col-sm" style="background:#f0f2f5;">
-                <strong class="title" style="color:#344767;">  Print da tela com problema </strong>                
+                <strong class="title" style="color:#344767;">  Arquivo Relacionado ao Problema de Acessibilidade do Aplicativo </strong>                
+                  @if($issue->printScreen==null)
+                  <p style="color:#000;">
+                    Sem arquivo
+                  </p>  
+                  @else
                   <p> 
                     <a href="{{asset('storage/'.$issue->printScreen)}}" download style="color:#1b21e9;font-weight:300;"> Download </a>
                     &nbsp;&nbsp;
                     <a href="{{asset('storage/'.$issue->printScreen)}}" target="_blank" style="color:#1b21e9;font-weight:300;"> Visualizar </a> 
                   </p>
+                  @endif                  
                 </div>
-
               </div>
             </div>                        
+
+            <br />
+
+            <div class="container" style="border-radius: 7px;">
+              <div class="row">
+                <div class="col-sm" style="background:#f0f2f5;">
+                  <strong class="title" style="color:#344767;">  Fluxo utilizad na identificação do Problema de Acessibilidade do Aplicativo </strong>
+                  <p style="color:#000;">
+                    {{$issue->flow_identify_problem}}
+                  </p>
+                </div>
+              </div>
+            </div>
 
             <br />
 
             <div class="container">
               <div class="row">
                 <div class="col-sm" style="background:#f0f2f5;">
-                  <strong class="title" style="color:#344767;"> Dispositivo  </strong>                
+                  <strong class="title" style="color:#344767;"> Dispositivo Móvel  </strong>                
                   <p style="color:#000;"> {{$issue->device}} </p>
                 </div>
 
                 <div class="col-sm" style="background:#f0f2f5;">                  
-                  <strong class="title" style="color:#344767;"> Modelo  </strong>                
+                  <strong class="title" style="color:#344767;"> Modelo do Dispositivo Móvel </strong>                
                   <p style="color:#000;"> {{$issue->devideModel}} </p>
                 </div>
 
                 <div class="col-sm" style="background:#f0f2f5;">
-                  <strong class="title" style="color:#344767;"> Versão do Dispositivo  </strong>                
+                  <strong class="title" style="color:#344767;"> Versão do Dispositivo Móvel </strong>                
                   <p style="color:#000;"> {{$issue->version}} </p>
                 </div>                                
               </div>
@@ -97,20 +115,36 @@
 
                 <div class="col-sm" style="background:#f0f2f5;">
                   
-                <strong class="title" style="color:#344767;"> Versão do Padrão </strong>                
+                <strong class="title" style="color:#344767;"> Versão do Guia de Acessibilidade </strong>                
                   <p style="color:#000;"> {{$issue->patternVersion}} </p>
                 </div>
 
                 <div class="col-sm" style="background:#f0f2f5;">                 
-                  <strong class="title" style="color:#344767;"> Detalhes do Padrão </strong>                
+                  <strong class="title" style="color:#344767;"> Detalhes do Princípio do Guia de Acessibilidade </strong>                
                   <p style="color:#000;"> {{$issue->patternVersionDetailts}} </p>
                 </div>                                
 
                 <div class="col-sm" style="background:#f0f2f5;">                 
                   <strong class="title" style="color:#344767;"> Origem </strong>                
                   <p style="color:#000;"> {{$issue->origin}} </p>       
-                </div>                                
+                </div>                              
 
+              </div>
+            </div>
+
+            <br />
+
+            <div class="container">
+              <div class="row">
+                  <div class="col-sm" style="background:#f0f2f5;">
+                    <strong class="title" style="color:#344767;"> Ferramenta de Acessibilidade que identificou o problema</strong> 
+                    <p style="color:#000;"> {{$issue->tool_problem}} </p>
+                  </div>
+
+                  <div class="col-sm" style="background:#f0f2f5;">
+                    <strong class="title" style="color:#344767;"> Versão Ferramenta de Acessibilidade que identificou o problema</strong> 
+                    <p style="color:#000;"> {{$issue->tool_problem_version}} </p>
+                  </div>
               </div>
             </div>
 
@@ -120,7 +154,15 @@
               <div class="row">
                 <div class="col-sm" style="background:#f0f2f5;">
                   <strong class="title" style="color:#344767;"> Utilizou ferramenta de tecnologia assistiva?  </strong>                
-                  <p style="color:#000;"> {{$issue->assistive_technology_tool}} </p>
+                  @if($issue->assistive_technology_tool==0) 
+                  <p style="color:#000;"> 
+                    Não
+                  </p>
+                  @else
+                  <p style="color:#000;"> 
+                    Sim
+                  </p>
+                  @endif
                 </div>
 
                 <div class="col-sm" style="background:#f0f2f5;">                  
@@ -168,8 +210,7 @@
                         <h6> Já realizou a avaliação! </h6>
                       @else
                         <form role="form" class="text-start" action="/avaliar-problema" method="post">
-                          @csrf
-                          
+                          @csrf                          
                           <h6> Este é de fato um problema de acessibilidade no aplicativo? </h6>
 
                           <input type="hidden" name="idIssue" value="{{Request::segment(2)}}"/>
@@ -187,6 +228,10 @@
 
                           <div class="input-group input-group-outline my-3">                    
                             <input type="text" class="form-control" name="severity" placeholder="Nível de criticidade">
+                          </div>
+
+                          <div class="input-group input-group-outline my-3">                    
+                            
                           </div>
 
                           <div class="d-flex justify-content-end mb-3">                        

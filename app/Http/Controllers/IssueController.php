@@ -27,12 +27,14 @@ class IssueController extends Controller
 
     public function indexView(){
 
-        $sql = 'select *,p.problem from tbIssue i 
+        $sql = 'select i.id,i.creationDate,p.problem,d.device,i.appTitle,pa.pattern from tbIssue i 
         inner join tbDevice d
         on i.idDevice = d.idDevice
         inner join tbProblem p
         on i.problemId = p.id
-        where i.deleted=0 order by creationDate desc';
+        inner join tbPattern pa
+        on i.patternId = pa.id
+        where i.deleted=0 order by i.id desc';
        
         $issues = DB::select($sql);
         
@@ -151,7 +153,7 @@ class IssueController extends Controller
                     ->get();
 
         $devices = Device::where('deleted','=',0)->get();  
-        $patterns = Pattern::where('deleted','=',0)->get(); 
+        $patterns = Pattern::where('deleted','=',0)->orderBy('pattern')->get(); 
         $problems = Problem::where('deleted','=',0)->orderBy('problem')->get();    
         return view('panel.problemas-adicionar', compact('issues', 'devices','patterns','problems'));        
     }
@@ -196,16 +198,20 @@ class IssueController extends Controller
     }
 
     public function queryQuestionsPanelbyParameter($idIssue){
-        $sql = "select * from tbIssue i 
-        inner join tbDevice d
+        $sql = "select *, pro.problem,pat.pattern from tbIssue i 
+        inner join tbDevice d        
         on i.idDevice = d.idDevice                
+        inner join tbProblem pro
+        on i.problemId = pro.id
+        inner join tbPattern pat
+        on i.patternId = pat.id
         where i.deleted=0 and i.id=$idIssue";
        
         $issues = DB::select($sql);
 
         $assessments = Assessment::where('issueId','=',$idIssue)->get();
 
-        $sql = 'SELECT i.id, i.title, i.idDevice, d.device,a.severity, ';
+        $sql = 'SELECT i.id, i.title, i.idDevice, d.device,a.severityId, ';
         $sql .= 'SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", ';
         $sql .= 'SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no", ';        
         $sql .= 'count(i.id) "total" ';
@@ -360,7 +366,7 @@ class IssueController extends Controller
 
         $issue ->save();
 
-        return redirect('/questions')->with('mensagem', 'Problema adicionado com sucesso!');
+        return redirect('/problemas')->with('mensagem', 'Problema adicionado com sucesso!');
     }
 
     /**

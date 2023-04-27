@@ -46,9 +46,10 @@
                   <thead>
                     <tr>                      
                       <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Data </th>
-                      <th class="text-uppercase text-sm font-weight-bolder opacity-7">Título do Problema</th>                      
-                      <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Dispositivo </th>                      
-                      <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Aplicativo </th>                      
+                      <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Aplicativo </th>
+                      <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Dispositivo </th>
+                      <th class="text-uppercase text-sm font-weight-bolder opacity-7">Título do Problema</th>                                           
+                                            
                       <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Padrão de Acessibilidade </th>                  
                       <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Ações </th>                                              
                     </tr>
@@ -57,9 +58,9 @@
                     @foreach($issues as $issue)                   
                     <tr>
                       <td> <div class="d-flex px-3 py-1"> <h6 class="mb-0 text-sm">  {{date( 'd/m/Y',strtotime($issue->creationDate))}} </h6></div> </td>
-                      <td> <div class="d-flex px-3 py-1"> <h6 class="mb-0 text-sm"> {{$issue->problem}} </h6></div> </td>                         
-                      <td> <div class="d-flex px-3 py-1"><h6 class="mb-0 text-sm"> {{$issue->device}} </h6></div> </td>                      
                       <td> <div class="d-flex px-3 py-1"><h6 class="mb-0 text-sm"> {{$issue->appTitle}} </h6></div> </td>                      
+                      <td> <div class="d-flex px-3 py-1"><h6 class="mb-0 text-sm"> {{$issue->device}} </h6></div> </td>
+                      <td> <div class="d-flex px-3 py-1"> <h6 class="mb-0 text-sm"> {{$issue->problem}} </h6></div> </td>                         
                       <td> <div class="d-flex px-3 py-1"><h6 class="mb-0 text-sm"> {{$issue->pattern}} </h6> </div></td>
                       
                       <td>
@@ -86,7 +87,7 @@
                         @AdminOnly
                         <a href="/problemas/{{$issue->id}}" class="btn btn-danger btn-round" title="Excluir o problema" style="padding: 5px 10px;"
                         data-toggle="modal" data-target="#exampleModal"
-                        onclick="setaDadosModal({{$issue->id}},'{{$issue->title}}')">
+                        onclick="setaDadosModal({{$issue->id}},'{{$issue->problem}}')">
                           <p class="text-xs font-weight-bold mb-0">
                             <i class="material-icons opacity-10">close</i>                            
                           </p>                        
