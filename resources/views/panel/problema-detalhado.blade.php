@@ -75,7 +75,7 @@
             <div class="container" style="border-radius: 7px;">
               <div class="row">
                 <div class="col-sm" style="background:#f0f2f5;">
-                  <strong class="title" style="color:#344767;">  Fluxo utilizad na identificação do Problema de Acessibilidade do Aplicativo </strong>
+                  <strong class="title" style="color:#344767;">  Fluxo utilizado na identificação do Problema de Acessibilidade do Aplicativo </strong>
                   <p style="color:#000;">
                     {{$issue->flow_identify_problem}}
                   </p>
@@ -206,9 +206,26 @@
                   <div class="row">
                     
                   <div class="card-body pt-4 pb-3">                                
-                      @if(App\Http\Controllers\IssueController::totalVotesUser(Request::segment(2))>0)
+                      @if(App\Http\Controllers\IssueController::totalVotesUser(Request::segment(2))>0)                      
                         <h6> Já realizou a avaliação! </h6>
                       @else
+                      @if ($errors->any())
+
+                        <div class="alert alert-danger">
+                              <ul>
+                                  @foreach ($errors->all() as $error)
+                                      <li style="color:#fff;">{{ $error }}</li>
+                                  @endforeach
+                              </ul>
+                          </div>
+                        @endif 
+
+                        @if(session('mensagem'))
+                          <div class="alert alert-success">
+                              <p style="color:#fff;">{{session('mensagem')}}</p>
+                          </div>
+                        @endif 
+
                         <form role="form" class="text-start" action="/avaliar-problema" method="post">
                           @csrf                          
                           <h6> Este é de fato um problema de acessibilidade no aplicativo? </h6>
@@ -222,18 +239,19 @@
                               </legend>
                           </fieldset>
 
+                          <div class="input-group input-group-outline my-3">                              
+                            <select class="form-select form-select-lg" id="" name="severityId" style="border: 1px solid #d2d6da;border-radius: 0.375rem;padding-left: 10px;">
+                              <option value="0"> * Escolha um Nível de criticidade </option>                                
+                              @foreach($severityLevel as $sl)                                    
+                                <option value="{{$sl->id}}" @if(old('severityLevelId')==$sl->id) {{'selected'}} @endif > {{$sl->severity}} </option>                                        
+                              @endforeach                        
+                            </select>                            
+                          </div>
+
                           <div class="input-group input-group-outline my-3">
                             <textarea class="form-control" placeholder="Justificar opção escolhida" name="justification" style="height:100px"></textarea>  
                           </div>
-
-                          <div class="input-group input-group-outline my-3">                    
-                            <input type="text" class="form-control" name="severity" placeholder="Nível de criticidade">
-                          </div>
-
-                          <div class="input-group input-group-outline my-3">                    
-                            
-                          </div>
-
+                                             
                           <div class="d-flex justify-content-end mb-3">                        
                               <button type="submit" class="btn bg-gradient-info"> Avaliar </button>                            
                           </div>
@@ -341,7 +359,7 @@
                           @if($a->severity == null)
                             <p style="color:#000;"> - </p>
                           @else
-                            <p style="color:#000;">{{$a->severity}} </p> 
+                            <p style=";background:{{$a->severityColor}};color:#fff;padding: 4px 10px;border-radius: 5px;">{{$a->severity}} </p> 
                           @endif                                                    
                         </td>
                       </tr>

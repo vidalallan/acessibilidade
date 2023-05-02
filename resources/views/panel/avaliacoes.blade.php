@@ -6,7 +6,7 @@
           <div class="card my-4">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
               <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                <h6 class="text-white text-capitalize ps-3"> Avaliações das Questões de Acessibilidade </h6>
+                <h6 class="text-white text-capitalize ps-3"> Avaliações das Problemas de Acessibilidade realizadas pelo Usuário </h6>
               </div>
             </div>           
 
@@ -19,7 +19,8 @@
                 @endif
 
               <h6 class="text-uppercase text-sm font-weight-bolder opacity-7">
-                Total de avaliações realizadas: {{App\Http\Controllers\AssessmentController::countAssessmentView()}} 
+                <!-- Total de avaliações realizadas: {{App\Http\Controllers\AssessmentController::countAssessmentView()}}-->
+                Total de avaliações {{count($assessments)}}
               </h6>
             </div>
 
@@ -29,9 +30,10 @@
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
-                      <th class="text-uppercase text-sm font-weight-bolder opacity-7">Questão</th>
+                      <th class="text-uppercase text-sm font-weight-bolder opacity-7">Título do Problema</th>
                       <th class="text-uppercase text-sm font-weight-bolder opacity-7">É um problema?</th>
-                      <th class="text-uppercase text-sm font-weight-bolder opacity-7">Justificativa</th>
+                      <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Gravidade </th>
+                      <th class="text-uppercase text-sm font-weight-bolder opacity-7">Justificativa</th>                      
                       <th class="text-uppercase text-sm font-weight-bolder opacity-7 ps-2"> Ações </th>                      
                     </tr>
                   </thead>
@@ -40,19 +42,25 @@
                     <tr>
                       <td>
                         <div class="d-flex px-3 py-1">                         
-                            <h6 class="mb-0 text-sm">{{$a->title}} </h6>                                                    
+                            <h6 class="mb-0 text-sm">{{$a->titProblem}} </h6>                                                    
                         </div>
                       </td>
 
                       <td>
                         <div class="d-flex px-3 py-1">
                         
-                          @if($a->problem == 0)
+                          @if($a->problem==0)
                             <h6 class="mb-0 text-sm"> Não </h6>      
                           @else
                             <h6 class="mb-0 text-sm"> Sim </h6>      
                           @endif               
                             
+                        </div>
+                      </td>
+
+                      <td>
+                        <div class="d-flex px-3 py-1">                         
+                            <h6 class="mb-0 text-sm" style="background:{{$a->severityColor}};color:#fff;padding:5px 10px;width:100%;border-radius:5px;">{{$a->severity}} </h6>                                                    
                         </div>
                       </td>
 
@@ -67,7 +75,13 @@
                           <p class="text-xs font-weight mb-0">
                             Detalhes
                           </p>                        
-                        </a>                       
+                        </a>  
+                        
+                        <a href="/avaliacoes/{{$a->id}}/editar" class="btn btn-success btn-round" style="padding: 5px 10px;">
+                          <p class="text-xs font-weight-bold mb-0">
+                            <i class="material-icons opacity-10">edit</i>                            
+                          </p>                        
+                        </a>
 
                         <a href="/avaliacoes/{{$a->id}}" class="btn btn-danger btn-round" style="padding: 5px 10px;"
                            data-toggle="modal" data-target="#exampleModal"
@@ -107,8 +121,7 @@
                               a = document.querySelector("#link-excluir");
                               a.href = "/avaliacoes/"+idProblema;
                           }
-                        </script>
-                        
+                        </script>                        
 
                       </td>                      
                     </tr>

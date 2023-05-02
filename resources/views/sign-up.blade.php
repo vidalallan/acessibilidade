@@ -128,23 +128,22 @@
   <script src="../assets/js/core/bootstrap.min.js"></script>
   <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
   <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
+  
   <script>
 
-var password = document.getElementById("password")
-  , confirm_password = document.getElementById("confirm_password");
+    var password = document.getElementById("password")
+      , confirm_password = document.getElementById("confirm_password");
 
-function validatePassword(){
-  if(password.value != confirm_password.value) {
-    confirm_password.setCustomValidity("Senhas diferentes!");
-  } else {
-    confirm_password.setCustomValidity('');
-  }
-}
+    function validatePassword(){
+      if(password.value != confirm_password.value) {
+        confirm_password.setCustomValidity("Senhas diferentes!");
+      } else {
+        confirm_password.setCustomValidity('');
+      }
+    }
 
-password.onchange = validatePassword;
-confirm_password.onkeyup = validatePassword;
-
-
+    password.onchange = validatePassword;
+    confirm_password.onkeyup = validatePassword;
 
     var win = navigator.platform.indexOf('Win') > -1;
     if (win && document.querySelector('#sidenav-scrollbar')) {
@@ -154,6 +153,7 @@ confirm_password.onkeyup = validatePassword;
       Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
     }
   </script>
+  
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->

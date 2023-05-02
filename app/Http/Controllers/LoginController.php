@@ -55,8 +55,14 @@ class LoginController extends Controller
             //return redirect()->back()->withErrors(['Usuário e/ou senha inválidos']);            
             return redirect('/login');
         }
+        else if(auth()->user()->deleted == 1){
+            return redirect('/login');
+        }
+        else{
+            return redirect('/dashboard');        
+        }
         
-        return redirect('/dashboard');  
+          
     }   
    
 

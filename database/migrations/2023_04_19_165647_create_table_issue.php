@@ -40,7 +40,7 @@ return new class extends Migration
             $table->foreign('patternId')->references('id')->on('tbPattern');
             $table->string('tool_problem')->nullable();	
             $table->string('tool_problem_version')->nullable();	
-            $table->string('flow_identify_problem')->nullable();	
+            $table->string('flow_identify_problem',2000)->nullable();	
             $table->tinyInteger('assistive_technology_tool')->nullable();
             $table->string('tool_assistive')->nullable();	
             $table->string('tool_assistive_version')->nullable();

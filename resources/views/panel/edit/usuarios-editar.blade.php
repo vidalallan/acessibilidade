@@ -37,14 +37,14 @@
               @endif
 
 
-              <form role="form" class="text-start" action="#" method="post">
+              <form role="form" class="text-start" action="/usuario/update/{{$user->id}}" method="post">
               @csrf
               <p class="mb-2 text-sm mx-auto" style="color:#fb8c00;">
                   Campo com * é de preenchimento obrigatório.                      
                 </p>
               <div class="input-group input-group-outline my-3">                    
                 <input type="text" 
-                        name="device" 
+                        name="name" 
                         class="form-control" 
                         placeholder=" * Digite o nome do usuário" 
                         value=  "{{$user->name}}" 
@@ -52,32 +52,28 @@
               </div>
 
               <div class="input-group input-group-outline my-3">
-              <input type="text" 
-                        name="email" 
-                        class="form-control" 
-                        placeholder=" * Digite o e-mail do usuário" 
-                        value=  "{{$user->email}}" 
-                />
+               <!-- <input type="text" 
+                          name="email" 
+                          class="form-control" 
+                          placeholder=" * Digite o e-mail do usuário" 
+                          value=  "{{$user->email}}" 
+                  />-->
+                  <label for="patternVersion" class="lab-center">E-mail: {{$user->email}} </label>
               </div>  
 
-              <div class="input-group input-group-outline my-3">
-              <input type="text" 
-                        name="level" 
-                        class="form-control" 
-                        placeholder="Escolha o Nível de acesso do usuário" 
-                        value=  "{{$user->level}}" 
-                />
-              </div> 
-                                                  
+           
+              <!--{{$user->level}}-->
+              <div class="input-group input-group-outline my-3 form-control">
+                <select class="form-select form-select-lg" name="level" style="border: 1px solid #d2d6da;border-radius: 0.375rem;padding-left: 10px;">
+                  <option value="admin" {{ $user->level == 'admin' ? 'selected' : '' }} > Administrador  </option>
+                  <option value="user" {{ $user->level == 'user' ? 'selected' : '' }}> Usuário  </option>                  
+                </select>
+              </div>
+                                    
               <div class="d-flex justify-content-end mb-3">
                 <button type="submit" class="btn bg-gradient-info"> Salvar </button>
               </div>                  
-              </form>             
-
-
-
-
-
+              </form> 
 
               <h6 class="text-uppercase text-sm font-weight-bolder opacity-7">
                 Total de Usuários cadastrados: {{App\Http\Controllers\UserController::countUserView()}} 
@@ -90,15 +86,22 @@
                 <table class="table align-items-center mb-0">
                   <thead>
                     <tr>
+                      <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Data de criação </th>
                       <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Nome </th>
                       <th class="text-uppercase text-sm font-weight-bolder opacity-7"> E-mail </th>
-                      <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Data de criação </th>
+                      <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Nível </th>
                       <th class="text-uppercase text-sm font-weight-bolder opacity-7 ps-2"> Ações </th>                      
                     </tr>
                   </thead>
                   <tbody>
                     @foreach($users as $user)                    
                     <tr>
+                      <td>
+                        <div class="d-flex px-3 py-1">                         
+                            <h6 class="mb-0 text-sm">{{date( 'd/m/Y',strtotime($user->created_at))}} </h6>                                                    
+                        </div>
+                      </td>
+                      
                       <td>
                         <div class="d-flex px-3 py-1">                         
                             <h6 class="mb-0 text-sm">{{$user->name}} </h6>                                                    
@@ -113,7 +116,7 @@
 
                       <td>
                         <div class="d-flex px-3 py-1">                         
-                            <h6 class="mb-0 text-sm">{{date( 'd/m/Y',strtotime($user->created_at))}} </h6>                                                    
+                            <h6 class="mb-0 text-sm">{{$user->level}} </h6>                                                    
                         </div>
                       </td>
                       

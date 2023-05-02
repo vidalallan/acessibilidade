@@ -9,6 +9,7 @@ use App\Models\Assessment;
 use App\Models\Pattern;
 use App\Models\User;
 use App\Models\Problem;
+use App\Models\SeverityLevel;
 use App\Http\Requests\ProblemFormRequest;
 use Illuminate\Support\Facades\DB;
 
@@ -27,7 +28,9 @@ class IssueController extends Controller
 
     public function indexView(){
 
-        $sql = 'select i.id,i.creationDate,p.problem,d.device,i.appTitle,pa.pattern from tbIssue i 
+        $sql = 'select i.id,i.creationDate,p.problem,d.device,i.appTitle,pa.pattern,
+		(select count(issueId) from tbassessment a where a.issueId =i.id) totalAvaliacoes
+		from tbIssue i 
         inner join tbDevice d
         on i.idDevice = d.idDevice
         inner join tbProblem p
@@ -43,6 +46,140 @@ class IssueController extends Controller
 
         return view('panel.problemas', compact('issues', 'devices','assessments'));        
     }
+
+    public function researchProblems(){
+
+        $sql = 'select i.id,i.creationDate,p.problem,d.device,i.appTitle,pa.pattern,
+		(select count(issueId) from tbassessment a where a.issueId =i.id) totalAvaliacoes
+		from tbIssue i 
+        inner join tbDevice d
+        on i.idDevice = d.idDevice
+        inner join tbProblem p
+        on i.problemId = p.id
+        inner join tbPattern pa
+        on i.patternId = pa.id
+        where i.deleted=0 order by i.id desc';
+       
+        $issues = DB::select($sql);
+        
+        $devices = Device::all();        
+        $assessments = Assessment::all();        
+
+        return view('panel.problemas-pesquisar', compact('issues', 'devices','assessments'));        
+    }
+
+    public function researchProblemsByUser(){
+        $sql = 'select i.id,i.creationDate,p.problem,d.device,i.appTitle,pa.pattern,
+		(select count(issueId) from tbassessment a where a.issueId =i.id) totalAvaliacoes
+		from tbIssue i 
+        inner join tbDevice d
+        on i.idDevice = d.idDevice
+        inner join tbProblem p
+        on i.problemId = p.id
+        inner join tbPattern pa
+        on i.patternId = pa.id
+        where i.deleted=0 and i.userId='. auth()->user()->id .' order by i.id desc';
+       
+        $issues = DB::select($sql);
+        
+        $devices = Device::all();        
+        $assessments = Assessment::all();        
+
+        return view('panel.problemas-por-usuario', compact('issues', 'devices','assessments'));        
+    }
+
+    public function filterProblems(Request $request){
+
+        $filter = '';
+        if($request->searchBy == 0){
+            $filter = ''; 
+        }
+        elseif($request->searchBy == 1){
+            $filter = ' and p.problem =' . "'$request->searchField'";            
+        }
+        elseif($request->searchBy == 2){            
+            $filter = ' and d.device =' . "'$request->searchField'";            
+        }
+        elseif($request->searchBy == 3){            
+            $filter = ' and i.appTitle =' . "'$request->searchField'";            
+        }
+        elseif($request->searchBy == 4){            
+            $filter = ' and pa.pattern =' . "'$request->searchField'";            
+        }
+        elseif($request->searchBy == 5){            
+            $filter = ' and (select count(issueId) from tbassessment a where a.issueId =i.id) = 0 ';            
+        }
+        elseif($request->searchBy == 6){            
+            $filter = ' and (select count(issueId) from tbassessment a where a.issueId =i.id) > 0 ';            
+        }
+
+
+        $sql = 'select i.id,i.creationDate,p.problem,d.device,i.appTitle,pa.pattern,
+		(select count(issueId) from tbassessment a where a.issueId =i.id) totalAvaliacoes
+		from tbIssue i 
+        inner join tbDevice d
+        on i.idDevice = d.idDevice
+        inner join tbProblem p
+        on i.problemId = p.id
+        inner join tbPattern pa
+        on i.patternId = pa.id
+        where i.deleted=0 '. $filter .'order by i.id desc';
+       
+        $issues = DB::select($sql);
+        
+        $devices = Device::all();        
+        $assessments = Assessment::all();        
+
+        return view('panel.problemas-pesquisar', compact('issues', 'devices','assessments'));        
+    }
+
+    public function filterProblemsByUser(Request $request){
+
+        $filter = '';
+        if($request->searchBy == 0){
+            $filter = ''; 
+        }
+        elseif($request->searchBy == 1){
+            $filter = ' and p.problem =' . "'$request->searchField'";            
+        }
+        elseif($request->searchBy == 2){            
+            $filter = ' and d.device =' . "'$request->searchField'";            
+        }
+        elseif($request->searchBy == 3){            
+            $filter = ' and i.appTitle =' . "'$request->searchField'";            
+        }
+        elseif($request->searchBy == 4){            
+            $filter = ' and pa.pattern =' . "'$request->searchField'";            
+        }
+        elseif($request->searchBy == 5){            
+            $filter = ' and (select count(issueId) from tbassessment a where a.issueId =i.id) = 0 ';            
+        }
+        elseif($request->searchBy == 6){            
+            $filter = ' and (select count(issueId) from tbassessment a where a.issueId =i.id) > 0 ';            
+        }
+
+
+        $sql = 'select i.id,i.creationDate,p.problem,d.device,i.appTitle,pa.pattern,
+		(select count(issueId) from tbassessment a where a.issueId =i.id) totalAvaliacoes
+		from tbIssue i 
+        inner join tbDevice d
+        on i.idDevice = d.idDevice
+        inner join tbProblem p
+        on i.problemId = p.id
+        inner join tbPattern pa
+        on i.patternId = pa.id
+        where i.userId=' . auth()->user()->id . ' and i.deleted=0 '. $filter .' order by i.id desc';
+       
+        $issues = DB::select($sql);
+        
+        $devices = Device::all();        
+        $assessments = Assessment::all();        
+
+        return view('panel.problemas-por-usuario', compact('issues', 'devices','assessments'));        
+    }
+
+
+
 
     public function indexAvaliacoesView(){         
         
@@ -209,7 +346,14 @@ class IssueController extends Controller
        
         $issues = DB::select($sql);
 
-        $assessments = Assessment::where('issueId','=',$idIssue)->get();
+        //$assessments = Assessment::where('issueId','=',$idIssue)->get();
+
+        $assessments = DB::table('tbAssessment')
+            ->join('tbSeverityLevel', 'tbAssessment.severityId', '=', 'tbSeverityLevel.id')            
+            ->select('tbAssessment.*', 'tbSeverityLevel.severity', 'tbSeverityLevel.description','tbSeverityLevel.severityColor')
+            ->where('tbAssessment.issueId','=',$idIssue)
+            ->get();
+
 
         $sql = 'SELECT i.id, i.title, i.idDevice, d.device,a.severityId, ';
         $sql .= 'SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", ';
@@ -226,11 +370,13 @@ class IssueController extends Controller
 
         $total = DB::select($sql);
 
+        $severityLevel = SeverityLevel::where('deleted','=',0)->get();
+
         //$sqlVote = "select * from tbAssessment where issueId= $idIssue and userId= ". auth()->user()->id;
         //$totalVotes = DB::select($sqlVote);
 
         //return view('panel.problema-detalhado', compact('issues','assessments','total','totalVotes'));        
-        return view('panel.problema-detalhado', compact('issues','assessments','total'));        
+        return view('panel.problema-detalhado', compact('issues','assessments','total','severityLevel'));        
     }
 
     public static function totalVotesUser($idIssue){

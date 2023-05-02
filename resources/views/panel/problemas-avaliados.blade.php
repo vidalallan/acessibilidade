@@ -12,26 +12,26 @@
 
             <div class="card-body px-0 pb-2">
 
-            <div class="card-body pt-4 pb-3">
-              <form action="/query-filter" method="get">
-                <label> Pesquisar por: </label>
-                <select class="form-select form-select-lg" name="searchBy">
-                  <option value="0"> Escolha uma das opções </option>                  
-                  <option value="1"> Título do problema </option>
-                  <option value="2"> Dispositivo </option>
-                  <option value="3"> Aplicativo </option>
-                  <option value="4"> Padrão de Acessibilidade </option>
-                </select>
+              <div class="card-body pt-4 pb-3">
+                <form action="/query-filter" method="get">
+                  <label> Pesquisar por: </label>
+                  <select class="form-select form-select-lg" name="searchBy">
+                    <option value="0"> Escolha uma das opções </option>                  
+                    <option value="1"> Título do problema </option>
+                    <option value="2"> Dispositivo </option>
+                    <option value="3"> Aplicativo </option>
+                    <option value="4"> Padrão de Acessibilidade </option>                    
+                  </select>
 
-                <div class="input-group input-group-outline my-3">                    
-                  <input type="text" class="form-control" name="searchField"  placeholder="Digite aqui a sua consulta">
-                </div>
+                  <div class="input-group input-group-outline my-3">                    
+                    <input type="text" class="form-control" name="searchField"  placeholder="Digite aqui a sua consulta">
+                  </div>
 
-                <div class="d-flex justify-content-end mb-3">
-                  <button type="submit" class="btn bg-gradient-info"> Pesquisar </button>
-                </div>
-              </form> 
-            </div>
+                  <div class="d-flex justify-content-end mb-3">
+                    <button type="submit" class="btn bg-gradient-info"> Pesquisar </button>
+                  </div>
+                </form> 
+              </div>
 
               <div class="table-responsive p-0">
 

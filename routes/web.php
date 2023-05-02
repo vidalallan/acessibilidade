@@ -30,6 +30,11 @@ Route::post('/dispositivo/update/{id}','App\Http\Controllers\DeviceController@up
 Route::get('/usuarios/{id}/editar','App\Http\Controllers\UserController@edit')->middleware(['only.admin']);
 Route::get('/usuarios','App\Http\Controllers\UserController@indexView')->middleware(['only.admin']);
 Route::get('/usuarios/{id}','App\Http\Controllers\UserController@destroyView')->middleware(['only.admin']);
+Route::post('/usuario/update/{id}','App\Http\Controllers\UserController@update')->middleware(['only.admin']);
+Route::post('/usuario/adicionar','App\Http\Controllers\UserController@storeViewPanel')->middleware(['only.admin']);
+Route::get('/alterar-senha','App\Http\Controllers\UserController@showUserById')->middleware(Authenticate::class);
+Route::post('/change-password/{id}','App\Http\Controllers\UserController@changePassById')->middleware(Authenticate::class);
+
 
 Route::get('/padroes','App\Http\Controllers\PatternController@indexView')->middleware(['only.admin']);
 Route::post('/padroes','App\Http\Controllers\PatternController@storeView')->middleware(['only.admin']);
@@ -39,7 +44,13 @@ Route::get('/problemas','App\Http\Controllers\IssueController@indexView')->middl
 Route::post('/problemas','App\Http\Controllers\IssueController@storeView')->middleware(Authenticate::class);
 Route::get('/problemas/{idIssue}','App\Http\Controllers\IssueController@destroyView')->middleware(Authenticate::class);
 Route::get('/problemas-avaliados','App\Http\Controllers\IssueController@indexAvaliacoesView')->middleware(Authenticate::class);
+Route::get('/problemas-pesquisar','App\Http\Controllers\IssueController@researchProblems')->middleware(Authenticate::class);
+Route::get('/problemas-por-usuario','App\Http\Controllers\IssueController@researchProblemsByUser')->middleware(Authenticate::class);
 Route::get('/query-filter','App\Http\Controllers\IssueController@queryFilter')->middleware(Authenticate::class);
+Route::get('/problemas-filtrar','App\Http\Controllers\IssueController@filterProblems')->middleware(Authenticate::class);
+Route::get('/problemas-filtrar-por-user','App\Http\Controllers\IssueController@filterProblemsByUser')->middleware(Authenticate::class);
+
+
 
 Route::get('/dashboard','App\Http\Controllers\IssueController@indexViewDashboard')->middleware(Authenticate::class);
 
@@ -48,6 +59,9 @@ Route::get('/problemas-adicionar','App\Http\Controllers\IssueController@indexVie
 Route::get('/avaliacoes','App\Http\Controllers\AssessmentController@indexView')->middleware(Authenticate::class);
 Route::get('/avaliacoes/{idAssessment}','App\Http\Controllers\AssessmentController@destroyView')->middleware(Authenticate::class);
 Route::post('/avaliar-problema','App\Http\Controllers\AssessmentController@storeViewProblemDetail')->middleware(Authenticate::class);
+Route::get('/avaliacoes/{id}/editar','App\Http\Controllers\AssessmentController@edit')->middleware(Authenticate::class);
+Route::post('/avaliacoes/update/{id}','App\Http\Controllers\AssessmentController@update')->middleware(Authenticate::class);
+
 Route::get('/problema-detalhado/{idIssue}','App\Http\Controllers\IssueController@queryQuestionsPanelbyParameter')->name('problema-detalhado')->middleware(Authenticate::class);
 
 

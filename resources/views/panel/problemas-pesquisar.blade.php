@@ -12,8 +12,7 @@
 
             <div class="card-body pt-4 pb-3">
 
-
-            <div class="card-body pt-4 pb-3">
+              <div class="card-body pt-4 pb-3">
                 <form action="/problemas-filtrar" method="get">
                   <label> Pesquisar por: </label>
                   <select class="form-select form-select-lg" name="searchBy">
@@ -36,7 +35,6 @@
                 </form> 
               </div>
 
-
             <div class="row">
 
                   @if(session('mensagemExclusao'))
@@ -48,8 +46,8 @@
                 <div class="col-sm">                  
                   
                   <h6 class="text-uppercase text-sm font-weight-bolder opacity-7">
-                    <!-- Total de problemas cadastrados: {{App\Http\Controllers\IssueController::countIssueView()}}-->
-                    Total de problemas: {{count($issues)}} 
+                    <!--Total de problemas cadastrados: {{App\Http\Controllers\IssueController::countIssueView()}} -->
+                    Total de problemas: {{count($issues)}}
                   </h6>               
                 </div>
 

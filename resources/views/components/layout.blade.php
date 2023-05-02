@@ -74,12 +74,22 @@
             <span class="nav-link-text ms-1">Dashboard</span>
           </a>
         </li>
+        
+        <li class="nav-item">
+          <a class="nav-link text-white" href="/problemas-por-usuario">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">note_add</i>
+            </div>
+            <span class="nav-link-text ms-1"> Modificar Problemas </span>
+          </a>
+        </li>
+
         <li class="nav-item">
           <a class="nav-link text-white" href="/avaliacoes">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <i class="material-icons opacity-10">note_add</i>
             </div>
-            <span class="nav-link-text ms-1"> Avaliações </span>
+            <span class="nav-link-text ms-1"> Modificar Avaliações</span>
           </a>
         </li>
 
@@ -127,7 +137,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="/problemas-avaliados">
+          <a class="nav-link text-white" href="/problemas-pesquisar">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <i class="material-icons opacity-10"> search </i>
             </div>
@@ -139,7 +149,7 @@
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
               <i class="material-icons opacity-10"> quiz </i>
             </div>
-            <span class="nav-link-text ms-1"> Problemas Avaliados </span>
+            <span class="nav-link-text ms-1"> Problemas já avaliados </span>
           </a>
         </li>        
         
@@ -159,7 +169,17 @@
             <span class="nav-link-text ms-1">Usuários</span>
           </a>
         </li>
-        @endAdminOnly        
+        @endAdminOnly
+        
+        <li class="nav-item">
+          <a class="nav-link text-white " href="/alterar-senha">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">person</i>
+            </div>
+            <span class="nav-link-text ms-1">Alterar senha de Usuário</span>
+          </a>
+        </li>
+
         <li class="nav-item">
           <a class="nav-link text-white " href="/logout">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -191,8 +211,9 @@
           <ul class="navbar-nav  justify-content-end">
             
             <li class="nav-item d-flex align-items-center">
+              {{auth()->user()->name}} &nbsp;
               <a href="/logout" class="nav-link text-body font-weight-bold px-0">
-                
+               
                 <i class="fa fa-sign-out me-sm-1" aria-hidden="true" style="color:#000;"></i>
                 <span class="d-sm-inline d-none" style="color:#000;">Sair</span>
               </a>

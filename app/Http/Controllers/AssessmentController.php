@@ -5,10 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Assessment;
-
+use App\Models\SeverityLevel;
+use App\Http\Requests\SeverityLevelRequest;
 use App\Models\Issue;
-
-
 
 class AssessmentController extends Controller
 {
@@ -23,8 +22,16 @@ class AssessmentController extends Controller
     }
 
     public function indexView()
-    {        
-        $assessments = $this->index();
+    {   
+        $sql = "select a.*,a.problem,i.title,i.pattern,p.problem titProblem,sl.severity,sl.severityColor
+                from tbAssessment a
+                inner join tbIssue i on a.issueId = i.id
+                inner join tbProblem p on i.problemId = p.id
+                inner join tbSeverityLevel sl on sl.id = a.severityId 
+                where a.deleted=0 and a.userId = ".auth()->user()->id;
+
+        $assessments = DB::select($sql);     
+        
         return view('panel.avaliacoes')->with('assessments',$assessments);
     }
 
@@ -49,22 +56,21 @@ class AssessmentController extends Controller
         $assessment -> save();        
     }
 
-    public function storeViewProblemDetail(Request $request){
+    public function storeViewProblemDetail(SeverityLevelRequest $request){
         $assessment = new Assessment();
         $assessment -> creationDate = date('Y-m-d');
         $assessment -> deleted = 0;
 	    $assessment -> issueId = $request -> idIssue;
 	    $assessment -> problem = $request -> problem;
 	    $assessment -> justification = $request -> justification;
-        $assessment -> severity = $request -> severity;
+        $assessment -> severityId = $request -> severityId;
         $assessment -> userId = auth()->user()->id;
 
         $assessment -> save();
 
-        $issues = Issue::all();        
+        $issues = Issue::all();
         
-        
-        return redirect("/problema-detalhado/".$request->idIssue); 
+        return redirect('/problema-detalhado/'.$request->idIssue)->with('mensagem', 'Avaliação realizada com sucesso!'); 
     }
 
     public function queryAssessmentEvaluation($idIssue){
@@ -72,8 +78,7 @@ class AssessmentController extends Controller
         $assessment = Assessment::where('issueId','=',$idIssue)
                                 ->where('deleted','=',false);
 
-        return $assessment; 
-
+        return $assessment;
     }
 
 
@@ -167,6 +172,7 @@ class AssessmentController extends Controller
         return $assessment;
     }
 
+
     public function countYesNoByDevice(Request $request){        
 
         $sql = 'SELECT i.id, i.title, i.idDevice, d.device, i.pattern, ';
@@ -203,6 +209,22 @@ class AssessmentController extends Controller
         $assessment = DB::select($sql);
 
         return $assessment;
+    }
+
+    public function edit($id)
+    {
+        $assessment = Assessment::where('id','=',$id)->first();
+        
+        $severityLevel = SeverityLevel::where('deleted','=',0)->get();
+        
+        return view('panel.edit.avaliacao-editar',compact('assessment','severityLevel'));
+        
+    }
+
+    public function update(Request $request, $id)
+    {
+        Assessment::where('id','=',$request->id)->update($request->except(['_token', '_method']));
+        return redirect('/avaliacoes')->with('mensagem', 'Avaliação alterada com sucesso!');
     }
 
     public function destroyView($idAssessment)

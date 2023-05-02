@@ -14,7 +14,7 @@
 
 
             <div class="card-body pt-4 pb-3">
-                <form action="/problemas-filtrar" method="get">
+                <form action="/problemas-filtrar-por-user" method="get">
                   <label> Pesquisar por: </label>
                   <select class="form-select form-select-lg" name="searchBy">
                     <option value="0"> Escolha uma das opções </option>                  
@@ -103,24 +103,20 @@
                           <i class="material-icons opacity-10">note_add</i>                                                   
                         </a>
 
-                        @AdminOnly
+                        
                         <a href="/problemas/{{$issue->id}}" class="btn btn-success btn-round" title="Editar o problema" style="padding: 5px 10px;">
                           <p class="text-xs font-weight-bold mb-0">
                             <i class="material-icons opacity-10">edit</i>                            
                           </p>                        
                         </a>                        
-                        @endAdminOnly
-
-
-                        @AdminOnly
+                        
                         <a href="/problemas/{{$issue->id}}" class="btn btn-danger btn-round" title="Excluir o problema" style="padding: 5px 10px;"
                         data-toggle="modal" data-target="#exampleModal"
                         onclick="setaDadosModal({{$issue->id}},'{{$issue->problem}}')">
                           <p class="text-xs font-weight-bold mb-0">
                             <i class="material-icons opacity-10">close</i>                            
                           </p>                        
-                        </a>
-                        @endAdminOnly
+                        </a>                        
 
                         <!-- Modal -->
                         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
