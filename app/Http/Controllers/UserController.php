@@ -35,6 +35,17 @@ class UserController extends Controller
         return view('panel.usuario-mudar-senha',compact('dataUser'));
     }
 
+    public static function  countUser(){
+        $user = new User();
+
+        $total = $user::where('deleted','=',0)->count();
+        
+        
+        return response()->json([
+            'count'=> $total,
+            'code'=>200]);              
+    }
+
 
     public static function  countUserView(){
         $user = new User();
@@ -182,7 +193,10 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        User::where('id', $id)->update(['deleted' => 1]);
+        return response()->json([
+            'message'=> 'user removed successfully',
+            'code'=>200]);
     }
 
     public function destroyView($id)

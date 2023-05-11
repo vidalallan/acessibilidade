@@ -15,8 +15,6 @@ use App\Http\Middleware\Authenticate;
 |
 */
 
-
-
 Route::get('/dashboard', function () {
     return view('panel.dashboard');
 })->middleware(Authenticate::class);
@@ -35,7 +33,6 @@ Route::post('/usuario/adicionar','App\Http\Controllers\UserController@storeViewP
 Route::get('/alterar-senha','App\Http\Controllers\UserController@showUserById')->middleware(Authenticate::class);
 Route::post('/change-password/{id}','App\Http\Controllers\UserController@changePassById')->middleware(Authenticate::class);
 
-
 Route::get('/padroes','App\Http\Controllers\PatternController@indexView')->middleware(['only.admin']);
 Route::post('/padroes','App\Http\Controllers\PatternController@storeView')->middleware(['only.admin']);
 Route::get('/padroes/{idPattern}','App\Http\Controllers\PatternController@destroyView')->middleware(['only.admin']);
@@ -49,12 +46,13 @@ Route::get('/problemas-por-usuario','App\Http\Controllers\IssueController@resear
 Route::get('/query-filter','App\Http\Controllers\IssueController@queryFilter')->middleware(Authenticate::class);
 Route::get('/problemas-filtrar','App\Http\Controllers\IssueController@filterProblems')->middleware(Authenticate::class);
 Route::get('/problemas-filtrar-por-user','App\Http\Controllers\IssueController@filterProblemsByUser')->middleware(Authenticate::class);
-
-
+Route::get('/problemas-adicionar','App\Http\Controllers\IssueController@indexView2');
+Route::get('/problema-detalhado/{idIssue}','App\Http\Controllers\IssueController@queryQuestionsPanelbyParameter')->name('problema-detalhado')->middleware(Authenticate::class);
+Route::get('/problemas/{id}/editar','App\Http\Controllers\IssueController@edit')->middleware(Authenticate::class);
+Route::post('/problemas/update/{id}','App\Http\Controllers\IssueController@update')->middleware(Authenticate::class);
 
 Route::get('/dashboard','App\Http\Controllers\IssueController@indexViewDashboard')->middleware(Authenticate::class);
-
-Route::get('/problemas-adicionar','App\Http\Controllers\IssueController@indexView2');
+Route::get('/description','App\Http\Controllers\IssueController@getDescriptionProblem')->middleware(Authenticate::class);
 
 Route::get('/avaliacoes','App\Http\Controllers\AssessmentController@indexView')->middleware(Authenticate::class);
 Route::get('/avaliacoes/{idAssessment}','App\Http\Controllers\AssessmentController@destroyView')->middleware(Authenticate::class);
@@ -62,8 +60,13 @@ Route::post('/avaliar-problema','App\Http\Controllers\AssessmentController@store
 Route::get('/avaliacoes/{id}/editar','App\Http\Controllers\AssessmentController@edit')->middleware(Authenticate::class);
 Route::post('/avaliacoes/update/{id}','App\Http\Controllers\AssessmentController@update')->middleware(Authenticate::class);
 
-Route::get('/problema-detalhado/{idIssue}','App\Http\Controllers\IssueController@queryQuestionsPanelbyParameter')->name('problema-detalhado')->middleware(Authenticate::class);
+Route::get('/niveis-gravidade','App\Http\Controllers\SeverityLevelController@indexView')->middleware(['only.admin']);
+Route::get('/nivel-gravidade/{id}','App\Http\Controllers\SeverityLevelController@destroyView')->middleware(['only.admin']);
+Route::post('/nivel-gravidade','App\Http\Controllers\SeverityLevelController@storeView')->middleware(['only.admin']);
+Route::get('/nivel-gravidade/{id}/editar','App\Http\Controllers\SeverityLevelController@edit')->middleware(['only.admin']);
+Route::post('/nivel-gravidade/update/{id}','App\Http\Controllers\SeverityLevelController@update')->middleware(['only.admin']);
 
+Route::get('/relatorio-nivel-gravidade','App\Http\Controllers\SeverityLevelController@listProblemByLevelSeverity')->middleware(Authenticate::class);
 
 
 Route::get('/inscrever-usuario', function () {
@@ -79,11 +82,8 @@ Route::get('/login', function () {
 Route::post('/login','App\Http\Controllers\LoginController@loginView')->name('login');
 Route::get('/logout','App\Http\Controllers\LoginController@logoutView');
 
-//Route::get('/questions','App\Http\Controllers\IssueController@indexView2');
-
 Route::get('/consultar-questoes','App\Http\Controllers\IssueController@queryQuestionsWithOutParameter');
 Route::get('/questao-detalhada/{idIssue}','App\Http\Controllers\IssueController@queryQuestionsbyParameter');
-//Route::get('/questao-detalhada/{idIssue}','App\Http\Controllers\AssessmentController@queryAssessmentEvaluation');
 
 
 Route::get('/', function () {
@@ -93,6 +93,5 @@ Route::get('/', function () {
 Route::get('/tables', function () {
     return view('panel.tables');
 });
-
 
 Route::get('/todas-avaliacoes-sn','App\Http\Controllers\AssessmentController@countYesNoIdIssueView');

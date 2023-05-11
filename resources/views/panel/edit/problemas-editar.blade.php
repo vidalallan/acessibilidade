@@ -72,7 +72,7 @@
               </div>
             @endif 
 
-            <form role="form" class="text-start" action="/problemas" method="post" enctype="multipart/form-data">
+            <form role="form" class="text-start" action="/problemas/update/{{$issue->id}}" method="post" enctype="multipart/form-data">
             @csrf
 
             <p class="mb-2 text-sm mx-auto" style="color:#b73807;font-weight:500;">
@@ -84,22 +84,22 @@
 
             <div class="input-group input-group-outline my-3">                    
             <label for="appTitle" class="lab-center"> * Nome do Aplicativo que está sendo testado </label>
-              <input type="text" class="form-control" id="appTitle" name="appTitle" placeholder="" value="{{old('appTitle')}}">
+              <input type="text" class="form-control" id="appTitle" name="appTitle" placeholder="" value="{{$issue->appTitle}}">
             </div>
 
             <div class="input-group input-group-outline my-3">                    
             <label for="appFieldId" class="lab-center">Id do Campo do Aplicativo que está sendo testado  </label>
-              <input type="text" class="form-control" id="appFieldId" name="appFieldId" placeholder="" value="{{old('appFieldId')}}">
+              <input type="text" class="form-control" id="appFieldId" name="appFieldId" placeholder="" value="{{$issue->appFieldId}}">
             </div>
 
             <div class="input-group input-group-outline my-3">                    
             <label for="appFieldName" class="lab-center">Nome do Campo do Aplicativo que está sendo testado </label>
-              <input type="text" class="form-control" id="appFieldName" name="appFieldName" placeholder="" value="{{old('appFieldName')}}">
+              <input type="text" class="form-control" id="appFieldName" name="appFieldName" placeholder="" value="{{$issue->appFieldName}}">
             </div>  
             
             <div class="input-group input-group-outline my-3">                    
             <label for="linkApp" class="lab-center"> Link do Aplicativo que está sendo testado </label>
-              <input type="text" class="form-control" id="linkApp" name="linkApp"  placeholder="" value="{{old('linkApp')}}">
+              <input type="text" class="form-control" id="linkApp" name="linkApp"  placeholder="" value="{{$issue->linkApp}}">
             </div>
             
             <div class="input-group input-group-outline my-3">                                    
@@ -138,8 +138,10 @@
 
               </style>
 
-              <div class="form-control">              
-              
+              <input type="text" value="{{$issue->printScreen}}" name='fileContent' style="width:100%" />
+
+              <div class="form-control"> 
+
                   <input type="file" id="file" class="inputfile" name="printScreen" onchange='uploadFile(this)' />
                   <label for="file">                  
                     <span class="file-button">
@@ -164,7 +166,7 @@
             
             <div class="input-group input-group-outline my-3">                    
               <label for="flow_identify_problem" class="lab-center"> Descreva o fluxo utilizado na identificação do problema de acessibilidade </label>
-              <input type="text" class="form-control" id="flow_identify_problem" name="flow_identify_problem" placeholder="" value="{{old('flow_identify_problem')}}">
+              <input type="text" class="form-control" id="flow_identify_problem" name="flow_identify_problem" placeholder="" value="{{$issue->flow_identify_problem}}">
             </div>
 
              <!-- Fim Campos referentes ao aplicativo que está sendo testado -->
@@ -176,19 +178,19 @@
                 <select class="form-select form-select-lg" id="idDevice" name="idDevice" style="border: 1px solid #d2d6da;border-radius: 0.375rem;padding-left: 10px;">
                   <option value="0"> * Escolha um dispositivo </option>
                   @foreach($devices as $device)                                    
-                    <option value="{{$device->idDevice}}" @if(old('idDevice')==$device->idDevice) {{'selected'}} @endif > {{$device->device}} </option>                                        
+                    <option value="{{$device->idDevice}}" {{ $device->idDevice == $issue->idDevice ? 'selected' : '' }}> {{$device->device}} </option>                                        
                   @endforeach                        
                 </select>
               </div>
             
               <div class="input-group input-group-outline my-3">                    
               <label for="devideModel" class="lab-center">Modelo do Dispositivo Móvel </label>
-                <input type="text" class="form-control" id="devideModel" name="devideModel" placeholder="" value="{{old('devideModel')}}">
+                <input type="text" class="form-control" id="devideModel" name="devideModel" placeholder="" value="{{$issue->devideModel}}">
               </div>
               
               <div class="input-group input-group-outline my-3">                    
               <label for="version" class="lab-center"> Versão do Dispositivo Móvel  </label>
-                <input type="text" class="form-control" id="version" name="version" placeholder="" value="{{old('version')}}">
+                <input type="text" class="form-control" id="version" name="version" placeholder="" value="{{$issue->version}}">
               </div> 
 
              <!-- Fim campos do dispositivo móvel -->
@@ -243,19 +245,19 @@
                 <option value="0"> * Escolha uma das opções para o título do problema </option>                
                 <option id="novoProblema" value="-1"> Adicione um novo problema (caso ele não esteja na lista) </option>
                 @foreach($problems as $problem)                                    
-                  <option value="{{$problem->id}}" @if(old('problemId')==$problem->id) {{'selected'}} @endif > {{$problem->problem}} </option>                                        
+                  <option value="{{$problem->id}}" {{ $problem->id == $issue->problemId ? 'selected' : '' }}> {{$problem->problem}} </option>                                        
                 @endforeach                        
               </select>
             </div>                                  
 
             <div class="input-group input-group-outline my-3" id="titleId" style="display: none;">
               <label for="title" class="lab-center"> * Título do novo problema de acessibilidade </label>                    
-              <input type="text" class="form-control" id="title" name="title" placeholder="" value="{{old('title')}}">
+              <input type="text" class="form-control" id="title" name="title" placeholder="" value="{{$problem->title}}">
             </div>
 
             <div class="input-group input-group-outline my-3" id="descrTitleId" style="display: none;">                    
               <label for="description" class="lab-center"> Descrição do novo problema de acessibilidade </label>
-              <input type="text" class="form-control" id="description" name="description" placeholder="" value="{{old('description')}}">
+              <input type="text" class="form-control" id="description" name="description" placeholder="" value="{{$issue->description}}">
             </div>  
             
             <script>
@@ -279,19 +281,19 @@
               <select class="form-select form-select-lg" id="patternId" name="patternId" onchange="exibirOcultarCamposPattern()" style="border: 1px solid #d2d6da;border-radius: 0.375rem;padding-left: 10px;">
                 <option value="0"> * Escolha um dos Guias de Acessibilidade </option>                                
                 @foreach($patterns as $pattern)                                    
-                  <option value="{{$pattern->id}}" @if(old('patternId')==$pattern->id) {{'selected'}} @endif > {{$pattern->pattern}} </option>                                        
+                  <option value="{{$pattern->id}}" {{ $pattern->id == $issue->patternId ? 'selected' : '' }}> {{$pattern->pattern}} </option>                     
                 @endforeach                        
               </select>
             </div>
 
             <div class="input-group input-group-outline my-3" id="divVerPattern">
             <label for="patternVersion" class="lab-center">Versão do Guia de Acessibilidade  </label>                    
-              <input type="text" class="form-control" id="patternVersion" name="patternVersion" placeholder="" value="{{old('patternVersion')}}">
+              <input type="text" class="form-control" id="patternVersion" name="patternVersion" placeholder="" value="{{$issue->patternVersion}}">
             </div>
 
             <div class="input-group input-group-outline my-3"  id="divDetailPattern">                    
             <label for="patternVersionDetailts" class="lab-center"> Descreva os detalhes do princípio do guia de acessibilidade utilizado na identificação do problema  </label>
-              <input type="text" class="form-control" id="patternVersionDetailts" name="patternVersionDetailts" placeholder="" value="{{old('patternVersionDetailts')}}">
+              <input type="text" class="form-control" id="patternVersionDetailts" name="patternVersionDetailts" placeholder="" value="{{$issue->patternVersionDetailts}}">
             </div>
 
               <div class="input-group input-group-outline my-3">                                  
@@ -299,10 +301,10 @@
               <label for="le" class="lab-center"> Utilizou ferramenta para identificar o problema? </label>                 
                   <legend class="leg-sn" id="le" style="border: 1px solid #d2d6da;border-radius: 0.375rem;padding-left: 10px;">
                     <label for="toolUsed1"> 
-                      <input type="radio" id="toolUsed1" name="toolUsed" value="0" checked /> <span style="color:#000;"> NÃO </span> 
+                      <input type="radio" id="toolUsed1" name="toolUsed" value="0" {{$issue->toolUsed==0 ? 'checked' : '' }} /> <span style="color:#000;"> NÃO </span> 
                     </label>
                     <label for="assistive_technology_tool2"> 
-                      <input type="radio" id="toolUsed" name="toolUsed" value="1" style="margin-left:20px;" /> <span style="color:#000;"> SIM </span>
+                      <input type="radio" id="toolUsed" name="toolUsed" value="1" {{$issue->toolUsed==1 ? 'checked' : '' }} style="margin-left:20px;" /> <span style="color:#000;"> SIM </span>
                      </label>
                   </legend>
               </fieldset>
@@ -310,15 +312,16 @@
             
             <div class="input-group input-group-outline my-3">                    
             <label for="tool_problem" class="lab-center">Ferramenta de acessibilidade que identificou o problema  </label>
-              <input type="text" class="form-control" id="tool_problem" name="tool_problem" placeholder="" value="{{old('tool_problem')}}">
+              <input type="text" class="form-control" id="tool_problem" name="tool_problem" placeholder="" value="{{$issue->tool_problem}}">
             </div>
 
             <div class="input-group input-group-outline my-3">                    
             <label for="tool_problem_version" class="lab-center"> Versão da Ferramenta de acessibilidade que identificou o problema </label>
-              <input type="text" class="form-control" id="tool_problem_version" name="tool_problem_version" placeholder="" value="{{old('tool_problem_version')}}">
+              <input type="text" class="form-control" id="tool_problem_version" name="tool_problem_version" placeholder="" value="{{$issue->tool_problem_version}}">
             </div>            
 
             <script>
+              /*
               function verOpcaoFerrAss(){
                 var op ="";
 
@@ -332,6 +335,7 @@
                     document.getElementById("tool_assistive_version").value="";
                 }
               }
+              */
             </script>        
 
             <div class="input-group input-group-outline my-3" style="display:block;">                                  
@@ -339,23 +343,23 @@
               <label for="le" class="lab-center"> Utilizou alguma ferramenta de tecnologia assistiva? </label>                 
                   <legend class="leg-sn" id="le" style="border: 1px solid #d2d6da;border-radius: 0.375rem;padding-left: 10px;">
                     <label for="assistive_technology_tool1"> 
-                      <input type="radio" id="assistive_technology_tool1" onchange="verOpcaoFerrAss()" name="assistive_technology_tool" value="0" checked /> <span style="color:#000;"> NÃO </span> 
+                      <input type="radio" id="assistive_technology_tool1" onchange="verOpcaoFerrAss()" name="assistive_technology_tool" value="0" {{$issue->assistive_technology_tool==0 ? 'checked' : '' }} /> <span style="color:#000;"> NÃO </span> 
                     </label>
                     <label for="assistive_technology_tool2"> 
-                      <input type="radio" id="assistive_technology_tool2" onchange="verOpcaoFerrAss()" name="assistive_technology_tool" value="1" style="margin-left:20px;" /> <span style="color:#000;"> SIM </span>
+                      <input type="radio" id="assistive_technology_tool2" onchange="verOpcaoFerrAss()" name="assistive_technology_tool" value="1" {{$issue->assistive_technology_tool==1 ? 'checked' : '' }} style="margin-left:20px;" /> <span style="color:#000;"> SIM </span>
                      </label>
                   </legend>
               </fieldset>
             </div>
 
-            <div class="input-group input-group-outline my-3" id="fta" style="display: none;">  
+            <div class="input-group input-group-outline my-3" id="fta">  
             <label for="tool_assistive" class="lab-center">Qual o nome da ferramenta de tecnologia assistiva utilizada? </label>                  
-              <input type="text" class="form-control" id="tool_assistive" name="tool_assistive" placeholder="" value="{{old('tool_assistive')}}">
+              <input type="text" class="form-control" id="tool_assistive" name="tool_assistive" placeholder="" value="{{$issue->tool_assistive}}">
             </div>
 
-            <div class="input-group input-group-outline my-3" id="vfta" style="display: none;">  
+            <div class="input-group input-group-outline my-3" id="vfta">  
             <label for="tool_assistive_version" class="lab-center">Qual a versão da ferramenta de tecnologia assistiva utilizada?  </label>                  
-              <input type="text" class="form-control" id="tool_assistive_version" name="tool_assistive_version" placeholder="" value="{{old('tool_assistive_version')}}">
+              <input type="text" class="form-control" id="tool_assistive_version" name="tool_assistive_version" placeholder="" value="{{$issue->tool_assistive_version}}">
             </div>                               
                                                 
             <div class="d-flex justify-content-end mb-3">

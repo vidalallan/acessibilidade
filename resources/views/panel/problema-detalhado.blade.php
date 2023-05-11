@@ -24,7 +24,7 @@
                     <span style="font-weight: 300;color:#000;"> {{$issue->problem}} </span> 
                   </strong>
                   <br />
-                  <strong class="title" style="color:#344767;">Descrição:  <span style="font-weight: 300;}">{{$issue->description}} </span> </strong>                  
+                  <strong class="title" style="color:#344767;">Descrição: <span style="font-weight: 300;}">{{$issue->description}} </span> </strong>                  
                 </div>
               </div>
             </div>
@@ -60,6 +60,7 @@
                     Sem arquivo
                   </p>  
                   @else
+                  <!--<img src="{{asset('storage/'.$issue->printScreen)}}" />-->
                   <p> 
                     <a href="{{asset('storage/'.$issue->printScreen)}}" download style="color:#1b21e9;font-weight:300;"> Download </a>
                     &nbsp;&nbsp;
@@ -231,6 +232,8 @@
                           <h6> Este é de fato um problema de acessibilidade no aplicativo? </h6>
 
                           <input type="hidden" name="idIssue" value="{{Request::segment(2)}}"/>
+
+                          
 
                           <fieldset class="input-group input-group-outline my-3">                              
                               <legend style="font-size: 1rem;">

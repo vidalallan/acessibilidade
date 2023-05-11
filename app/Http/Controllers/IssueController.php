@@ -12,6 +12,7 @@ use App\Models\Problem;
 use App\Models\SeverityLevel;
 use App\Http\Requests\ProblemFormRequest;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class IssueController extends Controller
 {
@@ -22,14 +23,55 @@ class IssueController extends Controller
      */
     public function index()
     {
-        $issues = Issue::where('deleted','=',0)->get();        
+        //$issues = Issue::where('deleted','=',0)->get();        
+        $sql = 'select              
+            i.id,
+            i.created_at,
+            i.problemId,
+            pro.problem,
+            pro.description,
+            i.appTitle,
+            i.appFieldId,
+            i.appFieldName,
+            i.printScreen,
+            i.idDevice,
+            d.device,
+            i.patternId,
+            pat.pattern,
+            i.patternVersion,
+            i.patternVersionDetailts,
+            i.devideModel,
+            i.version,
+            i.linkApp,
+            i.origin,
+            i.userId,
+            i.toolUsed,
+            i.tool_problem,
+            i.tool_problem_version,
+            i.flow_identify_problem,
+            i.assistive_technology_tool,
+            i.tool_assistive,
+            i.tool_assistive_version,
+            i.updated_at    
+        from tbIssue i 
+        inner join tbDevice d        
+        on i.idDevice = d.idDevice                
+        inner join tbProblem pro
+        on i.problemId = pro.id
+        inner join tbPattern pat
+        on i.patternId = pat.id
+        where i.deleted=0
+        order by i.id desc';
+
+        $issues = DB::select($sql);
+
         return $issues;
     }
 
     public function indexView(){
 
         $sql = 'select i.id,i.creationDate,p.problem,d.device,i.appTitle,pa.pattern,
-		(select count(issueId) from tbassessment a where a.issueId =i.id) totalAvaliacoes
+		(select count(issueId) from tbAssessment a where a.deleted=0 and a.issueId =i.id) totalAvaliacoes
 		from tbIssue i 
         inner join tbDevice d
         on i.idDevice = d.idDevice
@@ -47,10 +89,25 @@ class IssueController extends Controller
         return view('panel.problemas', compact('issues', 'devices','assessments'));        
     }
 
+    //para obter a descrição do título escolhido
+    public function getDescriptionProblem(Request $request){
+        
+        $sql = 'select p.description from tbIssue i
+                inner join tbProblem p
+                on i.problemId = p.id
+                where i.problemId = '. $request->id . ' limit 1';
+
+        $desc = DB::select($sql);
+
+        foreach($desc as $d){
+            echo $d->description;
+        }        
+    }
+
     public function researchProblems(){
 
         $sql = 'select i.id,i.creationDate,p.problem,d.device,i.appTitle,pa.pattern,
-		(select count(issueId) from tbassessment a where a.issueId =i.id) totalAvaliacoes
+		(select count(issueId) from tbAssessment a where a.issueId =i.id) totalAvaliacoes
 		from tbIssue i 
         inner join tbDevice d
         on i.idDevice = d.idDevice
@@ -70,7 +127,7 @@ class IssueController extends Controller
 
     public function researchProblemsByUser(){
         $sql = 'select i.id,i.creationDate,p.problem,d.device,i.appTitle,pa.pattern,
-		(select count(issueId) from tbassessment a where a.issueId =i.id) totalAvaliacoes
+		(select count(issueId) from tbAssessment a where a.issueId =i.id) totalAvaliacoes
 		from tbIssue i 
         inner join tbDevice d
         on i.idDevice = d.idDevice
@@ -87,6 +144,49 @@ class IssueController extends Controller
 
         return view('panel.problemas-por-usuario', compact('issues', 'devices','assessments'));        
     }
+
+    public function filterProblemsApi(Request $request){
+
+        $filter = '';
+        if($request->searchBy == 0){
+            $filter = ''; 
+        }
+        elseif($request->searchBy == 1){
+            $filter = ' and p.problem =' . "'$request->searchField'";            
+        }
+        elseif($request->searchBy == 2){            
+            $filter = ' and d.device =' . "'$request->searchField'";            
+        }
+        elseif($request->searchBy == 3){            
+            $filter = ' and i.appTitle =' . "'$request->searchField'";            
+        }
+        elseif($request->searchBy == 4){            
+            $filter = ' and pa.pattern =' . "'$request->searchField'";            
+        }
+        elseif($request->searchBy == 5){            
+            $filter = ' and (select count(issueId) from tbassessment a where a.issueId =i.id) = 0 ';            
+        }
+        elseif($request->searchBy == 6){            
+            $filter = ' and (select count(issueId) from tbassessment a where a.issueId =i.id) > 0 ';            
+        }
+
+        $sql = 'select i.id,i.creationDate,p.problem,d.device,i.appTitle,pa.pattern,
+		(select count(issueId) from tbassessment a where a.issueId =i.id) totalAvaliacoes
+		from tbIssue i 
+        inner join tbDevice d
+        on i.idDevice = d.idDevice
+        inner join tbProblem p
+        on i.problemId = p.id
+        inner join tbPattern pa
+        on i.patternId = pa.id
+        where i.deleted=0 '. $filter .'order by i.id desc';
+       
+        $issues = DB::select($sql);        
+        
+        return $issues;        
+    }
+
+
 
     public function filterProblems(Request $request){
 
@@ -179,11 +279,8 @@ class IssueController extends Controller
     }
 
 
-
-
-    public function indexAvaliacoesView(){         
-        
-        $sql = 'SELECT i.id, i.title, i.idDevice, d.device,i.appTitle,i.pattern,i.creationDate, 
+    public function problemsEvaluated(){                 
+        $sql = 'SELECT i.id, i.idDevice, d.device,i.appTitle,i.creationDate, pro.problem,pa.pattern,
         SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", 
         SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no",         
         count(i.id) "total"
@@ -191,11 +288,41 @@ class IssueController extends Controller
         inner join tbIssue i 
         on a.issueId = i.id 
         inner join tbDevice d 
-        on i.idDevice = d.idDevice         
+        on i.idDevice = d.idDevice
+        inner join tbProblem pro
+        on i.problemId = pro.id
+        inner join tbPattern pa
+        on i.patternId = pa.id         
         where i.deleted=0 and
         a.deleted=0 
         group by a.issueId 
-        order by i.creationDate desc';        
+        order by count(i.id) desc';        
+        
+        $issues = DB::select($sql);   
+       
+        return $issues;
+    }
+
+
+
+    public function indexAvaliacoesView(){                 
+        $sql = 'SELECT i.id, i.idDevice, d.device,i.appTitle,i.creationDate, pro.problem,pa.pattern,
+        SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", 
+        SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no",         
+        count(i.id) "total"
+        from tbAssessment a 
+        inner join tbIssue i 
+        on a.issueId = i.id 
+        inner join tbDevice d 
+        on i.idDevice = d.idDevice
+        inner join tbProblem pro
+        on i.problemId = pro.id
+        inner join tbPattern pa
+        on i.patternId = pa.id         
+        where i.deleted=0 and
+        a.deleted=0 
+        group by a.issueId 
+        order by count(i.id) desc';        
         
         $issues = DB::select($sql);   
        
@@ -204,7 +331,8 @@ class IssueController extends Controller
 
     public function indexViewDashboard(){         
         
-        $sql = 'SELECT i.id, i.title, i.idDevice, d.device,i.appTitle,i.pattern, 
+        //inserir título e guia de acessibilidade
+        $sql = 'SELECT i.id, i.idDevice, d.device,i.appTitle,i.problemId, 
         SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", 
         SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no",         
         count(i.id) "total"
@@ -221,7 +349,8 @@ class IssueController extends Controller
         
         $issues = DB::select($sql);
         
-        $sqlApp = 'SELECT i.id, i.title, i.idDevice, d.device,i.appTitle,i.pattern, 
+        //i.title i.pattern
+        $sqlApp = 'SELECT i.id, i.idDevice,i.problemId, d.device,i.appTitle, 
         SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", 
         SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no",         
         count(i.appTitle) "total"
@@ -237,8 +366,32 @@ class IssueController extends Controller
         limit 10';        
         
         $issuesApp = DB::select($sqlApp);
+
+        $sql3 = 'SELECT sl.severity,a.severityId,count(a.severityId) total FROM tbAssessment a
+        inner join tbSeverityLevel sl 
+        on sl.id = a.severityId
+        group by severityId order by a.severityId desc';
+
+        $severityLevelGroup = DB::select($sql3);
+
+        //consulta por problemas mais comuns e menos comuns
+        /*
+        select p.problem,i.problemId,count(i.problemId) total from tbIssue i
+        inner join tbproblem p
+        on i.problemId = p.id
+        where i.deleted=0
+        group by i.problemId
+        order by count(i.problemId) desc,i.created_at
+        */
+
+        //consulta por origin
+        /*
+          select origin, count(origin) from tbissue where deleted = 0
+            group by origin 
+         */
+
        
-        return view('panel.dashboard', compact('issues','issuesApp'));
+        return view('panel.dashboard', compact('issues','issuesApp','severityLevelGroup'));
     }
 
     
@@ -249,8 +402,8 @@ class IssueController extends Controller
         if($request->searchBy == 0){
             $filter = ''; 
         }
-        elseif($request->searchBy == 1){
-            $filter = ' and i.title =' . "'$request->searchField'";            
+        elseif($request->searchBy == 1){                      
+            //$filter = ' and i.title =' . "'$request->searchField'";            
         }
         elseif($request->searchBy == 2){            
             $filter = ' and d.device =' . "'$request->searchField'";            
@@ -259,10 +412,11 @@ class IssueController extends Controller
             $filter = ' and i.appTitle =' . "'$request->searchField'";            
         }
         elseif($request->searchBy == 4){            
-            $filter = ' and i.pattern =' . "'$request->searchField'";            
+            //$filter = ' and i.pattern =' . "'$request->searchField'";            
         }
 
-        $sql = 'SELECT i.id, i.title,i.creationDate, i.idDevice, d.device,i.appTitle,i.pattern, 
+        //colocar titulo e padrão
+        $sql = 'SELECT i.id, i.creationDate, i.idDevice, d.device,i.appTitle, 
         SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", 
         SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no",         
         count(i.id) "total"
@@ -273,7 +427,7 @@ class IssueController extends Controller
         on i.idDevice = d.idDevice         
         where i.deleted=0 and a.deleted=0 ' .
         $filter .
-        ' group by a.issueId';        
+        ' group by a.issueId order by count(i.id) desc';        
 
         //dd($sql);
         
@@ -316,7 +470,8 @@ class IssueController extends Controller
 
         $assessments = Assessment::where('issueId','=',$idIssue)->get();
 
-        $sql = 'SELECT i.id, i.title, i.idDevice, d.device, ';
+        //colocar i.title (problem)
+        $sql = 'SELECT i.id, i.idDevice, d.device, ';
         $sql .= 'SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", ';
         $sql .= 'SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no", ';        
         $sql .= 'count(i.id) "total" ';
@@ -335,7 +490,7 @@ class IssueController extends Controller
     }
 
     public function queryQuestionsPanelbyParameter($idIssue){
-        $sql = "select *, pro.problem,pat.pattern from tbIssue i 
+        $sql = "select *, pro.problem,pro.description,pat.pattern from tbIssue i 
         inner join tbDevice d        
         on i.idDevice = d.idDevice                
         inner join tbProblem pro
@@ -355,7 +510,8 @@ class IssueController extends Controller
             ->get();
 
 
-        $sql = 'SELECT i.id, i.title, i.idDevice, d.device,a.severityId, ';
+            //colocar i.title
+        $sql = 'SELECT i.id, i.idDevice, d.device,a.severityId, ';
         $sql .= 'SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", ';
         $sql .= 'SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no", ';        
         $sql .= 'count(i.id) "total" ';
@@ -390,7 +546,7 @@ class IssueController extends Controller
         $issue = new Issue();
         
         return response()->json([
-            'count'=> $issue::count(),
+            'count'=> $issue::where('deleted','=',0)->count(),
             'code'=>200]);
     }
 
@@ -419,44 +575,14 @@ class IssueController extends Controller
      */
     public function store(Request $request)
     {
-        $issue = new Issue();
-        
-        $issue -> creationDate = date('Y-m-d');
-        $issue -> deleted = 0;
-        $issue -> title = $request-> title;
-        $issue -> description = $request-> description;
-        $issue -> appFieldId = $request->appFieldId;
-        $issue -> appFieldName = $request->appFieldName;
-
-        $image = $request->file('printScreen');
-        $path = $image->store('images','public');
-
-        $issue -> printScreen = $path;
-
-        $issue -> idDevice = $request-> idDevice;        
-        $issue -> patternVersion = $request-> patternVersion;
-        $issue -> patternVersionDetailts = $request-> patternVersionDetailts;
-        $issue -> devideModel = $request-> devideModel;        
-        $issue -> version = $request-> version;
-        $issue -> appTitle = $request-> appTitle;
-        $issue -> linkApp = $request-> linkApp;  
-        
-        $issue -> origin = $request-> origin;
-        $issue -> userId = auth()->user()->id;
-
-        $issue ->save();
-    }
-
-
-    public function storeView(ProblemFormRequest $request)
-    {
+        //fazer API ainda hj
         $issue = new Issue();
 
-        $issue -> problemId = $request->problemId; //novaInstituicao
+        $issue -> problemId = $request->problemId;
 
         if($issue -> problemId == -1){
             $problem = new Problem();
-            $problem -> problem = $request-> title;
+            $problem -> problem = $request->title;
             $problem -> description = $request -> description;
             $problem -> deleted = 0;
             $problem -> userId = auth()->user()->id;
@@ -469,10 +595,72 @@ class IssueController extends Controller
             $issue -> problemId = $lastId->id;            
         }                
         
-        $issue -> creationDate = date('Y-m-d');
+        $issue -> creationDate = date('Y-m-d H:i:s');
         $issue -> deleted = 0;
-        $issue -> title = $request-> title;
-        $issue -> description = $request-> description;
+        $issue -> appFieldId = $request->field_id_app;
+        $issue -> appFieldName = $request->field_name_app;
+        
+        $image = $request->file('printScreen');
+
+        if($image ==null){
+            $path = "";
+        }else{
+            $path = $image->store('imagesonline','public');
+        }
+     
+        $issue -> printScreen = $path;        
+        $issue -> patternId = $request->pattern_id;
+        $issue -> patternVersion = $request->pattern_version;
+        $issue -> patternVersionDetailts = $request-> pattern_details;
+        $issue -> idDevice = $request-> device_id;
+        $issue -> devideModel = $request-> devide_model;        
+        $issue -> version = $request-> device_version;
+        $issue -> appTitle = $request-> title_app;
+        $issue -> linkApp = $request-> link_app;   
+        $issue -> toolUsed = $request->tool_used;        
+        $issue -> tool_problem = $request-> tool_problem;
+        $issue -> tool_problem_version = $request-> tool_problem_version;
+        $issue -> flow_identify_problem = $request-> flow_identify_problem;
+        $issue -> assistive_technology_tool = $request-> assistive_technology_tool;
+        $issue -> tool_assistive = $request-> tool_assistive;
+        $issue -> tool_assistive_version = $request-> tool_assistive_version;        
+        $issue -> origin = "API";
+        $issue -> userId = auth()->user()->id;  
+        $issue -> created_at = date('Y-m-d H:i:s');
+        $issue -> updated_at = date('Y-m-d H:i:s');
+
+        $issue ->save();
+
+        return response()->json([
+            'message'=> 'problem successfully added',
+            'code'=>200]);
+
+    }
+
+
+    public function storeView(ProblemFormRequest $request)
+    {
+        $issue = new Issue();
+
+        $issue -> problemId = $request->problemId;
+
+        if($issue -> problemId == -1){
+            $problem = new Problem();
+            $problem -> problem = $request->title;
+            $problem -> description = $request -> description;
+            $problem -> deleted = 0;
+            $problem -> userId = auth()->user()->id;
+            $problem -> created_at = date('Y-m-d H:i:s');
+            $problem -> updated_at = date('Y-m-d H:i:s');
+            $problem -> save();
+            
+            //pegar último id
+            $lastId = Problem::where('id', $problem->id)->orderBy('created_at', 'desc')->first();
+            $issue -> problemId = $lastId->id;            
+        }                
+        
+        $issue -> creationDate = date('Y-m-d H:i:s');
+        $issue -> deleted = 0;
         $issue -> appFieldId = $request->appFieldId;
         $issue -> appFieldName = $request->appFieldName;
         
@@ -481,34 +669,29 @@ class IssueController extends Controller
         if($image ==null){
             $path = "";
         }else{
-            $path = $image->store('images','public');
-        }        
-
+            $path = $image->store('imagesonline','public');
+        }
      
-        $issue -> printScreen = $path;
-        
-        $issue -> pattern = $request -> pattern;
+        $issue -> printScreen = $path;        
+        $issue -> patternId = $request->patternId;
         $issue -> patternVersion = $request-> patternVersion;
         $issue -> patternVersionDetailts = $request-> patternVersionDetailts;
-
         $issue -> idDevice = $request-> idDevice;
         $issue -> devideModel = $request-> devideModel;        
         $issue -> version = $request-> version;
         $issue -> appTitle = $request-> appTitle;
-        $issue -> linkApp = $request-> linkApp;
-        
-        
-        $issue -> patternId = $request->patternId;
-        
+        $issue -> linkApp = $request-> linkApp;   
+        $issue -> toolUsed = $request->toolUsed;        
         $issue -> tool_problem = $request-> tool_problem;
         $issue -> tool_problem_version = $request-> tool_problem_version;
         $issue -> flow_identify_problem = $request-> flow_identify_problem;
         $issue -> assistive_technology_tool = $request-> assistive_technology_tool;
         $issue -> tool_assistive = $request-> tool_assistive;
         $issue -> tool_assistive_version = $request-> tool_assistive_version;        
-
         $issue -> origin = "web";
-        $issue -> userId = auth()->user()->id;        
+        $issue -> userId = auth()->user()->id;  
+        $issue -> created_at = date('Y-m-d H:i:s');
+        $issue -> updated_at = date('Y-m-d H:i:s');
 
         $issue ->save();
 
@@ -534,7 +717,17 @@ class IssueController extends Controller
      */
     public function edit($id)
     {
-        //
+        $issue = Issue::where('id','=',$id)->first();
+        
+        $severityLevel = SeverityLevel::where('deleted','=',0)->get();
+
+        $devices = Device::where('deleted','=',0)->get();
+
+        $problems = Problem::where('deleted','=',0)->get();
+
+        $patterns = Pattern::where('deleted','=',0)->get();
+        
+        return view('panel.edit.problemas-editar',compact('issue','severityLevel','devices','problems','patterns'));
     }
 
     /**
@@ -544,9 +737,78 @@ class IssueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProblemFormRequest $request, $id)
     {
+
+        $issue = Issue::where('id', '=', $id)->first();
+
+        $issue -> problemId = $request->problemId;
+
+        if($issue -> problemId == -1){
+            $problem = new Problem();
+            $problem -> problem = $request->title;
+            $problem -> description = $request -> description;
+            $problem -> deleted = 0;
+            $problem -> userId = auth()->user()->id;
+            $problem -> created_at = date('Y-m-d H:i:s');
+            $problem -> updated_at = date('Y-m-d H:i:s');
+            $problem -> save();
+            
+            //pegar último id
+            $lastId = Problem::where('id', $problem->id)->orderBy('created_at', 'desc')->first();
+            $issue -> problemId = $lastId->id;            
+        }
+
         //
+        $hasImage = $request->fileContent;
+        $image = $request->file('printScreen');
+        $path = "";       
+
+        if($hasImage==null){
+            if($image ==null){
+                $path = "";
+            }else{
+                $path = $image->store('imagesonline','public');
+            }
+        }
+        else if($hasImage!=null && $image ==null){
+            $path = $request->fileContent;
+        } 
+        else if($hasImage!=null && $image !=null){
+            $path = $image->store('imagesonline','public');
+        }            
+     
+        $issue->printScreen=$path;
+
+
+
+        $issue->fill(
+            array(
+                'problemId' => $issue -> problemId,
+                'printScreen' => $issue->printScreen,
+                'appFieldId' => $request->appFieldId,
+                'appFieldName' => $request -> appFieldName,                        
+                'patternId' => $request->patternId,
+                'patternVersion' => $request->patternVersion,
+                'patternVersionDetailts' => $request->patternVersionDetailts,
+                'idDevice' => $request->idDevice,
+                'devideModel' => $request->devideModel,
+                'version' => $request->version,
+                'appTitle' => $request->appTitle,
+                'linkApp' => $request -> linkApp,
+                'toolUsed' => $request -> toolUsed,
+                'tool_problem' => $request -> tool_problem,
+                'tool_problem_version' => $request -> tool_problem_version,
+                'flow_identify_problem' => $request -> flow_identify_problem,
+                'assistive_technology_tool' => $request -> assistive_technology_tool,
+                'tool_assistive'=> $request-> tool_assistive,
+                'tool_assistive_version' => $request->tool_assistive_version,                
+                'updated_at' => date('Y-m-d H:i:s')
+            )
+        )->save();
+
+        
+        return redirect('/problemas-por-usuario')->with('mensagem', 'Problema alterado com sucesso!');
     }
 
     /**

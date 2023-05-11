@@ -65,8 +65,13 @@
                       </td>
 
                       <td>
-                        <div class="d-flex px-3 py-1">                         
-                            <h6 class="mb-0 text-sm">{{$a->justification}} </h6>                                                    
+                        <div class="d-flex px-3 py-1">
+                            @if($a->justification==null)
+                              <h6 class="mb-0 text-sm"> - </h6>                                                    
+                            @else
+                              <h6 class="mb-0 text-sm">{{$a->justification}} </h6>                                                    
+                            @endif
+                            
                         </div>
                       </td>
                       
@@ -85,7 +90,7 @@
 
                         <a href="/avaliacoes/{{$a->id}}" class="btn btn-danger btn-round" style="padding: 5px 10px;"
                            data-toggle="modal" data-target="#exampleModal"
-                           onclick="setaDadosModal({{$a->id}},'{{$a->title}}')">
+                           onclick="setaDadosModal({{$a->id}},'{{$a->problem}}')">
 
                             <p class="text-xs font-weight-bold mb-0">
                               <i class="material-icons opacity-10">close</i>                            

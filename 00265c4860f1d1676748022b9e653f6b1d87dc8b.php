@@ -1,4 +1,12 @@
-<x-layout title="Questões de Acessibilidade">
+<?php if (isset($component)) { $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4 = $component; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.layout','data' => ['title' => 'Questões de Acessibilidade']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
+<?php $component->withName('layout'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
+<?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['title' => 'Questões de Acessibilidade']); ?>
 
     <div class="container-fluid py-4">
       <div class="row">
@@ -12,9 +20,8 @@
 
             <div class="card-body pt-4 pb-3">
 
-
-            <div class="card-body pt-4 pb-3">
-                <form action="/problemas-filtrar-por-user" method="get">
+              <div class="card-body pt-4 pb-3">
+                <form action="/problemas-filtrar" method="get">
                   <label> Pesquisar por: </label>
                   <select class="form-select form-select-lg" name="searchBy">
                     <option value="0"> Escolha uma das opções </option>                  
@@ -36,20 +43,20 @@
                 </form> 
               </div>
 
-
             <div class="row">
 
-                  @if(session('mensagemExclusao'))
+                  <?php if(session('mensagemExclusao')): ?>
                     <div class="alert alert-danger">
-                        <p style="color:#fff;">{{session('mensagemExclusao')}}</p>
+                        <p style="color:#fff;"><?php echo e(session('mensagemExclusao')); ?></p>
                     </div>
-                  @endif
+                  <?php endif; ?>
 
                 <div class="col-sm">                  
                   
                   <h6 class="text-uppercase text-sm font-weight-bolder opacity-7">
-                    <!-- Total de problemas cadastrados: {{App\Http\Controllers\IssueController::countIssueView()}}-->
-                    Total de problemas: {{count($issues)}} 
+                    <!--Total de problemas cadastrados: <?php echo e(App\Http\Controllers\IssueController::countIssueView()); ?> -->
+                    Total de problemas: <?php echo e(count($issues)); ?>
+
                   </h6>               
                 </div>
 
@@ -82,41 +89,45 @@
                     </tr>
                   </thead>
                   <tbody>
-                    @foreach($issues as $issue)                   
+                    <?php $__currentLoopData = $issues; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $issue): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>                   
                     <tr>
-                      <td> <div class="d-flex px-3 py-1"> <h6 class="mb-0 text-sm">  {{date( 'd/m/Y',strtotime($issue->creationDate))}} </h6></div> </td>
-                      <td> <div class="d-flex px-3 py-1"><h6 class="mb-0 text-sm"> {{$issue->appTitle}} </h6></div> </td>                      
-                      <td> <div class="d-flex px-3 py-1"><h6 class="mb-0 text-sm"> {{$issue->totalAvaliacoes}} </h6></div> </td>
-                      <td> <div class="d-flex px-3 py-1"><h6 class="mb-0 text-sm"> {{$issue->device}} </h6></div> </td>
-                      <td> <div class="d-flex px-3 py-1"> <h6 class="mb-0 text-sm"> {{$issue->problem}} </h6></div> </td>                         
-                      <td> <div class="d-flex px-3 py-1"><h6 class="mb-0 text-sm"> {{$issue->pattern}} </h6> </div></td>
+                      <td> <div class="d-flex px-3 py-1"> <h6 class="mb-0 text-sm">  <?php echo e(date( 'd/m/Y',strtotime($issue->creationDate))); ?> </h6></div> </td>
+                      <td> <div class="d-flex px-3 py-1"><h6 class="mb-0 text-sm"> <?php echo e($issue->appTitle); ?> </h6></div> </td>                      
+                      <td> <div class="d-flex px-3 py-1"><h6 class="mb-0 text-sm"> <?php echo e($issue->totalAvaliacoes); ?> </h6></div> </td>
+                      <td> <div class="d-flex px-3 py-1"><h6 class="mb-0 text-sm"> <?php echo e($issue->device); ?> </h6></div> </td>
+                      <td> <div class="d-flex px-3 py-1"> <h6 class="mb-0 text-sm"> <?php echo e($issue->problem); ?> </h6></div> </td>                         
+                      <td> <div class="d-flex px-3 py-1"><h6 class="mb-0 text-sm"> <?php echo e($issue->pattern); ?> </h6> </div></td>
                       
                       <td>
 
-                        <a href="{{url('/problema-detalhado')}}/{{$issue->id}}" title="Mais detalhes sobre o problema" class="btn btn-info" style="padding: 5px 10px;">
+                        <a href="<?php echo e(url('/problema-detalhado')); ?>/<?php echo e($issue->id); ?>" title="Mais detalhes sobre o problema" class="btn btn-info" style="padding: 5px 10px;">
                           <p class="text-xs font-weight mb-0">
                             Detalhes
                           </p>                        
                         </a>                                                 
 
-                        <a href="{{url('/problema-detalhado')}}/{{$issue->id}}#evaluation" class="btn btn btn-warning btn-round" title="Avaliar o problema" style="padding: 3px 10px;">
+                        <a href="<?php echo e(url('/problema-detalhado')); ?>/<?php echo e($issue->id); ?>#evaluation" class="btn btn btn-warning btn-round" title="Avaliar o problema" style="padding: 3px 10px;">
                           <i class="material-icons opacity-10">note_add</i>                                                   
                         </a>
 
-                        
-                        <a href="/problemas/{{$issue->id}}/editar" class="btn btn-success btn-round" title="Editar o problema" style="padding: 5px 10px;">
+                        <?php if (\Illuminate\Support\Facades\Blade::check('AdminOnly')): ?>
+                        <a href="/problemas/<?php echo e($issue->id); ?>" class="btn btn-success btn-round" title="Editar o problema" style="padding: 5px 10px;">
                           <p class="text-xs font-weight-bold mb-0">
                             <i class="material-icons opacity-10">edit</i>                            
                           </p>                        
                         </a>                        
-                        
-                        <a href="/problemas/{{$issue->id}}" class="btn btn-danger btn-round" title="Excluir o problema" style="padding: 5px 10px;"
+                        <?php endif; ?>
+
+
+                        <?php if (\Illuminate\Support\Facades\Blade::check('AdminOnly')): ?>
+                        <a href="/problemas/<?php echo e($issue->id); ?>" class="btn btn-danger btn-round" title="Excluir o problema" style="padding: 5px 10px;"
                         data-toggle="modal" data-target="#exampleModal"
-                        onclick="setaDadosModal({{$issue->id}},'{{$issue->problem}}')">
+                        onclick="setaDadosModal(<?php echo e($issue->id); ?>,'<?php echo e($issue->problem); ?>')">
                           <p class="text-xs font-weight-bold mb-0">
                             <i class="material-icons opacity-10">close</i>                            
                           </p>                        
-                        </a>                        
+                        </a>
+                        <?php endif; ?>
 
                         <!-- Modal -->
                         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -151,7 +162,7 @@
 
                       </td>                      
                     </tr>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                   </tbody>
                 </table>
 
@@ -161,4 +172,9 @@
         </div>
       </div>
         
-</x-layout>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4)): ?>
+<?php $component = $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4; ?>
+<?php unset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4); ?>
+<?php endif; ?><?php /**PATH /home1/allanv60/accessibility-api-main/resources/views/panel/problemas-pesquisar.blade.php ENDPATH**/ ?>

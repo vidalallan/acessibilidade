@@ -44,8 +44,18 @@ class PatternController extends Controller
     {
         $pattern = new Pattern();        
         $pattern -> pattern = $request->pattern;
+        $pattern -> description = $request->description;
         $pattern -> deleted = 0;
+        $pattern -> userId = auth()->user()->id;
+        $pattern -> created_at = gmdate('Y-m-d H:i:s');
+        $pattern -> updated_at = gmdate('Y-m-d H:i:s');
+
         $pattern -> save();
+        
+        return response()->json([
+            'message'=> 'Accessibility Guide created successfully',
+            'code'=>200]
+        );
     }
 
     public function storeView(Request $request)
@@ -55,8 +65,8 @@ class PatternController extends Controller
         $pattern -> description = $request -> description;
         $pattern -> userId = auth()->user()->id;
         $pattern -> deleted = 0;
-        $pattern -> created_at = date('Y-m-d');
-        $pattern -> updated_at = date('Y-m-d');
+        $pattern -> created_at = date('Y-m-d H:i:s');
+        $pattern -> updated_at = date('Y-m-d H:i:s');
         $pattern -> save();
         return redirect('/padroes');
     }

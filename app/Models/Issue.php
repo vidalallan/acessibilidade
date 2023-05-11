@@ -11,7 +11,7 @@ class Issue extends Model
 
     protected $table = "tbIssue";
 
-    protected $fillable = ['idIssue','creationDate','deleted','title','description','appFieldId','appFieldName','printScreen','idDevice','devideModel','version','appTitle','linkApp'];
+    protected $fillable = ['id','problemId ','creationDate','deleted','appFieldId','appFieldName','printScreen','patternId','patternVersion','patternVersionDetailts','idDevice','devideModel','version','appTitle','linkApp','toolUsed','tool_problem','tool_problem_version','flow_identify_problem','assistive_technology_tool','tool_assistive','tool_assistive_version','origin','userId','created_at','updated_at'];
     
     public $timestamps = false;
 

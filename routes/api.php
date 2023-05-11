@@ -23,22 +23,52 @@ Route::middleware('auth:sanctum')->group(function(){
 
     Route::get('/device','App\Http\Controllers\DeviceController@index');
     Route::post('/device','App\Http\Controllers\DeviceController@store');
-    Route::get('/count/device','App\Http\Controllers\DeviceController@countDevice');
+    Route::get('/device/count','App\Http\Controllers\DeviceController@countDevice');
     Route::delete('/device/{id}','App\Http\Controllers\DeviceController@destroy');
+
+
+    Route::post('/issue','App\Http\Controllers\IssueController@store');
+    Route::get('/issue/count','App\Http\Controllers\IssueController@countIssue');
+
+    Route::get('/accessibility-problem','App\Http\Controllers\IssueController@index');
+    Route::get('/problems-evaluated','App\Http\Controllers\IssueController@problemsEvaluated');
+    Route::get('/problems-filter','App\Http\Controllers\IssueController@filterProblemsApi');
+
+
+    Route::get('/severity-level','App\Http\Controllers\SeverityLevelController@index');
+    Route::post('/severity-level','App\Http\Controllers\SeverityLevelController@store');
+    Route::get('/severity-level/list-problem','App\Http\Controllers\SeverityLevelController@listProblemByLevelSeverityApi');
+
+
+    Route::get('/user','App\Http\Controllers\UserController@index');
+    Route::delete('/user/{id}','App\Http\Controllers\UserController@destroy');
+    Route::get('/user/count','App\Http\Controllers\UserController@countUser');
+
+
+    Route::post('/assessment','App\Http\Controllers\AssessmentController@store');
+    Route::get('/assessment/count','App\Http\Controllers\AssessmentController@countAssessment');
+
+
+    Route::get('/pattern','App\Http\Controllers\PatternController@index');
+    Route::post('/pattern','App\Http\Controllers\PatternController@store');
 
 });
 
 
-Route::get('/pattern','App\Http\Controllers\PatternController@index');
-Route::post('/pattern','App\Http\Controllers\PatternController@store');
+
 
 
 Route::get('/issue','App\Http\Controllers\IssueController@index');
-Route::post('/issue','App\Http\Controllers\IssueController@store');
-Route::get('/count/issue','App\Http\Controllers\IssueController@countIssue');
+
+
+
+
+
+
+
 
 Route::get('/assessment','App\Http\Controllers\AssessmentController@index');
-Route::post('/assessment','App\Http\Controllers\AssessmentController@store');
+
 Route::get('/assessment/{id}','App\Http\Controllers\AssessmentController@showIdIssue');
 Route::get('/assessment/{id}/problem/{problem}','App\Http\Controllers\AssessmentController@showIdIssueProblem');
 Route::get('/assessment-total-yn','App\Http\Controllers\AssessmentController@countYesNoIdIssue');
@@ -47,10 +77,7 @@ Route::get('/assessment-by-id-device','App\Http\Controllers\AssessmentController
 Route::get('/assessment-by-device','App\Http\Controllers\AssessmentController@countYesNoByDevice');
 Route::get('/assessment-by-device-model','App\Http\Controllers\AssessmentController@countYesNoByDeviceModel');
 
-Route::get('/user','App\Http\Controllers\UserController@index');
-Route::post('/user','App\Http\Controllers\UserController@store');
 
+Route::post('/user','App\Http\Controllers\UserController@store');
 Route::post('/login','App\Http\Controllers\LoginController@login');
 Route::get('/logout','App\Http\Controllers\LoginController@logout');
-    
- 

@@ -1,11 +1,11 @@
-<x-layout title="Dispositivos">
+<x-layout title="Alteração da avaliação Realizada">
     <div class="container-fluid py-4">
       <div class="row">
         <div class="col-12">
           <div class="card my-4">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
               <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                <h6 class="text-white text-capitalize ps-3"> Dispositivos </h6>
+                <h6 class="text-white text-capitalize ps-3"> Alteração da avaliação Realizada </h6>
               </div>
             </div>
 
@@ -35,8 +35,8 @@
                   
                   <h6> Este é de fato um problema de acessibilidade no aplicativo? </h6>
 
-                  <input type="hidden" name="issueId" value="{{Request::segment(2)}}"/>
-
+                  <input type="hidden" name="issueId" value="{{$assessment->issueId}}"/>
+                  
                   <fieldset class="input-group input-group-outline my-3">                              
                       <legend style="font-size: 1rem;">
                         <input type="radio" name="problem" value="0" {{$assessment->problem==0 ? 'checked' : '' }} /> <span style="color:#000;"> NÃO </span>
@@ -46,7 +46,7 @@
 
                   <div class="input-group input-group-outline my-3">                              
                     <select class="form-select form-select-lg" id="" name="severityId" style="border: 1px solid #d2d6da;border-radius: 0.375rem;padding-left: 10px;">
-                      <option value="0"> * Escolha um Nível de criticidade </option>                                
+                      <!--<option value="0"> * Escolha um Nível de criticidade </option>-->                                
                       @foreach($severityLevel as $sl)                                    
                         <option value="{{$sl->id}}" {{$sl->id == $assessment->severityId ? 'selected' : '' }}> {{$sl->severity}} </option>                                        
                       @endforeach                        

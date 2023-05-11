@@ -105,20 +105,22 @@
       @endAdminOnly
 
       <!-- Gráficos -->
-      <!--
+      
       <div class="row mt-4">
         <div class="col-lg-4 col-md-6 mt-4 mb-4">
           <div class="card z-index-2 ">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
-              <div class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1">
+              <div class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1" style="background:#f56565;">
                 <div class="chart">
                   <canvas id="chart-bars" class="chart-canvas" height="170"></canvas>
                 </div>
               </div>
             </div>
             <div class="card-body">
-              <h6 class="mb-0 ">Website Views</h6>
-              <p class="text-sm ">Last Campaign Performance</p>
+              <!-- <h6 class="mb-0 ">Total de Avaliações por Nível de Gravidade </h6> -->
+              <a href="/relatorio-nivel-gravidade"> Problemas por Nível de Gravidade  </a> 
+              <br />
+              <a href="/relatorio-nivel-gravidade"> Problemas com pelo menos uma avaliação </a>
               <hr class="dark horizontal">
               <div class="d-flex ">
                 <i class="material-icons text-sm my-auto me-1">schedule</i>
@@ -127,6 +129,7 @@
             </div>
           </div>
         </div>
+
         <div class="col-lg-4 col-md-6 mt-4 mb-4">
           <div class="card z-index-2  ">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
@@ -147,6 +150,7 @@
             </div>
           </div>
         </div>
+        
         <div class="col-lg-4 mt-4 mb-3">
           <div class="card z-index-2 ">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
@@ -168,7 +172,7 @@
           </div>
         </div>
       </div>
-      -->
+      
       <!-- Fim Gráficos -->
 
       <br />
@@ -229,7 +233,7 @@
                       <td>
                         <div class="d-flex px-2 py-1">
                           <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm" style="color: #7e49e3;"> {{$issue->title}} </h6>
+                            <h6 class="mb-0 text-sm" style="color: #7e49e3;"> {{$issue->problemId}} </h6>
                           </div>
                         </div>
                       </td>
@@ -350,10 +354,24 @@
             </div>
           </div>
         </div>
+
+
       </div>
      
     </div>
   
+
+    
+    @foreach($severityLevelGroup as $aa)            
+      {{$aa->total}},
+    @endforeach
+
+    <?php 
+      //$num4=array(17,28,32,47,55,69); 
+      //for($i=0;$i<count($num4);$i++){
+        //echo $num4[$i] . " ";
+      //}    
+    ?>
 
   <!--   Core JS Files   -->
   <script src="../assets/js/core/popper.min.js"></script>
@@ -364,18 +382,29 @@
   <script>
     var ctx = document.getElementById("chart-bars").getContext("2d");
 
+    
+
+
     new Chart(ctx, {
       type: "bar",
       data: {
-        labels: ["M", "T", "W", "T", "F", "S", "S"],
+        labels: [
+          @foreach($severityLevelGroup as $aa)            
+              "{{$aa->severity}}",
+            @endforeach
+        ],
         datasets: [{
-          label: "Sales",
+          label: "Total",
           tension: 0.4,
           borderWidth: 0,
           borderRadius: 4,
           borderSkipped: false,
           backgroundColor: "rgba(255, 255, 255, .8)",
-          data: [50, 20, 10, 22, 50, 10, 40],
+          data:[             
+            @foreach($severityLevelGroup as $aa)            
+              {{$aa->total}},
+            @endforeach
+          ],
           maxBarThickness: 6
         }, ],
       },

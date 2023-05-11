@@ -19,15 +19,7 @@ class DeviceController extends Controller
     public function index()
     {
         $devices = Device::where('deleted','=',0)->get();
-
-        return $devices;
-
-        /*
-        foreach($devices as $device){
-            echo $device ->idDevice . " ";
-            echo $device ->device . "<br />";
-        }
-        */
+        return $devices;        
     }
 
 
@@ -59,7 +51,12 @@ class DeviceController extends Controller
         $device->device = $request->device;
         $device->deleted = 0; 
         $device ->save();
+        
+        return response()->json([
+            'message'=> 'Device created successfully',
+            'code'=>200]);
     }
+            
 
     public function storeView(DeviceFormRequest $request){
 

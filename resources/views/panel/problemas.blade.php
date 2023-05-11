@@ -104,7 +104,7 @@
                         </a>
 
                         @AdminOnly
-                        <a href="/problemas/{{$issue->id}}" class="btn btn-success btn-round" title="Editar o problema" style="padding: 5px 10px;">
+                        <a href="/problemas/{{$issue->id}}/editar" class="btn btn-success btn-round" title="Editar o problema" style="padding: 5px 10px;">
                           <p class="text-xs font-weight-bold mb-0">
                             <i class="material-icons opacity-10">edit</i>                            
                           </p>                        

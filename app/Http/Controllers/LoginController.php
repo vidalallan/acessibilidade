@@ -19,6 +19,7 @@ class LoginController extends Controller
     public function login(Request $request)    
     {
 
+        /*
         $users = User::where('email',$request->email)->where('password',$request->password)->get(); 
 
         if(count($users)>0){
@@ -40,6 +41,24 @@ class LoginController extends Controller
                                         'message'=>'Unauthorized',
                                         'code'=>401]]);
         }
+        */
+
+        if(!Auth::attempt($request->only(['email','password']))){
+            //return redirect()->back()->withErrors(['Usuário e/ou senha inválidos']);            
+            return "erro";
+        }
+        else if(auth()->user()->deleted == 1){
+            return "err";
+        }
+        else{
+            $user = Auth::user();
+            $token = $user -> createToken('token');
+
+            return response()->json(['data'=>[
+                'token'=> $token->plainTextToken,
+                'code'=>200]]);        
+        }
+
     }
 
     public function logout(Request $request)
