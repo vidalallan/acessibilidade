@@ -17,13 +17,14 @@
             @foreach($issues as $issue)
             <div class="container">
               <div class="row">
-                <div class="col-sm" style="background:#f0f2f5; border-radius: 7px;">
-                
-                  <strong class="title" style="color:#344767;"> Título do Problema: </strong> 
-                    Título do Problema: 
-                    <span style="font-weight: 300;color:#000;"> {{$issue->problem}} </span> 
-                  </strong>
-                  <br />
+                <div class="col-sm" style="background:#f0f2f5; border-radius: 7px;">                
+                  <strong class="title" style="color:#344767;"> Data: 
+                    <span style="font-weight: 300;color:#000;"> {{date( 'd/m/Y',strtotime($issue->creationDate))}} </span>                   
+                    <br />
+                  </strong>                   
+                  <strong class="title" style="color:#344767;"> Título do Problema: </strong>                   
+                    <span style="font-weight: 300;color:#000;"> {{$issue->problem}} </span>                   
+                    <br />
                   <strong class="title" style="color:#344767;">Descrição: <span style="font-weight: 300;}">{{$issue->description}} </span> </strong>                  
                 </div>
               </div>
@@ -137,6 +138,20 @@
 
             <div class="container">
               <div class="row">
+
+                <div class="col-sm" style="background:#f0f2f5;">
+                  <strong class="title" style="color:#344767;"> Utilizou alguma ferramenta?  </strong>                
+                  @if($issue->toolUsed==0) 
+                  <p style="color:#000;"> 
+                    Não
+                  </p>
+                  @else
+                  <p style="color:#000;"> 
+                    Sim
+                  </p>
+                  @endif
+                </div>
+
                   <div class="col-sm" style="background:#f0f2f5;">
                     <strong class="title" style="color:#344767;"> Ferramenta de Acessibilidade que identificou o problema</strong> 
                     <p style="color:#000;"> {{$issue->tool_problem}} </p>

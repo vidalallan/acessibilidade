@@ -29,11 +29,17 @@ Route::middleware('auth:sanctum')->group(function(){
 
     Route::post('/issue','App\Http\Controllers\IssueController@store');
     Route::get('/issue/count','App\Http\Controllers\IssueController@countIssue');
+    Route::delete('/issue/{id}','App\Http\Controllers\IssueController@destroy');
+
 
     Route::get('/accessibility-problem','App\Http\Controllers\IssueController@index');
     Route::get('/problems-evaluated','App\Http\Controllers\IssueController@problemsEvaluated');
     Route::get('/problems-filter','App\Http\Controllers\IssueController@filterProblemsApi');
+    Route::get('/problems-detailed-by-id/{id}','App\Http\Controllers\IssueController@detailedProblemById');
 
+
+    Route::get('/problems-common','App\Http\Controllers\ProblemController@commonProblems');
+    
 
     Route::get('/severity-level','App\Http\Controllers\SeverityLevelController@index');
     Route::post('/severity-level','App\Http\Controllers\SeverityLevelController@store');
@@ -43,6 +49,8 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('/user','App\Http\Controllers\UserController@index');
     Route::delete('/user/{id}','App\Http\Controllers\UserController@destroy');
     Route::get('/user/count','App\Http\Controllers\UserController@countUser');
+    Route::get('/user/filter','App\Http\Controllers\UserController@queryByEmail');
+
 
 
     Route::post('/assessment','App\Http\Controllers\AssessmentController@store');

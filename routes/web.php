@@ -50,6 +50,10 @@ Route::get('/problemas-adicionar','App\Http\Controllers\IssueController@indexVie
 Route::get('/problema-detalhado/{idIssue}','App\Http\Controllers\IssueController@queryQuestionsPanelbyParameter')->name('problema-detalhado')->middleware(Authenticate::class);
 Route::get('/problemas/{id}/editar','App\Http\Controllers\IssueController@edit')->middleware(Authenticate::class);
 Route::post('/problemas/update/{id}','App\Http\Controllers\IssueController@update')->middleware(Authenticate::class);
+Route::get('/severity-level/list-problem','App\Http\Controllers\SeverityLevelController@listProblemByLevelSeverityApi')->middleware(Authenticate::class);
+Route::get('/problemas-frequentes','App\Http\Controllers\ProblemController@commonProblemsView');
+Route::get('/download-csv', 'App\Http\Controllers\IssueController@download')->name('download.csv')->middleware(Authenticate::class);
+
 
 Route::get('/dashboard','App\Http\Controllers\IssueController@indexViewDashboard')->middleware(Authenticate::class);
 Route::get('/description','App\Http\Controllers\IssueController@getDescriptionProblem')->middleware(Authenticate::class);
@@ -95,3 +99,6 @@ Route::get('/tables', function () {
 });
 
 Route::get('/todas-avaliacoes-sn','App\Http\Controllers\AssessmentController@countYesNoIdIssueView');
+
+
+

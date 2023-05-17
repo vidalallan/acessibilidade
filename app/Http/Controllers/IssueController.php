@@ -13,6 +13,7 @@ use App\Models\SeverityLevel;
 use App\Http\Requests\ProblemFormRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response;
 
 class IssueController extends Controller
 {
@@ -61,6 +62,52 @@ class IssueController extends Controller
         inner join tbPattern pat
         on i.patternId = pat.id
         where i.deleted=0
+        order by i.id desc';
+
+        $issues = DB::select($sql);
+
+        return $issues;
+    }
+
+    public function detailedProblemById($id)
+    {        
+        $sql = 'select              
+            i.id,
+            i.created_at,
+            i.problemId,
+            pro.problem,
+            pro.description,
+            i.appTitle,
+            i.appFieldId,
+            i.appFieldName,
+            i.printScreen,
+            i.idDevice,
+            d.device,
+            i.patternId,
+            pat.pattern,
+            i.patternVersion,
+            i.patternVersionDetailts,
+            i.devideModel,
+            i.version,
+            i.linkApp,
+            i.origin,
+            i.userId,
+            i.toolUsed,
+            i.tool_problem,
+            i.tool_problem_version,
+            i.flow_identify_problem,
+            i.assistive_technology_tool,
+            i.tool_assistive,
+            i.tool_assistive_version,
+            i.updated_at    
+        from tbIssue i 
+        inner join tbDevice d        
+        on i.idDevice = d.idDevice                
+        inner join tbProblem pro
+        on i.problemId = pro.id
+        inner join tbPattern pat
+        on i.patternId = pat.id
+        where i.deleted=0 and i.id='. $id .'
         order by i.id desc';
 
         $issues = DB::select($sql);
@@ -207,15 +254,15 @@ class IssueController extends Controller
             $filter = ' and pa.pattern =' . "'$request->searchField'";            
         }
         elseif($request->searchBy == 5){            
-            $filter = ' and (select count(issueId) from tbassessment a where a.issueId =i.id) = 0 ';            
+            $filter = ' and (select count(issueId) from tbAssessment a where a.issueId =i.id) = 0 ';            
         }
         elseif($request->searchBy == 6){            
-            $filter = ' and (select count(issueId) from tbassessment a where a.issueId =i.id) > 0 ';            
+            $filter = ' and (select count(issueId) from tbAssessment a where a.issueId =i.id) > 0 ';            
         }
 
 
         $sql = 'select i.id,i.creationDate,p.problem,d.device,i.appTitle,pa.pattern,
-		(select count(issueId) from tbassessment a where a.issueId =i.id) totalAvaliacoes
+		(select count(issueId) from tbAssessment a where a.issueId =i.id) totalAvaliacoes
 		from tbIssue i 
         inner join tbDevice d
         on i.idDevice = d.idDevice
@@ -370,7 +417,10 @@ class IssueController extends Controller
         $sql3 = 'SELECT sl.severity,a.severityId,count(a.severityId) total FROM tbAssessment a
         inner join tbSeverityLevel sl 
         on sl.id = a.severityId
-        group by severityId order by a.severityId desc';
+        inner join tbIssue i
+        on i.id = a.issueId
+        where i.deleted = 0        
+        group by a.severityId order by a.severityId desc';
 
         $severityLevelGroup = DB::select($sql3);
 
@@ -647,16 +697,25 @@ class IssueController extends Controller
         if($issue -> problemId == -1){
             $problem = new Problem();
             $problem -> problem = $request->title;
-            $problem -> description = $request -> description;
-            $problem -> deleted = 0;
-            $problem -> userId = auth()->user()->id;
-            $problem -> created_at = date('Y-m-d H:i:s');
-            $problem -> updated_at = date('Y-m-d H:i:s');
-            $problem -> save();
-            
-            //pegar último id
-            $lastId = Problem::where('id', $problem->id)->orderBy('created_at', 'desc')->first();
-            $issue -> problemId = $lastId->id;            
+
+            $exists = Problem::where('problem','=',$request->title)->first();            
+
+            if($exists!=null){
+                //dd($exists);
+                $issue->problemId = $exists->id;
+            }
+            else{
+                $problem -> description = $request -> description;
+                $problem -> deleted = 0;
+                $problem -> userId = auth()->user()->id;
+                $problem -> created_at = date('Y-m-d H:i:s');
+                $problem -> updated_at = date('Y-m-d H:i:s');
+                $problem -> save();
+                
+                //pegar último id
+                $lastId = Problem::where('id', $problem->id)->orderBy('created_at', 'desc')->first();
+                $issue -> problemId = $lastId->id;
+            }
         }                
         
         $issue -> creationDate = date('Y-m-d H:i:s');
@@ -819,7 +878,11 @@ class IssueController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Issue::where('id', $id)->update(['deleted' => 1]);
+        return response()->json([
+            'message'=> 'problem successfully removed',
+            'code'=>200]);
+
     }
 
     public function destroyView($idIssue)
@@ -827,4 +890,143 @@ class IssueController extends Controller
         Issue::where('id', $idIssue)->update(['deleted' => 1]);        
         return redirect('/problemas')->with('mensagemExclusao', 'Problema removido com sucesso!'); 
     }
+
+       
+    public function download()
+    {               
+        $sql = 'select              
+                i.id,
+                i.created_at,
+                i.deleted,
+                i.problemId,
+                pro.problem,
+                pro.description,
+                i.appTitle,
+                i.appFieldId,
+                i.appFieldName,
+                i.printScreen,
+                i.idDevice,
+                d.device,
+                i.patternId,
+                pat.pattern,
+                i.patternVersion,
+                i.patternVersionDetailts,
+                i.devideModel,
+                i.version,
+                i.linkApp,
+                i.origin,
+                i.userId,
+                i.toolUsed,
+                i.tool_problem,
+                i.tool_problem_version,
+                i.flow_identify_problem,
+                i.assistive_technology_tool,
+                i.tool_assistive,
+                i.tool_assistive_version,
+                i.updated_at    
+            from tbIssue i 
+            inner join tbDevice d        
+            on i.idDevice = d.idDevice                
+            inner join tbProblem pro
+            on i.problemId = pro.id
+            inner join tbPattern pat
+            on i.patternId = pat.id
+            where i.deleted=0
+            order by i.id desc';
+
+        $queryJson = DB::select($sql);
+
+        // Nome do arquivo CSV
+        $filename = 'problemas.csv';
+
+        // Cabeçalho do arquivo
+        
+        $headers = [
+            'Content-Type' => 'text/csv;charset=utf-8',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ];        
+
+        //Cabeçalho
+        
+        
+        $file = fopen('php://output', 'w');
+
+        fclose($file);
+
+        // Gera o arquivo CSV
+        $callback = function () use ($queryJson) {
+            
+        $file = fopen('php://output', 'w');
+
+        //Cabeçalho
+        $col1 = "ID";
+        $col2 = "Data";
+        $col3 = mb_convert_encoding("Excluido","ISO-8859-1");
+        $col4 = "ID do Problema";
+        $col5 = "Problema";
+        $col6 = mb_convert_encoding("Descrição","ISO-8859-1");
+        $col7 = "Aplicativo";
+        $col8 = "Id Campo do Aplicativo";
+        $col9 = "Nome do campo do aplicativo";
+        $col10 = "URL Arquivo";
+        $col11 = "ID Dispositivo";
+        $col12 = "Dispositivo";
+        $col13 = "ID do Guia de Acessibilidade";
+        $col14 = "Guia de Acessibilidade";
+        $col15 = mb_convert_encoding("Versão do guia de Acessibilidade","ISO-8859-1");
+        $col16 = "Detalhes do Guia de Acessibilidade";
+        $col17 = "Modelo do Dispositivo";
+        $col18 = mb_convert_encoding("Versão do Dispositivo","ISO-8859-1");
+        $col19 = "Link do Aplicativo";
+        $col20 = "Origem";
+        //$col21 = "userId";
+        $col22 = "Usou ferramenta?";
+        $col23 = "Qual ferramenta?";
+        $col24 = mb_convert_encoding("Versão da ferramenta","ISO-8859-1");
+        $col25 = mb_convert_encoding("Fluxo na identificação do problema","ISO-8859-1");
+        $col26 = "Utilizou ferramenta de tecnologia assistiva?";
+        $col27 = "Qual ferramenta de tecnologia assisitiva";
+        $col28 = mb_convert_encoding("Versão da ferramenta de tecnologia assistiva","ISO-8859-1");
+        //$col29 = "updated_at";
+        $escreve = fwrite($file, "$col1;$col2;$col3;$col4;$col5;$col6;$col7;$col8;$col9;$col10;$col11;$col12;$col13;$col14;$col15;$col16;$col17;$col18;$col19;$col20;$col22;$col23;$col24;$col25;$col26;$col27;$col28");
+        
+        foreach($queryJson as $d) {
+            $data1 = $d->id;
+            $data2 = $d->created_at;
+            $data3 = $d->deleted;
+            $data4 = $d->problemId;
+            $data5 = mb_convert_encoding($d->problem,"ISO-8859-1");
+            $data6 = mb_convert_encoding($d->description,"ISO-8859-1");
+            $data7 = mb_convert_encoding($d->appTitle,"ISO-8859-1");
+            $data8 = $d->appFieldId;
+            $data9 = mb_convert_encoding($d->appFieldName,"ISO-8859-1");
+            $data10 = url('/') . '/storage/' . $d->printScreen;
+            $data11 = $d->idDevice;
+            $data12 = mb_convert_encoding($d->device,"ISO-8859-1");
+            $data13 = $d->patternId;
+            $data14 = mb_convert_encoding($d->pattern,"ISO-8859-1");
+            $data15 = mb_convert_encoding($d->patternVersion,"ISO-8859-1");
+            $data16 = mb_convert_encoding($d->patternVersionDetailts,"ISO-8859-1");
+            $data17 = mb_convert_encoding($d->devideModel,"ISO-8859-1");
+            $data18 = mb_convert_encoding($d->version,"ISO-8859-1");
+            $data19 = $d->linkApp;
+            $data20 = mb_convert_encoding($d->origin,"ISO-8859-1");
+            //$data21 = $d->userId;
+            $data22 = $d->toolUsed;
+            $data23 = mb_convert_encoding($d->tool_problem,"ISO-8859-1");
+            $data24 = mb_convert_encoding($d->tool_problem_version,"ISO-8859-1");
+            $data25 = mb_convert_encoding($d->flow_identify_problem,"ISO-8859-1");
+            $data26 = mb_convert_encoding($d->assistive_technology_tool,"ISO-8859-1");
+            $data27 = mb_convert_encoding($d->tool_assistive,"ISO-8859-1");
+            $data28 = mb_convert_encoding($d->tool_assistive_version,"ISO-8859-1");
+            //$data29 = $d->updated_at;            
+            $escreve = fwrite($file, "\n$data1;$data2;$data3;$data4;$data5;$data6;$data7;$data8;$data9;$data10;$data11;$data12;$data13;$data14;$data15;$data16;$data17;$data18;$data19;$data20;$data22;$data23;$data24;$data25;$data26;$data27;$data28");
+        }
+            fclose($file);
+        };
+
+        // Retorna o arquivo CSV para download
+        return Response::stream($callback, 200, $headers);
+    }
+
 }

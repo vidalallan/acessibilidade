@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Problem;
+use App\Models\Issue;
+use Illuminate\Support\Facades\DB;
 
 class ProblemController extends Controller
 {
@@ -15,6 +17,38 @@ class ProblemController extends Controller
     public function index()
     {
         $problem = Problem::where('deleted','=','false')->get();
+    }
+
+    public function commonProblems()
+    {
+        $sql = "select p.problem, count(i.problemId) total from tbProblem p
+                inner join tbIssue i on
+                p.id = i.problemId
+                where i.deleted=0 
+                and p.deleted=0
+                group by i.problemId
+                order by count(i.problemId) desc";
+       
+        $problems = DB::select($sql);
+
+        return $problems;
+    }
+
+    public function commonProblemsView()
+    {
+        $sql = "select p.problem, count(i.problemId) total from tbProblem p
+                inner join tbIssue i on
+                p.id = i.problemId
+                where i.deleted=0 
+                and p.deleted=0
+                group by i.problemId
+                order by count(i.problemId) desc";
+       
+        $problems = DB::select($sql);
+
+        $issues = Issue::where('deleted','=',0)->get();
+
+        return view('panel.problemas-frequentes',compact('problems','issues'));
     }
 
     /**

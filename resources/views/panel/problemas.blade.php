@@ -12,29 +12,28 @@
 
             <div class="card-body pt-4 pb-3">
 
+                <div class="card-body pt-4 pb-3">
+                  <form action="/problemas-filtrar" method="get">
+                    <label> Pesquisar por: </label>
+                    <select class="form-select form-select-lg" name="searchBy">
+                      <option value="0"> Escolha uma das opções </option>                  
+                      <option value="1"> Título do problema </option>
+                      <option value="2"> Dispositivo </option>
+                      <option value="3"> Aplicativo </option>
+                      <option value="4"> Guia de Acessibilidade </option>
+                      <option value="5"> Problemas sem nenhuma avaliação </option>
+                      <option value="6"> Problemas com pelo menos uma avaliação </option>
+                    </select>
 
-            <div class="card-body pt-4 pb-3">
-                <form action="/problemas-filtrar" method="get">
-                  <label> Pesquisar por: </label>
-                  <select class="form-select form-select-lg" name="searchBy">
-                    <option value="0"> Escolha uma das opções </option>                  
-                    <option value="1"> Título do problema </option>
-                    <option value="2"> Dispositivo </option>
-                    <option value="3"> Aplicativo </option>
-                    <option value="4"> Guia de Acessibilidade </option>
-                    <option value="5"> Problemas sem nenhuma avaliação </option>
-                    <option value="6"> Problemas com pelo menos uma avaliação </option>
-                  </select>
+                    <div class="input-group input-group-outline my-3">                    
+                      <input type="text" class="form-control" name="searchField"  placeholder="Digite aqui a sua consulta">
+                    </div>
 
-                  <div class="input-group input-group-outline my-3">                    
-                    <input type="text" class="form-control" name="searchField"  placeholder="Digite aqui a sua consulta">
-                  </div>
-
-                  <div class="d-flex justify-content-end mb-3">
-                    <button type="submit" class="btn bg-gradient-info"> Pesquisar </button>
-                  </div>
-                </form> 
-              </div>
+                    <div class="d-flex justify-content-end mb-3">
+                      <button type="submit" class="btn bg-gradient-info"> Pesquisar </button>
+                    </div>
+                  </form> 
+                </div>
 
 
             <div class="row">
@@ -59,7 +58,10 @@
                       <i class="material-icons opacity-10">add</i>  
                       Adicionar problema
                     </p>  
-                  </a>             
+                  </a>
+
+                  <a href="{{route('download.csv')}}" download> Download CSV </a>                 
+
                 </div>
             </div>
 

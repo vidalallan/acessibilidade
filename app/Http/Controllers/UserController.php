@@ -22,6 +22,45 @@ class UserController extends Controller
         return $users;
     }
 
+
+    public function queryByEmail(Request $request)
+    {
+
+        $filter = ($request->query->keys());        
+
+        if($filter[0]=='email'){
+            $users = User::where('deleted','=',0)
+                    ->where('email','=',$request->email)
+                    ->orderBy('id','DESC')->get();                   
+
+            if(count($users)>0){
+                return $users;
+            }   
+            else{
+                return response()->json([
+                    'message'=> 'user not found',
+                    'code'=>200]
+                );
+            }
+        }
+        else if($filter[0]=='name'){
+            $users = User::where('deleted','=',0)
+                    ->where('name','=',$request->name)
+                    ->orderBy('id','DESC')->get();                   
+
+            if(count($users)>0){
+                return $users;
+            }   
+            else{
+                return response()->json([
+                    'message'=> 'user not found',
+                    'code'=>200]
+                );
+            }    
+        }                       
+    }
+   
+
     public function indexView()
     {
         $users = $this->index();
@@ -72,17 +111,21 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-     
+    {     
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->password = $request->password;
+        $user->password = Hash::make($request->password);
         $user->created_at = date('Y-m-d');
         $user->updated_at = date('Y-m-d');
-        $user->level = 'admin';
+        $user->level = 'user';
 
         $user ->save();
+
+        return response()->json([
+            'message'=> 'user created successfully',
+            'code'=>200]
+        );
     }
 
     //quando cria um novo usuário
@@ -193,10 +236,22 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        User::where('id', $id)->update(['deleted' => 1]);
-        return response()->json([
-            'message'=> 'user removed successfully',
-            'code'=>200]);
+        $user = User::where('id','=',$id)->first();
+        
+        if($user!=null){
+            User::where('id', $id)->update(['deleted' => 1,'email'=>'removed'.$user->email]);
+            
+            return response()->json([
+                'message'=> 'user removed successfully',
+                'code'=>200]
+            );
+        }
+        else{
+            return response()->json([
+                'message'=> 'user not found',
+                'code'=>200]
+            );
+        }        
     }
 
     public function destroyView($id)

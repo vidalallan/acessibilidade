@@ -138,7 +138,7 @@
 
               </style>
 
-              <input type="text" value="{{$issue->printScreen}}" name='fileContent' style="width:100%" />
+              <input type="hidden" value="{{$issue->printScreen}}" name='fileContent' style="width:100%" />
 
               <div class="form-control"> 
 

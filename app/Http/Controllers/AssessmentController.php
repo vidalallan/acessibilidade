@@ -48,10 +48,16 @@ class AssessmentController extends Controller
     }
 
     public static function  countAssessmentView(){
-        $assessment = new Assessment();
-
-        $total = $assessment::where('deleted','=',0)->count();
         
+        //$assessment = new Assessment();
+        //$total = $assessment::where('deleted','=',0)->count();
+        
+        $total = DB::table('tbAssessment')
+            ->join('tbIssue', 'tbAssessment.issueId', '=', 'tbIssue.id')            
+            ->select('tbAssessment.*', 'tbIssue.deleted')
+            ->where('tbIssue.deleted','=',0)
+            ->count();
+
         return $total;               
     }
 
