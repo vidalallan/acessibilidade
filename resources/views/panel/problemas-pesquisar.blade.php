@@ -159,6 +159,41 @@
 
               </div>
             </div>
+
+            <!-- Paginação -->
+            <div>          
+            
+              <style>
+
+                .page-item .page-link, .page-item span {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #000;
+                    padding: 0;
+                    margin: 0 8px;
+                    border-radius: 30% !important;
+                    width: 36px;
+                    height: 35px;
+                    font-size: 1rem;
+                }
+
+                .page-link.active, .active>.page-link {
+                    z-index: 3;
+                    color: var(--bs-pagination-active-color);
+                    background-color: #1a73e8;
+                    border-color: #1a73e8;
+                }
+               
+              </style>
+
+              <div class="container">
+                <!-- Exibir links de paginação -->
+                {{ $issues->render("pagination::bootstrap-4") }}
+              </div>
+              
+            </div>
+
           </div>
         </div>
       </div>

@@ -6,7 +6,7 @@
           <div class="card my-4">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
               <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                <h6 class="text-white ps-3"> Problemas / Barreiras de Acessibilidade Avaliados </h6>
+                <h6 class="text-white ps-3"> Problemas / Barreiras de Acessibilidade com pelo menos uma avaliação </h6>
               </div>
             </div>                       
 
@@ -53,7 +53,7 @@
                       @foreach($issues as $issue)                   
                       <tr>
                         <td> <div class="d-flex px-3 py-1"> <h6 class="mb-0 text-sm">{{date( 'd/m/Y',strtotime($issue->creationDate))}} </h6></div> </td>
-                        <td> <div class="d-flex px-3 py-1"> <h6 class="mb-0 text-sm"> {{$issue->problem}} </h6></div> </td>                         
+                        <td> <div class="d-flex px-3 py-1"> <h6 class="mb-0 text-sm"> {{$issue->problem1}} </h6></div> </td>                         
                         <td> <div class="d-flex px-3 py-1"><h6 class="mb-0 text-sm"> {{$issue->device}} </h6></div> </td>                      
                         <td> <div class="d-flex px-3 py-1"><h6 class="mb-0 text-sm"> {{$issue->appTitle}} </h6></div> </td>                      
                         <td> <div class="d-flex px-3 py-1"><h6 class="mb-0 text-sm"> {{$issue->pattern}} </h6> </div></td>                      
@@ -90,6 +90,41 @@
 
               </div>
             </div>
+
+
+          <div>          
+            
+            <style>
+
+              .page-item .page-link, .page-item span {
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: #000;
+                  padding: 0;
+                  margin: 0 8px;
+                  border-radius: 30% !important;
+                  width: 36px;
+                  height: 35px;
+                  font-size: 1rem;
+              }
+
+              .page-link.active, .active>.page-link {
+                  z-index: 3;
+                  color: var(--bs-pagination-active-color);
+                  background-color: #1a73e8;
+                  border-color: #1a73e8;
+              }
+             
+            </style>
+
+            <div class="container">
+              <!-- Exibir links de paginação -->
+              {{ $issues->render("pagination::bootstrap-4") }}
+            </div>
+
+          </div>
+
           </div>
         </div>
       </div>

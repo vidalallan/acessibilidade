@@ -14,6 +14,7 @@ use App\Http\Requests\ProblemFormRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class IssueController extends Controller
 {
@@ -128,13 +129,32 @@ class IssueController extends Controller
         on i.patternId = pa.id
         where i.deleted=0 order by i.id desc';
        
-        $issues = DB::select($sql);
+        $issuesPag = DB::select($sql);
+
+        $issues = $this->paginate($issuesPag, 10);
         
         $devices = Device::all();        
         $assessments = Assessment::all();        
 
         return view('panel.problemas', compact('issues', 'devices','assessments'));        
     }
+
+
+
+    //function control paginate
+    private function paginate($items, $perPage)
+    {
+        $currentPage = request()->query('page', 1);
+
+        $paginatedItems = array_slice($items, ($currentPage - 1) * $perPage, $perPage);
+
+        $paginatedData = new LengthAwarePaginator($paginatedItems, count($items), $perPage);
+        $paginatedData->setPath(request()->url());
+
+        return $paginatedData;
+    }
+
+
 
     //para obter a descrição do título escolhido
     public function getDescriptionProblem(Request $request){
@@ -272,7 +292,9 @@ class IssueController extends Controller
         on i.patternId = pa.id
         where i.deleted=0 '. $filter .'order by i.id desc';
        
-        $issues = DB::select($sql);
+        $issuesPag = DB::select($sql);
+
+        $issues = $this->paginate($issuesPag, 10);
         
         $devices = Device::all();        
         $assessments = Assessment::all();        
@@ -299,15 +321,15 @@ class IssueController extends Controller
             $filter = ' and pa.pattern =' . "'$request->searchField'";            
         }
         elseif($request->searchBy == 5){            
-            $filter = ' and (select count(issueId) from tbassessment a where a.issueId =i.id) = 0 ';            
+            $filter = ' and (select count(issueId) from tbAssessment a where a.issueId =i.id) = 0 ';            
         }
         elseif($request->searchBy == 6){            
-            $filter = ' and (select count(issueId) from tbassessment a where a.issueId =i.id) > 0 ';            
+            $filter = ' and (select count(issueId) from tbAssessment a where a.issueId =i.id) > 0 ';            
         }
 
 
         $sql = 'select i.id,i.creationDate,p.problem,d.device,i.appTitle,pa.pattern,
-		(select count(issueId) from tbassessment a where a.issueId =i.id) totalAvaliacoes
+		(select count(issueId) from tbAssessment a where a.issueId =i.id) totalAvaliacoes
 		from tbIssue i 
         inner join tbDevice d
         on i.idDevice = d.idDevice
@@ -317,7 +339,9 @@ class IssueController extends Controller
         on i.patternId = pa.id
         where i.userId=' . auth()->user()->id . ' and i.deleted=0 '. $filter .' order by i.id desc';
        
-        $issues = DB::select($sql);
+        $issuesPag = DB::select($sql);
+
+        $issues = $this->paginate($issuesPag, 1);
         
         $devices = Device::all();        
         $assessments = Assessment::all();        
@@ -353,7 +377,7 @@ class IssueController extends Controller
 
 
     public function indexAvaliacoesView(){                 
-        $sql = 'SELECT i.id, i.idDevice, d.device,i.appTitle,i.creationDate, pro.problem,pa.pattern,
+        $sql = 'SELECT i.id, i.idDevice, d.device,i.appTitle,i.creationDate, pro.problem problem1,pa.pattern,
         SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", 
         SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no",         
         count(i.id) "total"
@@ -371,7 +395,9 @@ class IssueController extends Controller
         group by a.issueId 
         order by count(i.id) desc';        
         
-        $issues = DB::select($sql);   
+        $issuesPag = DB::select($sql);   
+
+        $issues = $this->paginate($issuesPag, 10);
        
         return view('panel.problemas-avaliados', compact('issues'));
     }
@@ -379,18 +405,20 @@ class IssueController extends Controller
     public function indexViewDashboard(){         
         
         //inserir título e guia de acessibilidade
-        $sql = 'SELECT i.id, i.idDevice, d.device,i.appTitle,i.problemId, 
+        $sql = 'SELECT i.id, p.problem problemTit, d.device,i.problemId, 
         SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", 
         SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no",         
-        count(i.id) "total"
+        count(i.problemId) "total"
         from tbAssessment a 
         inner join tbIssue i 
         on a.issueId = i.id 
+        inner join tbProblem p
+        on p.id = i.problemId 
         inner join tbDevice d 
         on i.idDevice = d.idDevice         
         where i.deleted=0 and
         a.deleted=0 
-        group by a.issueId
+        group by i.problemId
         order by count(i.id) desc
         limit 10';        
         
@@ -403,7 +431,8 @@ class IssueController extends Controller
         count(i.appTitle) "total"
         from tbAssessment a 
         inner join tbIssue i 
-        on a.issueId = i.id 
+        on a.issueId = i.id
+        
         inner join tbDevice d 
         on i.idDevice = d.idDevice         
         where i.deleted=0 and
@@ -424,24 +453,26 @@ class IssueController extends Controller
 
         $severityLevelGroup = DB::select($sql3);
 
-        //consulta por problemas mais comuns e menos comuns
-        /*
-        select p.problem,i.problemId,count(i.problemId) total from tbIssue i
-        inner join tbproblem p
-        on i.problemId = p.id
-        where i.deleted=0
-        group by i.problemId
-        order by count(i.problemId) desc,i.created_at
-        */
+        $sqlGrafPie = "SELECT sl.severity,a.severityId,count(a.severityId) total,sl.severityColor FROM tbAssessment a
+        inner join tbSeverityLevel sl 
+        on sl.id = a.severityId
+        inner join tbIssue i
+        on i.id = a.issueId
+        where i.deleted = 0      
+        group by a.severityId order by a.severityId desc";
 
-        //consulta por origin
-        /*
-          select origin, count(origin) from tbissue where deleted = 0
-            group by origin 
-         */
+        $pieChart = DB::select($sqlGrafPie);
+
+        $sqlChartPattern = "select i.patternId,p.pattern,count(i.patternId) total from tbIssue i
+        inner join tbPattern p on
+        i.patternId = p.id
+        where i.deleted=0
+        group by i.patternId";
+
+        $patternChart = DB::select($sqlChartPattern);
 
        
-        return view('panel.dashboard', compact('issues','issuesApp','severityLevelGroup'));
+        return view('panel.dashboard', compact('issues','issuesApp','severityLevelGroup','pieChart','patternChart'));
     }
 
     
@@ -453,7 +484,7 @@ class IssueController extends Controller
             $filter = ''; 
         }
         elseif($request->searchBy == 1){                      
-            //$filter = ' and i.title =' . "'$request->searchField'";            
+            $filter = ' and pro.problem =' . "'$request->searchField'";            
         }
         elseif($request->searchBy == 2){            
             $filter = ' and d.device =' . "'$request->searchField'";            
@@ -462,26 +493,29 @@ class IssueController extends Controller
             $filter = ' and i.appTitle =' . "'$request->searchField'";            
         }
         elseif($request->searchBy == 4){            
-            //$filter = ' and i.pattern =' . "'$request->searchField'";            
+            $filter = ' and pa.pattern =' . "'$request->searchField'";            
         }
-
-        //colocar titulo e padrão
-        $sql = 'SELECT i.id, i.creationDate, i.idDevice, d.device,i.appTitle, 
+        
+        $sql = 'SELECT pro.problem problem1,i.id, i.creationDate, i.idDevice, d.device,i.appTitle,pa.pattern, 
         SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", 
         SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no",         
         count(i.id) "total"
-        from tbassessment a 
-        inner join tbissue i 
-        on a.issueId = i.id 
+        from tbAssessment a 
+        inner join tbIssue i 
+        on a.issueId = i.id
+        inner join tbProblem pro
+        on pro.id = i.problemId 
+        inner join tbPattern pa
+        on pa.id = i.patternId 
         inner join tbDevice d 
         on i.idDevice = d.idDevice         
         where i.deleted=0 and a.deleted=0 ' .
         $filter .
-        ' group by a.issueId order by count(i.id) desc';        
-
-        //dd($sql);
+        ' group by a.issueId order by count(i.id) desc';
         
-        $issues = DB::select($sql);   
+        $issuesPag = DB::select($sql);   
+
+        $issues = $this->paginate($issuesPag, 10);
        
         return view('panel.problemas-avaliados', compact('issues'));
     }
@@ -525,7 +559,7 @@ class IssueController extends Controller
         $sql .= 'SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", ';
         $sql .= 'SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no", ';        
         $sql .= 'count(i.id) "total" ';
-        $sql .= 'from tbassessment a ';
+        $sql .= 'from tbAssessment a ';
         $sql .= 'inner join tbissue i ';
         $sql .= 'on a.issueId = i.id ';
         $sql .= 'inner join tbDevice d ';
@@ -990,38 +1024,38 @@ class IssueController extends Controller
         //$col29 = "updated_at";
         $escreve = fwrite($file, "$col1;$col2;$col3;$col4;$col5;$col6;$col7;$col8;$col9;$col10;$col11;$col12;$col13;$col14;$col15;$col16;$col17;$col18;$col19;$col20;$col22;$col23;$col24;$col25;$col26;$col27;$col28");
         
-        foreach($queryJson as $d) {
-            $data1 = $d->id;
-            $data2 = $d->created_at;
-            $data3 = $d->deleted;
-            $data4 = $d->problemId;
-            $data5 = mb_convert_encoding($d->problem,"ISO-8859-1");
-            $data6 = mb_convert_encoding($d->description,"ISO-8859-1");
-            $data7 = mb_convert_encoding($d->appTitle,"ISO-8859-1");
-            $data8 = $d->appFieldId;
-            $data9 = mb_convert_encoding($d->appFieldName,"ISO-8859-1");
-            $data10 = url('/') . '/storage/' . $d->printScreen;
-            $data11 = $d->idDevice;
-            $data12 = mb_convert_encoding($d->device,"ISO-8859-1");
-            $data13 = $d->patternId;
-            $data14 = mb_convert_encoding($d->pattern,"ISO-8859-1");
-            $data15 = mb_convert_encoding($d->patternVersion,"ISO-8859-1");
-            $data16 = mb_convert_encoding($d->patternVersionDetailts,"ISO-8859-1");
-            $data17 = mb_convert_encoding($d->devideModel,"ISO-8859-1");
-            $data18 = mb_convert_encoding($d->version,"ISO-8859-1");
-            $data19 = $d->linkApp;
-            $data20 = mb_convert_encoding($d->origin,"ISO-8859-1");
-            //$data21 = $d->userId;
-            $data22 = $d->toolUsed;
-            $data23 = mb_convert_encoding($d->tool_problem,"ISO-8859-1");
-            $data24 = mb_convert_encoding($d->tool_problem_version,"ISO-8859-1");
-            $data25 = mb_convert_encoding($d->flow_identify_problem,"ISO-8859-1");
-            $data26 = mb_convert_encoding($d->assistive_technology_tool,"ISO-8859-1");
-            $data27 = mb_convert_encoding($d->tool_assistive,"ISO-8859-1");
-            $data28 = mb_convert_encoding($d->tool_assistive_version,"ISO-8859-1");
-            //$data29 = $d->updated_at;            
-            $escreve = fwrite($file, "\n$data1;$data2;$data3;$data4;$data5;$data6;$data7;$data8;$data9;$data10;$data11;$data12;$data13;$data14;$data15;$data16;$data17;$data18;$data19;$data20;$data22;$data23;$data24;$data25;$data26;$data27;$data28");
-        }
+            foreach($queryJson as $d) {
+                $data1 = $d->id;
+                $data2 = $d->created_at;
+                $data3 = $d->deleted;
+                $data4 = $d->problemId;
+                $data5 = mb_convert_encoding($d->problem,"ISO-8859-1");
+                $data6 = mb_convert_encoding($d->description,"ISO-8859-1");
+                $data7 = mb_convert_encoding($d->appTitle,"ISO-8859-1");
+                $data8 = $d->appFieldId;
+                $data9 = mb_convert_encoding($d->appFieldName,"ISO-8859-1");
+                $data10 = url('/') . '/storage/' . $d->printScreen;
+                $data11 = $d->idDevice;
+                $data12 = mb_convert_encoding($d->device,"ISO-8859-1");
+                $data13 = $d->patternId;
+                $data14 = mb_convert_encoding($d->pattern,"ISO-8859-1");
+                $data15 = mb_convert_encoding($d->patternVersion,"ISO-8859-1");
+                $data16 = mb_convert_encoding($d->patternVersionDetailts,"ISO-8859-1");
+                $data17 = mb_convert_encoding($d->devideModel,"ISO-8859-1");
+                $data18 = mb_convert_encoding($d->version,"ISO-8859-1");
+                $data19 = $d->linkApp;
+                $data20 = mb_convert_encoding($d->origin,"ISO-8859-1");
+                //$data21 = $d->userId;
+                $data22 = $d->toolUsed;
+                $data23 = mb_convert_encoding($d->tool_problem,"ISO-8859-1");
+                $data24 = mb_convert_encoding($d->tool_problem_version,"ISO-8859-1");
+                $data25 = mb_convert_encoding($d->flow_identify_problem,"ISO-8859-1");
+                $data26 = mb_convert_encoding($d->assistive_technology_tool,"ISO-8859-1");
+                $data27 = mb_convert_encoding($d->tool_assistive,"ISO-8859-1");
+                $data28 = mb_convert_encoding($d->tool_assistive_version,"ISO-8859-1");
+                //$data29 = $d->updated_at;            
+                $escreve = fwrite($file, "\n$data1;$data2;$data3;$data4;$data5;$data6;$data7;$data8;$data9;$data10;$data11;$data12;$data13;$data14;$data15;$data16;$data17;$data18;$data19;$data20;$data22;$data23;$data24;$data25;$data26;$data27;$data28");
+            }
             fclose($file);
         };
 

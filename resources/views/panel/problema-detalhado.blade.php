@@ -1,6 +1,6 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+
 <x-layout title="Questões de Acessibilidade">
-
-
 
     <div class="container-fluid py-4">
       <div class="row">
@@ -8,192 +8,332 @@
           <div class="card my-4">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
               <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                <h6 class="text-white ps-3"> Problemas / Barreiras de Acessibilidade Avaliadas </h6>
+                <h6 class="text-white ps-3"> 
+                  Detalhes do Problema / Barreira de Acessibilidade para a avaliação criado em 
+                  @foreach($issues as $issue) {{date( 'd/m/Y',strtotime($issue->creationDate))}} @endforeach
+                </h6>
               </div>
             </div>            
+
+            <style>
+              .row-border{
+                /* background: #eff3f9; */
+                border: 1px solid #cbd0d7;
+                margin-bottom: 5px;
+                border-radius: 3px;
+                padding: 1px 4px;
+              }
+
+              .row-border strong{
+                font-weight:500;
+                color:#344767;
+                padding: 0px 2px;
+              }
+
+              .row-border p{
+                font-size:15px;
+                color: #000;
+                margin: 0px;
+                padding: 0px 2px;
+              }
+
+            </style>  
 
             <div class="card-body pt-4 pb-3">                
 
             @foreach($issues as $issue)
-            <div class="container">
-              <div class="row">
-                <div class="col-sm" style="background:#f0f2f5; border-radius: 7px;">                
-                  <strong class="title" style="color:#344767;"> Data: 
-                    <span style="font-weight: 300;color:#000;"> {{date( 'd/m/Y',strtotime($issue->creationDate))}} </span>                   
-                    <br />
-                  </strong>                   
-                  <strong class="title" style="color:#344767;"> Título do Problema: </strong>                   
-                    <span style="font-weight: 300;color:#000;"> {{$issue->problem}} </span>                   
-                    <br />
-                  <strong class="title" style="color:#344767;">Descrição: <span style="font-weight: 300;}">{{$issue->description}} </span> </strong>                  
-                </div>
-              </div>
-            </div>
-
-            <br />
-
+              
             <div class="container" style="border-radius: 7px;">
+
               <div class="row" >
-                <div class="col-sm" style="background:#f0f2f5;">
-                  <strong class="title" style="color:#344767;"> Aplicativo Móvel </strong>                
-                  <p style="color:#000;"> {{$issue->appTitle}} </p>
+
+                <!-- Col 1 -->
+                <div class="col-sm">
+
+                  <div class="row-border">
+                    <div>
+                      <strong class="title"> Nome do Aplicativo que está sendo testado </strong>
+                    </div>  
+                                    
+                    <div style="background:#fff;">
+                      <p style="color:#000;margin:0px"> {{$issue->appTitle}} </p>
+                    </div>
+                  </div>
+
+                  <div class="row-border">
+                    <div>
+                      <strong class="title"> Identificação do campo do aplicativo que está sendo testado </strong>
+                    </div>  
+                                    
+                    <div style="background:#fff;">
+                      @if($issue->appFieldName==null)
+                        <p style="color:#000;margin:0px"> - </p>
+                      @else
+                        <p style="color:#000;margin:0px"> {{$issue->appFieldName}} </p>
+                      @endif
+                    </div>
+                  </div>                  
+
+                  <div class="row-border">
+                    <div>
+                      <strong class="title"> Arquivo relacionado ao problema de acessibilidade encontrado no aplicativo </strong>
+                    </div>  
+                                    
+                    <div style="background:#fff;">
+                      @if($issue->printScreen==null)
+                        <p style="color:#000;">
+                          Não fornecido
+                        </p>  
+                        @else
+                        <!--<img src="{{asset('storage/'.$issue->printScreen)}}" />-->
+                        <p>                           
+                          <a href="{{asset('storage/'.$issue->printScreen)}}" target="_blank" style="color:#1b21e9;font-weight:300;"> 
+                            <span class="material-symbols-outlined">file_open</span>
+                            <span style="top: -7px;position: relative;">Visualizar arquivo</span> 
+                          </a> 
+                        </p>
+                      @endif
+                    </div>
+                  </div>
+
+                  <div class="row-border">
+                    <div>
+                      <strong class="title"> Fluxo utilizado na identificação do problema de acessibilidade </strong>
+                    </div>  
+                                    
+                    <div style="background:#fff;">
+                      @if($issue->flow_identify_problem==null)
+                        <p> - </p>
+                      @else
+                        <p style="color:#000;margin:0px"> {{$issue->flow_identify_problem}} </p>
+                      @endif                      
+                    </div>
+                  </div>
+
+                  <div class="row-border">
+                    <div>
+                      <strong class="title"> Link do Aplicativo que está sendo testado </strong>
+                    </div>  
+                                    
+                    <div style="background:#fff;">
+                      @if($issue->linkApp==null)
+                        <p style="color:#000;">
+                          Não fornecido
+                        </p>  
+                      @else                      
+                        <p> 
+                          <a href="{{$issue->linkApp}}" target="_blank" style="color:#1b21e9;font-weight:300;"> 
+                            <span class="material-symbols-outlined">link</span>
+                            <span style="top: -7px;position: relative;"> Link para acessar a página do aplicativo {{$issue->appTitle}} </span>
+                          </a>
+                        </p>
+                      @endif  
+                    </div>
+                  </div>
+
+                  <div class="row-border">
+                    <div>
+                      <strong class="title"> Título do Problema: </strong>
+                    </div>  
+                                    
+                    <div style="background:#fff;">
+                      <p style="color:#000;margin:0px"> {{$issue->problem}} </p>
+                    </div>
+                  </div>
+
+                  <div class="row-border">
+                    <div>
+                      <strong class="title"> Descrição do novo problema de acessibilidade </strong>
+                    </div>  
+                                    
+                    <div style="background:#fff;">
+                      <p style="color:#000;margin:0px"> {{$issue->description}} </p>
+                    </div>
+                  </div>
+
+
+                  <div class="row-border">
+                    <div>
+                      <strong class="title"> Dispositivo Móvel </strong>
+                    </div>  
+                                    
+                    <div style="background:#fff;">
+                      <p style="color:#000;margin:0px"> 
+                        <span class="material-symbols-outlined">smartphone</span>
+                        <span style="top: -7px;position: relative;"> {{$issue->device}} </span>
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="row-border">
+                    <div>
+                      <strong class="title"> Modelo do Dispositivo Móvel </strong>
+                    </div>  
+                                    
+                    <div style="background:#fff;">
+                      @if($issue->devideModel==null)
+                        <p> - </p>
+                      @else
+                      <p style="color:#000;margin:0px"> {{$issue->devideModel}} </p>
+                      @endif
+                      
+                    </div>
+                  </div>
+
+                  <div class="row-border">
+                    <div>
+                      <strong class="title"> Versão do Dispositivo Móvel </strong>
+                    </div>  
+                                    
+                    <div style="background:#fff;">
+                      @if($issue->version==null)
+                        <p> - </p>
+                      @else
+                        <p style="color:#000;margin:0px"> {{$issue->version}}  </p>
+                      @endif
+                      
+                    </div>
+                  </div>
+
+                  
+
+                 
+                  
                 </div>
 
-                <div class="col-sm" style="background:#f0f2f5;">
-                  <strong class="title" style="color:#344767;"> Id do Campo do Aplicativo  </strong>                
-                  <p style="color:#000;"> {{$issue->appFieldId}} </p>
-                </div>
+                <!-- Col 2 -->
 
-                <div class="col-sm" style="background:#f0f2f5;">
-                  <strong class="title" style="color:#344767;"> Nome do Campo do Aplicativo </strong>                
-                  <p style="color:#000;"> {{$issue->appFieldName}}  </p>
-                </div>
+                <div class="col-sm">
 
-                <div class="col-sm" style="background:#f0f2f5;">                  
-                  <strong class="title" style="color:#344767;"> Link do Aplicativo </strong>                
-                  <p> <a href="{{$issue->linkApp}}" target="_blank" style="color:#1b21e9;font-weight:300;"> Aplicativo {{$issue->appTitle}} </a> </p>
-                </div>
+                                    
+                  <div class="row-border">
+                    <div>
+                      <strong class="title"> Guia de acessibilidade utilizado como referência </strong>
+                    </div>  
+                                    
+                    <div style="background:#fff;">
+                      @if($issue->pattern=='Nenhum')
+                        <p style="color:#bf0000;margin:0px"> {{$issue->pattern}} </p>
+                      @else
+                        <p style="color:#000;margin:0px"> {{$issue->pattern}} </p>
+                      @endif                      
+                    </div>
+                  </div>
 
-                <div class="col-sm" style="background:#f0f2f5;">
-                <strong class="title" style="color:#344767;">  Arquivo Relacionado ao Problema de Acessibilidade do Aplicativo </strong>                
-                  @if($issue->printScreen==null)
-                  <p style="color:#000;">
-                    Sem arquivo
-                  </p>  
-                  @else
-                  <!--<img src="{{asset('storage/'.$issue->printScreen)}}" />-->
-                  <p> 
-                    <a href="{{asset('storage/'.$issue->printScreen)}}" download style="color:#1b21e9;font-weight:300;"> Download </a>
-                    &nbsp;&nbsp;
-                    <a href="{{asset('storage/'.$issue->printScreen)}}" target="_blank" style="color:#1b21e9;font-weight:300;"> Visualizar </a> 
-                  </p>
-                  @endif                  
-                </div>
+                  @if($issue->pattern!='Nenhum')
+                  <div class="row-border">
+                    <div>
+                      <strong class="title"> Versão do Guia de Acessibilidade </strong>
+                    </div>  
+                                    
+                    <div style="background:#fff;">
+                      <p style="color:#000;margin:0px"> {{$issue->patternVersion}} </p>
+                    </div>
+                  </div>
+
+                  <div class="row-border">
+                    <div>
+                      <strong class="title"> Detalhes (princípio, diretriz etc), do guia de acessibilidade </strong>
+                    </div>  
+                                    
+                    <div style="background:#fff;">
+                      <p style="color:#000;margin:0px"> {{$issue->patternVersionDetailts}} </p>
+                    </div>
+                  </div>
+                  @endif
+
+                  <div class="row-border">
+                    <div>
+                      <strong class="title"> Utilizou alguma ferramenta na identifcação do problema de acessibilidade? </strong>
+                    </div>  
+                                    
+                    <div style="background:#fff;">
+                      @if($issue->toolUsed==0) 
+                        <p style="color:#bf0000;"> 
+                          Não
+                        </p>
+                      @else
+                        <p style="color:#000;"> 
+                          Sim
+                        </p>
+                      @endif
+                    </div>
+                  </div>
+                  
+                  @if(!$issue->toolUsed==0)
+                  <div class="row-border">
+                    <div>
+                      <strong class="title"> Ferramenta utilizada na identificação do problema de acessibilidade</strong>
+                    </div>  
+                                    
+                    <div style="background:#fff;">
+                      <p style="color:#000;margin:0px"> {{$issue->tool_problem}} </p>
+                    </div>
+                  </div>
+
+                  <div class="row-border">
+                    <div>
+                      <strong class="title"> Versão da Ferramenta de acessibilidade que identificou o problema </strong>
+                    </div>  
+                                    
+                    <div style="background:#fff;">
+                      <p style="color:#000;margin:0px"> {{$issue->tool_problem_version}} </p>
+                    </div>
+                  </div>
+                  @endif
+                  
+                  <div class="row-border">
+                    <div>
+                      <strong class="title"> Utilizou alguma ferramenta de tecnologia assistiva? </strong>
+                    </div>  
+                                    
+                    <div style="background:#fff;">
+                      @if($issue->assistive_technology_tool==0) 
+                        <p style="color:#bf0000;"> 
+                          Não
+                        </p>
+                      @else
+                        <p style="color:#000;"> 
+                          Sim
+                        </p>
+                      @endif
+                    </div>
+                  </div>
+
+                  @if(! $issue->assistive_technology_tool==0)
+                  <div class="row-border">
+                    <div>
+                      <strong class="title"> Qual o nome da ferramenta de tecnologia assistiva utilizada? </strong>
+                    </div>  
+                                    
+                    <div style="background:#fff;">
+                      <p style="color:#000;margin:0px"> {{$issue->tool_assistive}} </p>
+                    </div>
+                  </div>
+
+                  <div class="row-border">
+                    <div>
+                      <strong class="title"> Qual a versão da ferramenta de tecnologia assistiva utilizada? </strong>
+                    </div>  
+                                    
+                    <div style="background:#fff;">
+                      <p style="color:#000;margin:0px"> {{$issue->tool_assistive_version}} </p>
+                    </div>
+                  </div>
+                  @endif
+
+                  <div class="row-border">
+                    <div>
+                      <strong class="title"> O problema foi cadastrado por meio da Aplicação Web ou utilizando a API? </strong>
+                    </div>  
+                                    
+                    <div style="background:#fff;">
+                      <p style="color:#000;margin:0px"> {{$issue->origin}} </p>
+                    </div>
+                  </div>  
+                
               </div>
             </div>                        
-
-            <br />
-
-            <div class="container" style="border-radius: 7px;">
-              <div class="row">
-                <div class="col-sm" style="background:#f0f2f5;">
-                  <strong class="title" style="color:#344767;">  Fluxo utilizado na identificação do Problema de Acessibilidade do Aplicativo </strong>
-                  <p style="color:#000;">
-                    {{$issue->flow_identify_problem}}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <br />
-
-            <div class="container">
-              <div class="row">
-                <div class="col-sm" style="background:#f0f2f5;">
-                  <strong class="title" style="color:#344767;"> Dispositivo Móvel  </strong>                
-                  <p style="color:#000;"> {{$issue->device}} </p>
-                </div>
-
-                <div class="col-sm" style="background:#f0f2f5;">                  
-                  <strong class="title" style="color:#344767;"> Modelo do Dispositivo Móvel </strong>                
-                  <p style="color:#000;"> {{$issue->devideModel}} </p>
-                </div>
-
-                <div class="col-sm" style="background:#f0f2f5;">
-                  <strong class="title" style="color:#344767;"> Versão do Dispositivo Móvel </strong>                
-                  <p style="color:#000;"> {{$issue->version}} </p>
-                </div>                                
-              </div>
-            </div>
-
-            <br />
-
-            <div class="container">
-              <div class="row">
-                  <div class="col-sm" style="background:#f0f2f5;">
-                  <strong class="title" style="color:#344767;"> Guia de Acessibilidade </strong>                
-                  <p style="color:#000;"> {{$issue->pattern}} </p>
-                </div>
-
-                <div class="col-sm" style="background:#f0f2f5;">
-                  
-                <strong class="title" style="color:#344767;"> Versão do Guia de Acessibilidade </strong>                
-                  <p style="color:#000;"> {{$issue->patternVersion}} </p>
-                </div>
-
-                <div class="col-sm" style="background:#f0f2f5;">                 
-                  <strong class="title" style="color:#344767;"> Detalhes do Princípio do Guia de Acessibilidade </strong>                
-                  <p style="color:#000;"> {{$issue->patternVersionDetailts}} </p>
-                </div>                                
-
-                <div class="col-sm" style="background:#f0f2f5;">                 
-                  <strong class="title" style="color:#344767;"> Origem </strong>                
-                  <p style="color:#000;"> {{$issue->origin}} </p>       
-                </div>                              
-
-              </div>
-            </div>
-
-            <br />
-
-            <div class="container">
-              <div class="row">
-
-                <div class="col-sm" style="background:#f0f2f5;">
-                  <strong class="title" style="color:#344767;"> Utilizou alguma ferramenta?  </strong>                
-                  @if($issue->toolUsed==0) 
-                  <p style="color:#000;"> 
-                    Não
-                  </p>
-                  @else
-                  <p style="color:#000;"> 
-                    Sim
-                  </p>
-                  @endif
-                </div>
-
-                  <div class="col-sm" style="background:#f0f2f5;">
-                    <strong class="title" style="color:#344767;"> Ferramenta de Acessibilidade que identificou o problema</strong> 
-                    <p style="color:#000;"> {{$issue->tool_problem}} </p>
-                  </div>
-
-                  <div class="col-sm" style="background:#f0f2f5;">
-                    <strong class="title" style="color:#344767;"> Versão Ferramenta de Acessibilidade que identificou o problema</strong> 
-                    <p style="color:#000;"> {{$issue->tool_problem_version}} </p>
-                  </div>
-              </div>
-            </div>
-
-            <br />
-
-            <div class="container">
-              <div class="row">
-                <div class="col-sm" style="background:#f0f2f5;">
-                  <strong class="title" style="color:#344767;"> Utilizou ferramenta de tecnologia assistiva?  </strong>                
-                  @if($issue->assistive_technology_tool==0) 
-                  <p style="color:#000;"> 
-                    Não
-                  </p>
-                  @else
-                  <p style="color:#000;"> 
-                    Sim
-                  </p>
-                  @endif
-                </div>
-
-                <div class="col-sm" style="background:#f0f2f5;">                  
-                  <strong class="title" style="color:#344767;"> Qual ferramenta de tecnologia assistiva?  </strong>                
-                  <p style="color:#000;"> {{$issue->tool_assistive}} </p>
-                </div>
-
-                <div class="col-sm" style="background:#f0f2f5;">
-                  <strong class="title" style="color:#344767;"> Versão da ferramenta de tecnologia assistiva  </strong>                
-                  <p style="color:#000;"> {{$issue->tool_assistive_version}} </p>
-                </div>                                
-              </div>
-            </div>
-
-            <br />
           
             @endforeach
                   
@@ -259,7 +399,7 @@
 
                           <div class="input-group input-group-outline my-3">                              
                             <select class="form-select form-select-lg" id="" name="severityId" style="border: 1px solid #d2d6da;border-radius: 0.375rem;padding-left: 10px;">
-                              <option value="0"> * Escolha um Nível de criticidade </option>                                
+                              <option value="0"> * Escolha um Nível de gravidade </option>                                
                               @foreach($severityLevel as $sl)                                    
                                 <option value="{{$sl->id}}" @if(old('severityLevelId')==$sl->id) {{'selected'}} @endif > {{$sl->severity}} </option>                                        
                               @endforeach                        
@@ -361,14 +501,14 @@
                             @if($a->problem == 0)
                               <p class="mb-0 text-sm" style="color:#018906;"> <i class="material-icons opacity-10"> sentiment_very_satisfied </i> NÃO</p>      
                             @else
-                              <p class="mb-0 text-sm" style="color:#F44335;"> <i class="material-icons opacity-10"> mood_bad </i> SIM</p>      
+                              <p class="mb-0 text-sm" style="color:#cf0404;"> <i class="material-icons opacity-10"> mood_bad </i> SIM</p>      
                             @endif                                                    
                           </div>
                         </td>
 
                         <td>
                           @if($a->justification == null)
-                            -
+                              <p style="color:#000;"> - </p>
                             @else
                               <p style="color:#000;"> {{$a->justification}} </p>  
                             @endif                                                    

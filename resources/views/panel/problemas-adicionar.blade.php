@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 <x-layout title="Problemas de Acessibilidade">
 
   <style>
@@ -83,17 +84,20 @@
             <!-- Campos referentes ao aplicativo que está sendo testado -->
 
             <div class="input-group input-group-outline my-3">                    
-            <label for="appTitle" class="lab-center"> * Nome do Aplicativo que está sendo testado </label>
+              <label for="appTitle" class="lab-center">
+               * Nome do Aplicativo que está sendo testado
+               <!-- <span class="material-symbols-outlined" title="aaaa">info</span>-->
+              </label>
               <input type="text" class="form-control" id="appTitle" name="appTitle" placeholder="" value="{{old('appTitle')}}">
             </div>
 
-            <div class="input-group input-group-outline my-3">                    
+            <div class="input-group input-group-outline my-3" style="display:none;">                    
             <label for="appFieldId" class="lab-center">Id do Campo do Aplicativo que está sendo testado  </label>
               <input type="text" class="form-control" id="appFieldId" name="appFieldId" placeholder="" value="{{old('appFieldId')}}">
             </div>
 
             <div class="input-group input-group-outline my-3">                    
-            <label for="appFieldName" class="lab-center">Nome do Campo do Aplicativo que está sendo testado </label>
+            <label for="appFieldName" class="lab-center">Identificação do campo do aplicativo que está sendo testado </label>
               <input type="text" class="form-control" id="appFieldName" name="appFieldName" placeholder="" value="{{old('appFieldName')}}">
             </div>  
             
@@ -138,7 +142,7 @@
 
               </style>
 
-              <div class="form-control">              
+              <div class="form-control" style="height: 38px;">              
               
                   <input type="file" id="file" class="inputfile" name="printScreen" onchange='uploadFile(this)' />
                   <label for="file">                  

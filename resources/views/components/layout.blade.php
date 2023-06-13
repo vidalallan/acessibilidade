@@ -148,6 +148,7 @@
             <span class="nav-link-text ms-1"> Problemas </span>
           </a>
         </li>
+        <!--
         <li class="nav-item">
           <a class="nav-link text-white" href="/problemas-pesquisar">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -156,6 +157,7 @@
             <span class="nav-link-text ms-1"> Pesquisar Problemas </span>
           </a>
         </li>
+        -->
         <li class="nav-item">
           <a class="nav-link text-white" href="/problemas-avaliados">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -222,8 +224,8 @@
           </div>
           <ul class="navbar-nav  justify-content-end">
             
-            <li class="nav-item d-flex align-items-center">
-              {{auth()->user()->name}} &nbsp;
+            <li class="nav-item d-flex align-items-center" style="color:#000;">
+              <span> Bem-vindo(a) {{auth()->user()->name}} &nbsp; </span>
               <a href="/logout" class="nav-link text-body font-weight-bold px-0">
                
                 <i class="fa fa-sign-out me-sm-1" aria-hidden="true" style="color:#000;"></i>

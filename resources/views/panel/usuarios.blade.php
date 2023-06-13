@@ -125,7 +125,8 @@
                            onclick="setaDadosModal({{$user->id}},'{{$user->name}}')">
 
                             <p class="text-xs font-weight-bold mb-0">
-                              <i class="material-icons opacity-10">close</i>                            
+                              <i class="material-icons opacity-10">delete</i>                            
+                              
                             </p>                        
                         </a> 
                         

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\SeverityLevel;
 use App\Http\Requests\SeverityLevelFormRequest;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class SeverityLevelController extends Controller
 {
@@ -174,7 +175,11 @@ class SeverityLevelController extends Controller
         on i.patternId = pa.id
         where i.deleted=0 and (select count(issueId) from tbAssessment a where a.deleted=0 and a.issueId =i.id) > 0 order by i.id desc';
 
-        $listProSevLev = DB::select($sql);
+        $listProSevLevPag = DB::select($sql);
+
+
+        $listProSevLev = $this->paginate($listProSevLevPag, 10);
+
 
         $severityLevel = SeverityLevel::where('deleted','=',0)->orderBy('id','desc')->get(); 
 
@@ -191,6 +196,19 @@ class SeverityLevelController extends Controller
         $severityLevelGroup = DB::select($sql);
 
         return view('panel.relatNivelGrav', compact('severityLevelGroup'));
+    }
+
+    //function control paginate
+    private function paginate($items, $perPage)
+    {
+        $currentPage = request()->query('page', 1);
+
+        $paginatedItems = array_slice($items, ($currentPage - 1) * $perPage, $perPage);
+
+        $paginatedData = new LengthAwarePaginator($paginatedItems, count($items), $perPage);
+        $paginatedData->setPath(request()->url());
+
+        return $paginatedData;
     }
 
 }

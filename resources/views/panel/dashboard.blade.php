@@ -4,7 +4,7 @@
       <!-- Count Add -->
       <div class="row">
 
-        @AdminOnly
+       
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
           <div class="card">
             <div class="card-header p-3 pt-2">
@@ -28,9 +28,9 @@
             </div>
           </div>
         </div>
-        @endAdminOnly
+       
 
-        @AdminOnly
+       
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
           <div class="card">
             <div class="card-header p-3 pt-2">
@@ -53,9 +53,9 @@
             </div>
           </div>
         </div>
-        @endAdminOnly
+       
 
-        @AdminOnly
+       
         <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
           <div class="card">
             <div class="card-header p-3 pt-2">
@@ -78,9 +78,9 @@
             </div>
           </div>
         </div>
-        @endAdminOnly
+       
 
-        @AdminOnly
+       
         <div class="col-xl-3 col-sm-6">
           <div class="card">
             <div class="card-header p-3 pt-2">
@@ -102,16 +102,44 @@
           </div>
         </div>
       </div>
-      @endAdminOnly
+      
 
       <!-- Gráficos -->
       
       <div class="row mt-4">
+        
+
+        <div class="col-lg-4 col-md-6 mt-4 mb-4">
+          <div class="card z-index-2  ">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
+              <div class="bg-gradient-success shadow-success border-radius-lg py-3 pe-1" style="background:#fff;">
+                <div class="chart" style="height: 200px;">
+                  <canvas id="chart-line" class="chart-canvas" height="170"></canvas>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">              
+              <a href="/relatorio-nivel-gravidade"> Problemas por Nível de Gravidade  </a> 
+              <br />
+              <a href="/relatorio-nivel-gravidade"> Problemas com pelo menos uma avaliação </a>
+              <br />
+              <a href="/problemas-frequentes"> Problemas mais frequentes e menos frequentes </a>
+              <hr class="dark horizontal">
+              <div class="d-flex ">                
+                <i class="material-icons opacity-10"> quiz </i>
+                <a href="/problemas">
+                  <p class="mb-0 text-sm"> Visualizar todos problemas cadastrados </p>
+                </a>                  
+              </div>              
+            </div>
+          </div>
+        </div>
+
         <div class="col-lg-4 col-md-6 mt-4 mb-4">
           <div class="card z-index-2 ">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
               <div class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1" style="background:#f56565;">
-                <div class="chart">
+                <div class="chart" style="height: 200px;">
                   <canvas id="chart-bars" class="chart-canvas" height="170"></canvas>
                 </div>
               </div>
@@ -121,31 +149,14 @@
               <a href="/relatorio-nivel-gravidade"> Problemas por Nível de Gravidade  </a> 
               <br />
               <a href="/relatorio-nivel-gravidade"> Problemas com pelo menos uma avaliação </a>
+              <br />
+              <a href="/problemas-frequentes"> Problemas mais frequentes e menos frequentes </a>
               <hr class="dark horizontal">
-              <div class="d-flex ">
-                <i class="material-icons text-sm my-auto me-1">schedule</i>
-                <p class="mb-0 text-sm"> campaign sent 2 days ago </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-6 mt-4 mb-4">
-          <div class="card z-index-2  ">
-            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
-              <div class="bg-gradient-success shadow-success border-radius-lg py-3 pe-1">
-                <div class="chart">
-                  <canvas id="chart-line" class="chart-canvas" height="170"></canvas>
-                </div>
-              </div>
-            </div>
-            <div class="card-body">
-              <h6 class="mb-0 "> Daily Sales </h6>
-              <p class="text-sm "> (<span class="font-weight-bolder">+15%</span>) increase in today sales. </p>
-              <hr class="dark horizontal">
-              <div class="d-flex ">
-                <i class="material-icons text-sm my-auto me-1">schedule</i>
-                <p class="mb-0 text-sm"> updated 4 min ago </p>
+              <div class="d-flex ">                
+                <i class="material-icons opacity-10"> quiz </i>
+                <a href="/problemas">
+                  <p class="mb-0 text-sm"> Visualizar todos problemas cadastrados </p>
+                </a>                  
               </div>
             </div>
           </div>
@@ -154,19 +165,25 @@
         <div class="col-lg-4 mt-4 mb-3">
           <div class="card z-index-2 ">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
-              <div class="bg-gradient-dark shadow-dark border-radius-lg py-3 pe-1">
-                <div class="chart">
+              <div class="bg-gradient-success shadow-dark border-radius-lg py-3 pe-1">
+                <div class="chart" style="height: 200px;">
                   <canvas id="chart-line-tasks" class="chart-canvas" height="170"></canvas>
                 </div>
               </div>
             </div>
             <div class="card-body">
-              <h6 class="mb-0 ">Completed Tasks</h6>
-              <p class="text-sm ">Last Campaign Performance</p>
+              <!-- <h6 class="mb-0 ">Total de Avaliações por Nível de Gravidade </h6> -->
+              <a href="/relatorio-nivel-gravidade"> -  </a> 
+              <br />
+              <a href="/relatorio-nivel-gravidade"> - </a>
+              <br />
+              <a href="/problemas-frequentes"> - </a>
               <hr class="dark horizontal">
-              <div class="d-flex ">
-                <i class="material-icons text-sm my-auto me-1">schedule</i>
-                <p class="mb-0 text-sm">just updated</p>
+              <div class="d-flex ">                
+                <i class="material-icons opacity-10"> quiz </i>
+                <a href="/problemas">
+                  <p class="mb-0 text-sm"> Visualizar todos problemas cadastrados </p>
+                </a>                  
               </div>
             </div>
           </div>
@@ -187,22 +204,10 @@
                   <p class="text-sm mb-0">
                     <i class="fa fa-check text-info" aria-hidden="true"></i>
                     <span class="font-weight-bold ms-1">
-                      Problemas / barreiras com mais avaliações realizadas.
+                      Top 10 dos Problemas / barreiras com mais avaliações realizadas.
                     </span> 
                   </p>
-                </div>
-                <div class="col-lg-6 col-5 my-auto text-end">
-                  <div class="dropdown float-lg-end pe-4">
-                    <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
-                      <i class="fa fa-ellipsis-v text-secondary"></i>
-                    </a>
-                    <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
-                      <li><a class="dropdown-item border-radius-md" href="javascript:;">Action</a></li>
-                      <li><a class="dropdown-item border-radius-md" href="javascript:;">Another action</a></li>
-                      <li><a class="dropdown-item border-radius-md" href="javascript:;">Something else here</a></li>
-                    </ul>
-                  </div>
-                </div>
+                </div>                
               </div>
             </div>
             <div class="card-body px-0 pb-2">
@@ -212,8 +217,6 @@
                     <tr>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Nº </th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Título</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Dispositivo</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aplicativo</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total <br />de Avaliações</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Avaliações <br /> Realizadas </th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Ações </th>
@@ -233,18 +236,11 @@
                       <td>
                         <div class="d-flex px-2 py-1">
                           <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm" style="color: #7e49e3;"> {{$issue->problemId}} </h6>
+                            <h6 class="mb-0 text-sm" style="color: #7e49e3;"> {{$issue->problemTit}} </h6>
                           </div>
                         </div>
-                      </td>
-                      <td>
-                        <div class="avatar-group mt-2">
-                          <h6 class="mb-0 text-sm"> {{$issue->device}} </h6>
-                        </div>
-                      </td>
-                      <td class="align-middle text-center text-sm">
-                        <span class="text-xs font-weight-bold"> {{$issue->appTitle}} </span>
-                      </td>
+                      </td>                      
+                      
                       <td class="align-middle">
                       <div class="avatar-group mt-2">
                           <h5 class="mb-0 text-sm text-center"> 
@@ -269,9 +265,9 @@
                       </td>
                       <td class="align-middle">
                         <div class="text-center">
-                          <a href="/problema-detalhado/{{$issue->id}}" title="Mais detalhes sobre o problema" class="btn btn-info " style="padding: 5px 10px;">
+                          <a href="/problemas-filtrar?searchBy=1&searchField={{$issue->problemTit}}" title="Mais detalhes sobre o problema" class="btn btn-info " style="padding: 5px 10px;">
                             <p class="text-xs font-weight mb-0">
-                              Detalhes
+                              Visualizar problemas
                             </p>                        
                           </a>
                         </div>
@@ -292,8 +288,13 @@
         <div class="col-lg-4 col-md-6">
           <div class="card h-100">
             <div class="card-header pb-0">
-              <h6> Aplicativos com mais avaliações realizadas </h6> 
-                           
+              <h6> Aplicativos com mais problemas cadastrados </h6>               
+              <p class="text-sm mb-0">
+                <i class="fa fa-check text-info" aria-hidden="true"></i>
+                <span class="font-weight-bold ms-1">
+                  Top 10 dos Aplicativos com mais problemas cadastrados.
+                </span> 
+              </p>                           
             </div>
             
             <div class="card-body p-3">
@@ -337,9 +338,9 @@
                       
                       <td class="align-middle">
                         <div class="text-center">
-                          <a href="query-filter?searchBy=3&searchField={{$issue->appTitle}}" title="Mais detalhes sobre o problema" class="btn btn-info " style="padding: 5px 10px;">
+                          <a href="/problemas-filtrar?searchBy=3&searchField={{$issue->appTitle}}" title="Mais detalhes sobre o problema" class="btn btn-info " style="padding: 5px 10px;">
                             <p class="text-xs font-weight mb-0">
-                              Detalhes
+                              Visualizar Problemas
                             </p>                        
                           </a>
                         </div>
@@ -360,19 +361,6 @@
      
     </div>
   
-
-    
-    @foreach($severityLevelGroup as $aa)            
-      {{$aa->total}},
-    @endforeach
-
-    <?php 
-      //$num4=array(17,28,32,47,55,69); 
-      //for($i=0;$i<count($num4);$i++){
-        //echo $num4[$i] . " ";
-      //}    
-    ?>
-
   <!--   Core JS Files   -->
   <script src="../assets/js/core/popper.min.js"></script>
   <script src="../assets/js/core/bootstrap.min.js"></script>
@@ -381,10 +369,7 @@
   <script src="../assets/js/plugins/chartjs.min.js"></script>
   <script>
     var ctx = document.getElementById("chart-bars").getContext("2d");
-
     
-
-
     new Chart(ctx, {
       type: "bar",
       data: {
@@ -475,23 +460,35 @@
     var ctx2 = document.getElementById("chart-line").getContext("2d");
 
     new Chart(ctx2, {
-      type: "line",
-      data: {
-        labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+      type: "pie",
+      data: {        
+        labels: [
+          @foreach($pieChart as $aa)            
+              "{{$aa->severity}}",
+            @endforeach
+        ],
+
         datasets: [{
-          label: "Mobile apps",
+          label: "",          
           tension: 0,
           borderWidth: 0,
-          pointRadius: 5,
-          pointBackgroundColor: "rgba(255, 255, 255, .8)",
-          pointBorderColor: "transparent",
-          borderColor: "rgba(255, 255, 255, .8)",
-          borderColor: "rgba(255, 255, 255, .8)",
-          borderWidth: 4,
-          backgroundColor: "transparent",
-          fill: true,
-          data: [50, 40, 300, 320, 500, 350, 200, 230, 500],
-          maxBarThickness: 6
+         // pointRadius: 5,
+          //pointBackgroundColor: "rgba(255, 255, 255, .8)",
+          pointBorderColor: "transparent",          
+          //borderColor: "rgba(255, 255, 255, .8)",
+         // borderWidth: 4,
+          //backgroundColor: "transparent",
+          backgroundColor: [ 
+            @foreach($pieChart as $aa)            
+              '{{$aa->severityColor}}',
+            @endforeach],
+          fill: false,
+          data: [
+            @foreach($pieChart as $aa)            
+              {{$aa->total}},
+            @endforeach
+          ],
+          maxBarThickness: 4
 
         }],
       },
@@ -500,26 +497,26 @@
         maintainAspectRatio: false,
         plugins: {
           legend: {
-            display: false,
+            display: true,
           }
         },
         interaction: {
-          intersect: false,
+          intersect: true,
           mode: 'index',
         },
         scales: {
           y: {
             grid: {
               drawBorder: false,
-              display: true,
-              drawOnChartArea: true,
+              display: false,
+              drawOnChartArea: false,
               drawTicks: false,
               borderDash: [5, 5],
-              color: 'rgba(255, 255, 255, .2)'
+              //color: 'rgba(255, 255, 255, .2)'
             },
             ticks: {
-              display: true,
-              color: '#f8f9fa',
+              display: false,
+              //color: '#f8f9fa',
               padding: 10,
               font: {
                 size: 14,
@@ -539,7 +536,7 @@
               borderDash: [5, 5]
             },
             ticks: {
-              display: true,
+              display: false,
               color: '#f8f9fa',
               padding: 10,
               font: {
@@ -558,9 +555,14 @@
     var ctx3 = document.getElementById("chart-line-tasks").getContext("2d");
 
     new Chart(ctx3, {
-      type: "line",
+      //type: "line",
+      type: "bar",
       data: {
-        labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        labels: [
+          @foreach($patternChart as $aa)            
+              "{{$aa->pattern}}",
+            @endforeach
+        ],
         datasets: [{
           label: "Mobile apps",
           tension: 0,
@@ -572,7 +574,11 @@
           borderWidth: 4,
           backgroundColor: "transparent",
           fill: true,
-          data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
+          data: [
+            @foreach($patternChart as $aa)            
+              "{{$aa->total}}",
+            @endforeach
+          ],
           maxBarThickness: 6
 
         }],

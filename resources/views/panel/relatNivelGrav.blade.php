@@ -1,11 +1,11 @@
-<x-layout title="Dispositivos">
+<x-layout title="Relatório dos problemas por nível de gravidade">
     <div class="container-fluid py-4">
       <div class="row">
         <div class="col-12">
           <div class="card my-4">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
               <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                <h6 class="text-white text-capitalize ps-3"> Dispositivos </h6>
+                <h6 class="text-white ps-3"> Relatório dos problemas por nível de gravidade </h6>
               </div>
             </div>            
 
@@ -16,7 +16,6 @@
             </div>-->
 
             <div class="card-body px-0 pb-2">
-
 
               <div class="card-body pt-4 pb-3">
                 <form action="/query-filter" method="get">
@@ -38,7 +37,6 @@
                   </div>
                 </form> 
               </div>
-
 
               <div class="table-responsive p-0">
 
@@ -174,6 +172,45 @@
                 </table>
               </div>
             </div>
+
+            <!-- Paginação -->
+
+            <div>          
+            
+            <style>
+
+              .page-item .page-link, .page-item span {
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: #000;
+                  padding: 0;
+                  margin: 0 8px;
+                  border-radius: 30% !important;
+                  width: 36px;
+                  height: 35px;
+                  font-size: 1rem;
+              }
+
+              .page-link.active, .active>.page-link {
+                  z-index: 3;
+                  color: var(--bs-pagination-active-color);
+                  background-color: #1a73e8;
+                  border-color: #1a73e8;
+              }
+             
+            </style>
+
+            <div class="container">
+              <!-- Exibir links de paginação -->
+              {{ $listProSevLev->render("pagination::bootstrap-4") }}
+            </div>
+
+          </div>
+
+
+
+
           </div>
         </div>
       </div>    

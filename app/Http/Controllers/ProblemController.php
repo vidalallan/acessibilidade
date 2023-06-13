@@ -34,15 +34,24 @@ class ProblemController extends Controller
         return $problems;
     }
 
-    public function commonProblemsView()
+    public function commonProblemsView(Request $request)
     {
+
+        if($request->order==null){
+            $order= 'desc';
+        }
+        else{
+            $order=$request->order;
+        }       
+
+
         $sql = "select p.problem, count(i.problemId) total from tbProblem p
                 inner join tbIssue i on
                 p.id = i.problemId
                 where i.deleted=0 
                 and p.deleted=0
                 group by i.problemId
-                order by count(i.problemId) desc";
+                order by count(i.problemId) $order";
        
         $problems = DB::select($sql);
 
