@@ -41,6 +41,7 @@
                       <legend style="font-size: 1rem;">
                         <input type="radio" name="problem" value="0" {{$assessment->problem==0 ? 'checked' : '' }} /> <span style="color:#000;"> NÃO </span>
                         <input type="radio" name="problem" value="1" {{$assessment->problem==1 ? 'checked' : '' }} style="margin-left:20px;" /> <span style="color:#000;"> SIM </span>
+                        <input type="radio" name="problem" value="2" {{$assessment->problem==2 ? 'checked' : '' }} style="margin-left:20px;" /> <span style="color:#000;"> NÃO TENHO CERTEZA </span>
                       </legend>
                   </fieldset>
 

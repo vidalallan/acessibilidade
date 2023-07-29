@@ -52,7 +52,7 @@
         <div class="card my-4">
           <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
             <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-              <h6 class="text-white text-capitalize ps-3"> Adicione o Problema / Barreira de acessibilidade </h6>
+              <h6 class="text-white ps-3"> Adicione o problema / Barreira de acessibilidade </h6>
             </div>
           </div>
 
@@ -85,7 +85,7 @@
 
             <div class="input-group input-group-outline my-3">                    
               <label for="appTitle" class="lab-center">
-               * Nome do Aplicativo que está sendo testado
+               * Nome ou título da aplicação que está sendo testada
                <!-- <span class="material-symbols-outlined" title="aaaa">info</span>-->
               </label>
               <input type="text" class="form-control" id="appTitle" name="appTitle" placeholder="" value="{{old('appTitle')}}">
@@ -97,18 +97,18 @@
             </div>
 
             <div class="input-group input-group-outline my-3">                    
-            <label for="appFieldName" class="lab-center">Identificação do campo do aplicativo que está sendo testado </label>
+            <label for="appFieldName" class="lab-center">Identificação do campo da aplicação que está sendo testada </label>
               <input type="text" class="form-control" id="appFieldName" name="appFieldName" placeholder="" value="{{old('appFieldName')}}">
             </div>  
             
             <div class="input-group input-group-outline my-3">                    
-            <label for="linkApp" class="lab-center"> Link do Aplicativo que está sendo testado </label>
+            <label for="linkApp" class="lab-center"> Link da aplicação que está sendo testada </label>
               <input type="text" class="form-control" id="linkApp" name="linkApp"  placeholder="" value="{{old('linkApp')}}">
             </div>
             
             <div class="input-group input-group-outline my-3">                                    
               <!-- <input type="file" title="Print da Tela do Aplicativo" name="printScreen" class="form-control inputFileHidden" id="" />-->
-              <label for="file" class="lab-center">Arquivo relacionado ao problema de acessibilidade no aplicativo que está sendo testado </label>
+              <label for="file" class="lab-center">Arquivo relacionado ao problema de acessibilidade na aplicação que está sendo testada </label>
               <style>
 
                 .inputfile-box {
@@ -149,7 +149,7 @@
                     <span class="file-button">
                       <i class="fa fa-upload" aria-hidden="true"></i>
                       &nbsp;&nbsp;
-                      Escolha o arquivo referente ao problema de acessibilidade no aplicativo
+                      Escolha o arquivo referente ao problema de acessibilidade na aplicação
                       <span id="file-name" class="file-box"></span>
                     </span>
                   </label>
@@ -176,7 +176,7 @@
 
              <!-- Campos do dispositivo móvel -->
              <div class="input-group input-group-outline my-3 form-control">            
-              <label for="idDevice" class="lab-center"> * Dispositivo Móvel utilizado </label>                                      
+              <label for="idDevice" class="lab-center"> * Dispositivo utilizado </label>                                      
                 <select class="form-select form-select-lg" id="idDevice" name="idDevice" style="border: 1px solid #d2d6da;border-radius: 0.375rem;padding-left: 10px;">
                   <option value="0"> * Escolha um dispositivo </option>
                   @foreach($devices as $device)                                    
@@ -186,12 +186,12 @@
               </div>
             
               <div class="input-group input-group-outline my-3">                    
-              <label for="devideModel" class="lab-center">Modelo do Dispositivo Móvel </label>
+              <label for="devideModel" class="lab-center">Modelo do dispositivo </label>
                 <input type="text" class="form-control" id="devideModel" name="devideModel" placeholder="" value="{{old('devideModel')}}">
               </div>
               
               <div class="input-group input-group-outline my-3">                    
-              <label for="version" class="lab-center"> Versão do Dispositivo Móvel  </label>
+              <label for="version" class="lab-center"> Versão do dispositivo </label>
                 <input type="text" class="form-control" id="version" name="version" placeholder="" value="{{old('version')}}">
               </div> 
 
@@ -276,7 +276,14 @@
                     document.getElementById("patternVersionDetailts").value="";                    
                   }
               }              
-            </script>            
+            </script>      
+            
+            <div class="input-group input-group-outline my-3">                    
+            <label for="labDevNote" class="lab-center"> Informações detalhadas referente ao problema e sua descrição. Exemplo: qual é o valor do contraste indicado pela ferramenta?    </label>
+              <input type="text" class="form-control" name="developerNote" placeholder="" >
+            </div>
+
+            
 
             <div class="input-group input-group-outline my-3 form-control">
             <label for="patternId" class="lab-center"> * Qual guia de acessibilidade foi utilizado como referência na identificação do problema de acessibilidade? </label>                                                  
@@ -298,9 +305,10 @@
               <input type="text" class="form-control" id="patternVersionDetailts" name="patternVersionDetailts" placeholder="" value="{{old('patternVersionDetailts')}}">
             </div>
 
+
               <div class="input-group input-group-outline my-3">                                  
               <fieldset class="input-group input-group-outline my-3">             
-              <label for="le" class="lab-center"> Utilizou ferramenta para identificar o problema? </label>                 
+              <label for="le" class="lab-center"> Utilizou alguma ferramenta para identificar o problema? </label>                 
                   <legend class="leg-sn" id="le" style="border: 1px solid #d2d6da;border-radius: 0.375rem;padding-left: 10px;">
                     <label for="toolUsed1"> 
                       <input type="radio" id="toolUsed1" name="toolUsed" value="0" checked /> <span style="color:#000;"> NÃO </span> 

@@ -20,7 +20,7 @@
                     <option value="0"> Escolha uma das opções </option>                  
                     <option value="1"> Título do problema </option>
                     <option value="2"> Dispositivo </option>
-                    <option value="3"> Aplicativo </option>
+                    <option value="3"> Aplicação </option>
                     <option value="4"> Guia de Acessibilidade </option>
                     <option value="5"> Problemas sem nenhuma avaliação </option>
                     <option value="6"> Problemas com pelo menos uma avaliação </option>
@@ -72,7 +72,7 @@
                   <thead>
                     <tr>                      
                       <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Data </th>
-                      <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Aplicativo </th>
+                      <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Aplicação </th>
                       <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Total de Avaliações </th>
                       <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Dispositivo </th>
                       <th class="text-uppercase text-sm font-weight-bolder opacity-7">Título do Problema</th>                                           

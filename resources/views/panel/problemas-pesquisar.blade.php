@@ -19,7 +19,7 @@
                     <option value="0"> Escolha uma das opções </option>                  
                     <option value="1"> Título do problema </option>
                     <option value="2"> Dispositivo </option>
-                    <option value="3"> Aplicativo </option>
+                    <option value="3"> Aplicação </option>
                     <option value="4"> Guia de Acessibilidade </option>
                     <option value="5"> Problemas sem nenhuma avaliação </option>
                     <option value="6"> Problemas com pelo menos uma avaliação </option>
@@ -70,13 +70,14 @@
                   <thead>
                     <tr>                      
                       <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Data </th>
-                      <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Aplicativo </th>
+                      <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Aplicação </th>
                       <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Total de Avaliações </th>
                       <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Dispositivo </th>
                       <th class="text-uppercase text-sm font-weight-bolder opacity-7">Título do Problema</th>                                           
                                             
                       <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Guia de Acessibilidade </th>                  
                       <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Ações </th>                                              
+                      <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Já avaliou? </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -151,7 +152,20 @@
                           }
                         </script>
 
-                      </td>                      
+                      </td>  
+                      
+                      <td>
+                         @foreach($idIssuetotUserAss as $a)
+                          @if($issue -> id == $a->id)
+                            <i class="material-icons opacity-10" style="font-weight: 900;
+                                                                        color: #169516;
+                                                                        font-size: 1.4em;
+                                                                        margin-left: 15px;">done
+                            </i>
+                            @break
+                          @endif                         
+                        @endforeach
+                      </td>
                     </tr>
                     @endforeach
                   </tbody>

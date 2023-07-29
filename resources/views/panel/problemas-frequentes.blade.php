@@ -16,11 +16,18 @@
               </h6>
 
               <h6 class="text-uppercase text-sm font-weight-bolder opacity-7" style="text-align:center;">
-                <a href="/problemas-frequentes?order=desc" style="color:#e91e63"> 
+                <a href="/problemas-frequentes?order=desc" style="color: #fff;
+                                                                  background: #e91e63;
+                                                                  border-radius: 5px;
+                                                                  padding: 8px 8px;"> 
                   + Mais frequentes&nbsp;
                 </a>
 
-                <a href="/problemas-frequentes?order=asc" style="color:#3173e1"> 
+                <a href="/problemas-frequentes?order=asc" style=" margin-left:10px;
+                                                                  color:#fff;
+                                                                  background:#3173e1;
+                                                                  border-radius: 5px;
+                                                                  padding: 8px 8px;"> 
                   - Menos frequentes
                 </a>
               </h6>

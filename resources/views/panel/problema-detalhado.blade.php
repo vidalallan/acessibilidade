@@ -39,11 +39,17 @@
 
             </style>  
 
-            <div class="card-body pt-4 pb-3">                
-
+            <div class="card-body pt-4 pb-3">     
+            
             @foreach($issues as $issue)
               
             <div class="container" style="border-radius: 7px;">
+
+            <a href="{{url('/problemas')}}" title="Voltar para todos os problemas" class="btn btn-info" style="padding: 5px 10px;">
+              <p class="text-xs font-weight mb-0">
+                Visualizar todos problemas 
+              </p>                        
+            </a> 
 
               <div class="row" >
 
@@ -52,7 +58,7 @@
 
                   <div class="row-border">
                     <div>
-                      <strong class="title"> Nome do Aplicativo que está sendo testado </strong>
+                      <strong class="title"> Nome da aplicação que está sendo testada </strong>
                     </div>  
                                     
                     <div style="background:#fff;">
@@ -62,7 +68,7 @@
 
                   <div class="row-border">
                     <div>
-                      <strong class="title"> Identificação do campo do aplicativo que está sendo testado </strong>
+                      <strong class="title"> Identificação do campo da aplicação que está sendo testada </strong>
                     </div>  
                                     
                     <div style="background:#fff;">
@@ -76,7 +82,7 @@
 
                   <div class="row-border">
                     <div>
-                      <strong class="title"> Arquivo relacionado ao problema de acessibilidade encontrado no aplicativo </strong>
+                      <strong class="title"> Arquivo relacionado ao problema de acessibilidade encontrado na aplicação </strong>
                     </div>  
                                     
                     <div style="background:#fff;">
@@ -112,7 +118,7 @@
 
                   <div class="row-border">
                     <div>
-                      <strong class="title"> Link do Aplicativo que está sendo testado </strong>
+                      <strong class="title"> Link da aplicação que está sendo testada </strong>
                     </div>  
                                     
                     <div style="background:#fff;">
@@ -124,7 +130,7 @@
                         <p> 
                           <a href="{{$issue->linkApp}}" target="_blank" style="color:#1b21e9;font-weight:300;"> 
                             <span class="material-symbols-outlined">link</span>
-                            <span style="top: -7px;position: relative;"> Link para acessar a página do aplicativo {{$issue->appTitle}} </span>
+                            <span style="top: -7px;position: relative;"> Link para acessar a página da aplicação {{$issue->appTitle}} </span>
                           </a>
                         </p>
                       @endif  
@@ -151,10 +157,20 @@
                     </div>
                   </div>
 
+                  <div class="row-border">
+                    <div>
+                      <strong class="title"> Informações detalhadas referente ao problema e sua descrição </strong>
+                    </div>  
+                                    
+                    <div style="background:#fff;">
+                      <p style="color:#000;margin:0px"> {{$issue->developerNote}} </p>
+                    </div>
+                  </div>
+
 
                   <div class="row-border">
                     <div>
-                      <strong class="title"> Dispositivo Móvel </strong>
+                      <strong class="title"> Dispositivo </strong>
                     </div>  
                                     
                     <div style="background:#fff;">
@@ -167,7 +183,7 @@
 
                   <div class="row-border">
                     <div>
-                      <strong class="title"> Modelo do Dispositivo Móvel </strong>
+                      <strong class="title"> Modelo do Dispositivo </strong>
                     </div>  
                                     
                     <div style="background:#fff;">
@@ -182,7 +198,7 @@
 
                   <div class="row-border">
                     <div>
-                      <strong class="title"> Versão do Dispositivo Móvel </strong>
+                      <strong class="title"> Versão do Dispositivo </strong>
                     </div>  
                                     
                     <div style="background:#fff;">
@@ -394,6 +410,7 @@
                               <legend style="font-size: 1rem;">
                                 <input type="radio" name="problem" value="0" checked /> <span style="color:#000;"> NÃO </span>
                                 <input type="radio" name="problem" value="1" style="margin-left:20px;" /> <span style="color:#000;"> SIM </span>
+                                <input type="radio" name="problem" value="2" style="margin-left:20px;" /> <span style="color:#000;"> NÃO TENHO CERTEZA </span>
                               </legend>
                           </fieldset>
 
@@ -407,7 +424,13 @@
                           </div>
 
                           <div class="input-group input-group-outline my-3">
-                            <textarea class="form-control" placeholder="Justificar opção escolhida" name="justification" style="height:100px"></textarea>  
+                              <label style="color:#000;">
+                                De acordo com as opções escolhidas, descreva como identificou essa resposta. (método, guia, ferramentas etc) .
+                              </label>
+                          </div>
+
+                          <div class="input-group input-group-outline my-3">                                                        
+                            <textarea class="form-control" placeholder="Descreva aqui suas considerações" name="justification" style="height:100px"></textarea>  
                           </div>
                                              
                           <div class="d-flex justify-content-end mb-3">                        
@@ -442,13 +465,12 @@
 
                     <div class="table-responsive card-body pt-4 pb-3">
                       <p class="">
-                        <span style="color:#000;"> Total de avaliações Realizadas: <span style="font-weight:500;"> @foreach($total as $t){{$t->yes + $t->no}} @endforeach </span> </span>                        
+                        <span style="color:#000;"> Total de avaliações Realizadas: <span style="font-weight:500;"> @foreach($total as $t){{$t->yes + $t->no +$t->noSure}} @endforeach </span> </span>                        
                         <span style="color:#cf0404;margin:0px 10px;"> 
                           Total de avaliações com Sim: 
                           <span style="color:#cf0404;font-weight:500;"> 
                             @foreach($total as $t)
-                              {{$t->yes}} - 
-                              <!-- {{$t->yes / ($t->yes + $t->no) *100}}% -->
+                              {{$t->yes}} -                               
                             @endforeach 
                           </span>
                         </span>                                                
@@ -457,8 +479,16 @@
                           Total de avaliações com NÃO: 
                           <span style="font-weight:500;"> 
                             @foreach($total as $t)
-                              {{$t->no}}
-                              <!-- {{$t->no / ($t->yes + $t->no) *100}}%-->
+                              {{$t->no}}                              
+                            @endforeach
+                          </span>
+                        </span> 
+
+                        <span style="color:#0a1d83;"> 
+                          Total de avaliações com NÃO TENHO CERTEZA: 
+                          <span style="font-weight:500;"> 
+                            @foreach($total as $t)
+                              {{$t->noSure}}                              
                             @endforeach
                           </span>
                         </span> 
@@ -468,7 +498,7 @@
                         <span style="color:#cf0404;">                           
                           <span style="font-weight:500;"> 
                             @foreach($total as $t)                              
-                              Sim: {{number_format($t->yes/$t->total * 100,0)}}% 
+                              {{number_format($t->yes/$t->total * 100,0)}}% avaliaram que É um problema de acessibilidade.
                             @endforeach 
                           </span>
                         </span>                                                
@@ -476,8 +506,15 @@
                         <span style="color:#018906;">                           
                           <span style="font-weight:500;"> 
                             @foreach($total as $t)                              
-                              Não: {{number_format($t->no/$t->total * 100,0)}}% 
-                              
+                              {{number_format($t->no/$t->total * 100,0)}}% avaliaram que NÃO É um problema de acessibilidade.                              
+                            @endforeach
+                          </span>
+                        </span>
+                        <br />
+                        <span style="color:#0a1d83;">                           
+                          <span style="font-weight:500;"> 
+                            @foreach($total as $t)                              
+                              {{number_format($t->noSure/$t->total * 100,0)}}% Não têm certeza se É ou NÃO É um problema de acessibilidade.                                
                             @endforeach
                           </span>
                         </span> 
@@ -490,7 +527,7 @@
                       <tr>
                         <th class="text-uppercase text-sm font-weight-bolder opacity-7">É um problema de acessibilidade?</th>
                         <th class="text-uppercase text-sm font-weight-bolder opacity-7 ps-2"> Justificativa </th>                      
-                        <th class="text-uppercase text-sm font-weight-bolder opacity-7 ps-2"> Criticidade </th>
+                        <th class="text-uppercase text-sm font-weight-bolder opacity-7 ps-2"> Gravidade </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -500,8 +537,10 @@
                           <div class="d-flex px-3 py-1">                         
                             @if($a->problem == 0)
                               <p class="mb-0 text-sm" style="color:#018906;"> <i class="material-icons opacity-10"> sentiment_very_satisfied </i> NÃO</p>      
-                            @else
+                            @elseif($a->problem == 1)
                               <p class="mb-0 text-sm" style="color:#cf0404;"> <i class="material-icons opacity-10"> mood_bad </i> SIM</p>      
+                            @else  
+                              <p class="mb-0 text-sm" style="color:#0a1d83;"> <i class="material-icons opacity-10"> mood_bad </i> NÃO TÊM CERTEZA</p>
                             @endif                                                    
                           </div>
                         </td>

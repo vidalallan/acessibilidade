@@ -118,6 +118,8 @@ class IssueController extends Controller
 
     public function indexView(){
 
+        //consulta dos problemas antes de colocar se o usuário logado já avaliou
+        /*
         $sql = 'select i.id,i.creationDate,p.problem,d.device,i.appTitle,pa.pattern,
 		(select count(issueId) from tbAssessment a where a.deleted=0 and a.issueId =i.id) totalAvaliacoes
 		from tbIssue i 
@@ -128,15 +130,37 @@ class IssueController extends Controller
         inner join tbPattern pa
         on i.patternId = pa.id
         where i.deleted=0 order by i.id desc';
+        */
+
+
+        $sql = 'select i.id,i.creationDate,p.problem,d.device,i.appTitle,pa.pattern,
+		(select count(issueId) from tbAssessment a where a.deleted=0 and a.issueId =i.id) totalAvaliacoes        
+		from tbIssue i 
+        inner join tbDevice d
+        on i.idDevice = d.idDevice
+        inner join tbProblem p
+        on i.problemId = p.id
+        inner join tbPattern pa
+        on i.patternId = pa.id                
+        where i.deleted=0        
+        order by i.id desc';
        
         $issuesPag = DB::select($sql);
 
         $issues = $this->paginate($issuesPag, 10);
         
         $devices = Device::all();        
-        $assessments = Assessment::all();        
+        $assessments = Assessment::all(); 
 
-        return view('panel.problemas', compact('issues', 'devices','assessments'));        
+        //para verificar quais usuários já fizeram avaliação em um determinado problema
+        $sqlIdIssuetotUserAss = 'SELECT i.id,a.userId FROM tbIssue i inner join tbAssessment a
+        on i.id = a.issueId
+        where i.deleted = 0 and a.userId = ' . auth()->user()->id .
+        ' order by i.id desc';
+
+        $idIssuetotUserAss = DB::select($sqlIdIssuetotUserAss);        
+
+        return view('panel.problemas', compact('issues', 'devices','assessments','idIssuetotUserAss'));        
     }
 
 
@@ -282,14 +306,14 @@ class IssueController extends Controller
 
 
         $sql = 'select i.id,i.creationDate,p.problem,d.device,i.appTitle,pa.pattern,
-		(select count(issueId) from tbAssessment a where a.issueId =i.id) totalAvaliacoes
+		(select count(issueId) from tbAssessment a where a.issueId =i.id) totalAvaliacoes        
 		from tbIssue i 
         inner join tbDevice d
         on i.idDevice = d.idDevice
         inner join tbProblem p
         on i.problemId = p.id
         inner join tbPattern pa
-        on i.patternId = pa.id
+        on i.patternId = pa.id        
         where i.deleted=0 '. $filter .'order by i.id desc';
        
         $issuesPag = DB::select($sql);
@@ -297,9 +321,16 @@ class IssueController extends Controller
         $issues = $this->paginate($issuesPag, 10);
         
         $devices = Device::all();        
-        $assessments = Assessment::all();        
+        $assessments = Assessment::all();    
+        
+        $sqlIdIssuetotUserAss = 'SELECT i.id,a.userId FROM tbIssue i inner join tbAssessment a
+        on i.id = a.issueId
+        where i.deleted = 0 and a.userId = ' . auth()->user()->id .
+        ' order by i.id desc';
 
-        return view('panel.problemas-pesquisar', compact('issues', 'devices','assessments'));        
+        $idIssuetotUserAss = DB::select($sqlIdIssuetotUserAss);
+
+        return view('panel.problemas-pesquisar', compact('issues', 'devices','assessments','idIssuetotUserAss'));        
     }
 
     public function filterProblemsByUser(Request $request){
@@ -379,7 +410,8 @@ class IssueController extends Controller
     public function indexAvaliacoesView(){                 
         $sql = 'SELECT i.id, i.idDevice, d.device,i.appTitle,i.creationDate, pro.problem problem1,pa.pattern,
         SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", 
-        SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no",         
+        SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no",
+        SUM(case when(a.problem=2)THEN 1 ELSE 0 END) AS "noSure",
         count(i.id) "total"
         from tbAssessment a 
         inner join tbIssue i 
@@ -408,6 +440,7 @@ class IssueController extends Controller
         $sql = 'SELECT i.id, p.problem problemTit, d.device,i.problemId, 
         SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", 
         SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no",         
+        SUM(case when(a.problem=2)THEN 1 ELSE 0 END) AS "noSure",
         count(i.problemId) "total"
         from tbAssessment a 
         inner join tbIssue i 
@@ -498,7 +531,8 @@ class IssueController extends Controller
         
         $sql = 'SELECT pro.problem problem1,i.id, i.creationDate, i.idDevice, d.device,i.appTitle,pa.pattern, 
         SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", 
-        SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no",         
+        SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no", 
+        SUM(case when(a.problem=2)THEN 1 ELSE 0 END) AS "noSure",        
         count(i.id) "total"
         from tbAssessment a 
         inner join tbIssue i 
@@ -557,7 +591,8 @@ class IssueController extends Controller
         //colocar i.title (problem)
         $sql = 'SELECT i.id, i.idDevice, d.device, ';
         $sql .= 'SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", ';
-        $sql .= 'SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no", ';        
+        $sql .= 'SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no", ';
+        $sql .= 'SUM(case when(a.problem=2)THEN 1 ELSE 0 END) AS "noSure", ';                
         $sql .= 'count(i.id) "total" ';
         $sql .= 'from tbAssessment a ';
         $sql .= 'inner join tbissue i ';
@@ -597,7 +632,8 @@ class IssueController extends Controller
             //colocar i.title
         $sql = 'SELECT i.id, i.idDevice, d.device,a.severityId, ';
         $sql .= 'SUM(case WHEN(a.problem=1)THEN 1 ELSE 0 END) AS "yes", ';
-        $sql .= 'SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no", ';        
+        $sql .= 'SUM(case when(a.problem=0)THEN 1 ELSE 0 END) AS "no", ';
+        $sql .= 'SUM(case when(a.problem=2)THEN 1 ELSE 0 END) AS "noSure", ';        
         $sql .= 'count(i.id) "total" ';
         $sql .= 'from tbAssessment a ';
         $sql .= 'inner join tbIssue i ';
@@ -697,7 +733,7 @@ class IssueController extends Controller
         $issue -> patternVersion = $request->pattern_version;
         $issue -> patternVersionDetailts = $request-> pattern_details;
         $issue -> idDevice = $request-> device_id;
-        $issue -> devideModel = $request-> devide_model;        
+        $issue -> devideModel = $request-> device_model;        
         $issue -> version = $request-> device_version;
         $issue -> appTitle = $request-> title_app;
         $issue -> linkApp = $request-> link_app;   
@@ -707,6 +743,7 @@ class IssueController extends Controller
         $issue -> flow_identify_problem = $request-> flow_identify_problem;
         $issue -> assistive_technology_tool = $request-> assistive_technology_tool;
         $issue -> tool_assistive = $request-> tool_assistive;
+        $issue -> developerNote = $request -> developer_note;
         $issue -> tool_assistive_version = $request-> tool_assistive_version;        
         $issue -> origin = "API";
         $issue -> userId = auth()->user()->id;  
@@ -780,7 +817,8 @@ class IssueController extends Controller
         $issue -> flow_identify_problem = $request-> flow_identify_problem;
         $issue -> assistive_technology_tool = $request-> assistive_technology_tool;
         $issue -> tool_assistive = $request-> tool_assistive;
-        $issue -> tool_assistive_version = $request-> tool_assistive_version;        
+        $issue -> tool_assistive_version = $request-> tool_assistive_version;  
+        $issue -> developerNote = $request -> developerNote;      
         $issue -> origin = "web";
         $issue -> userId = auth()->user()->id;  
         $issue -> created_at = date('Y-m-d H:i:s');
@@ -874,6 +912,7 @@ class IssueController extends Controller
         $issue->printScreen=$path;
 
 
+        $issue->developerNote = $request->developerNote;
 
         $issue->fill(
             array(
@@ -888,6 +927,7 @@ class IssueController extends Controller
                 'devideModel' => $request->devideModel,
                 'version' => $request->version,
                 'appTitle' => $request->appTitle,
+                
                 'linkApp' => $request -> linkApp,
                 'toolUsed' => $request -> toolUsed,
                 'tool_problem' => $request -> tool_problem,

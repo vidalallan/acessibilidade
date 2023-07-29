@@ -113,22 +113,25 @@
           <div class="card z-index-2  ">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
               <div class="bg-gradient-success shadow-success border-radius-lg py-3 pe-1" style="background:#fff;">
-                <div class="chart" style="height: 200px;">
-                  <canvas id="chart-line" class="chart-canvas" height="170"></canvas>
-                </div>
+                  <h6 style="color:#212529 ;padding-left:20px;"> Problemas por nível de gravidade </h6>                  
+                  <div class="chart" style="height: 200px;">                      
+                    <canvas id="chart-line" class="chart-canvas" height="170"></canvas>
+                  </div>
               </div>
             </div>
-            <div class="card-body">              
+            <div class="card-body">  
+              <!--            
               <a href="/relatorio-nivel-gravidade"> Problemas por Nível de Gravidade  </a> 
               <br />
               <a href="/relatorio-nivel-gravidade"> Problemas com pelo menos uma avaliação </a>
               <br />
               <a href="/problemas-frequentes"> Problemas mais frequentes e menos frequentes </a>
               <hr class="dark horizontal">
+              -->
               <div class="d-flex ">                
                 <i class="material-icons opacity-10"> quiz </i>
-                <a href="/problemas">
-                  <p class="mb-0 text-sm"> Visualizar todos problemas cadastrados </p>
+                <a href="/relatorio-nivel-gravidade">                
+                  <p class="mb-0 text-sm"> Problemas por Nível de Gravidade </p>
                 </a>                  
               </div>              
             </div>
@@ -138,24 +141,28 @@
         <div class="col-lg-4 col-md-6 mt-4 mb-4">
           <div class="card z-index-2 ">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
-              <div class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1" style="background:#f56565;">
+              <div class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1" style="background:#f56565;">              
+                <h6 style="color: #fff;padding-left:10px;"> Problemas por nível de gravidade </h6>
                 <div class="chart" style="height: 200px;">
                   <canvas id="chart-bars" class="chart-canvas" height="170"></canvas>
                 </div>
               </div>
             </div>
+            
             <div class="card-body">
               <!-- <h6 class="mb-0 ">Total de Avaliações por Nível de Gravidade </h6> -->
+              <!--
               <a href="/relatorio-nivel-gravidade"> Problemas por Nível de Gravidade  </a> 
               <br />
               <a href="/relatorio-nivel-gravidade"> Problemas com pelo menos uma avaliação </a>
               <br />
               <a href="/problemas-frequentes"> Problemas mais frequentes e menos frequentes </a>
               <hr class="dark horizontal">
+              -->
               <div class="d-flex ">                
-                <i class="material-icons opacity-10"> quiz </i>
-                <a href="/problemas">
-                  <p class="mb-0 text-sm"> Visualizar todos problemas cadastrados </p>
+                <i class="material-icons opacity-10"> quiz </i>                
+                <a href="/problemas-avaliados">  
+                  <p class="mb-0 text-sm"> Problemas com pelo menos uma avaliação </p>
                 </a>                  
               </div>
             </div>
@@ -166,6 +173,7 @@
           <div class="card z-index-2 ">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2 bg-transparent">
               <div class="bg-gradient-success shadow-dark border-radius-lg py-3 pe-1">
+                <h6 style="color:#fff;padding-left:10px;"> Guias de acessibilidade mais citados </h6>
                 <div class="chart" style="height: 200px;">
                   <canvas id="chart-line-tasks" class="chart-canvas" height="170"></canvas>
                 </div>
@@ -173,16 +181,18 @@
             </div>
             <div class="card-body">
               <!-- <h6 class="mb-0 ">Total de Avaliações por Nível de Gravidade </h6> -->
+              <!--
               <a href="/relatorio-nivel-gravidade"> -  </a> 
               <br />
               <a href="/relatorio-nivel-gravidade"> - </a>
               <br />
               <a href="/problemas-frequentes"> - </a>
               <hr class="dark horizontal">
+              -->
               <div class="d-flex ">                
                 <i class="material-icons opacity-10"> quiz </i>
-                <a href="/problemas">
-                  <p class="mb-0 text-sm"> Visualizar todos problemas cadastrados </p>
+                <a href="/problemas-frequentes">
+                  <p class="mb-0 text-sm"> Problemas mais frequentes e menos frequentes </p>
                 </a>                  
               </div>
             </div>
@@ -191,6 +201,30 @@
       </div>
       
       <!-- Fim Gráficos -->
+
+      <!--
+      <div class="card-body pt-4 pb-3">
+        <div class="col-lg-12 col-md-6 mb-md-0 mb-4">
+          <div class="card">
+            <div class="card-header pb-0">
+              <div class="row">
+               <p>
+                <a href="/problemas"> Visualizar todos problemas cadastrados </a>   
+               
+                <a href="/relatorio-nivel-gravidade"> Problemas por Nível de Gravidade  </a> 
+                  
+                <a href="/problemas-avaliados"> Problemas com pelo menos uma avaliação </a>
+                
+                <a href="/problemas-frequentes"> Problemas mais frequentes e menos frequentes </a>                 
+              </p>
+                
+              </div>  
+            </div>  
+          </div>    
+        </div>  
+      </div>
+      -->
+
 
       <br />
 
@@ -218,7 +252,12 @@
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Nº </th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Título</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total <br />de Avaliações</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Avaliações <br /> Realizadas </th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> 
+                        Das Avaliações Realizadas:
+                        <br /> Sim - avaliaram que é um problema
+                        <br /> Não - avaliaram que não é um problema
+                        <br /> Não têm certeza se é um problema
+                      </th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Ações </th>
                     </tr>
                   </thead>
@@ -257,8 +296,12 @@
                               Sim: {{$issue->yes}}                            
                             </span>                                                
                               
-                            <span class="text-center" style="color:#4CAF50;font-weight:500;"> 
+                            <span class="text-center" style="color:#4CAF50;margin:0px 10px;font-weight:500;"> 
                               Não: {{$issue->no}}
+                            </span>
+
+                            <span class="text-center" style="color:#0a1d83;font-weight:500;"> 
+                              Não têm certeza: {{$issue->noSure}}
                             </span>
                           </h6>
                         </div>
@@ -288,11 +331,11 @@
         <div class="col-lg-4 col-md-6">
           <div class="card h-100">
             <div class="card-header pb-0">
-              <h6> Aplicativos com mais problemas cadastrados </h6>               
+              <h6> Aplicações com mais problemas cadastrados </h6>               
               <p class="text-sm mb-0">
                 <i class="fa fa-check text-info" aria-hidden="true"></i>
                 <span class="font-weight-bold ms-1">
-                  Top 10 dos Aplicativos com mais problemas cadastrados.
+                  Top 10 das Aplicações com mais problemas cadastrados.
                 </span> 
               </p>                           
             </div>

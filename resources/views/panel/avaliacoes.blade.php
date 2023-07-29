@@ -6,7 +6,7 @@
           <div class="card my-4">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
               <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-                <h6 class="text-white text-capitalize ps-3"> Avaliações das Problemas de Acessibilidade realizadas pelo Usuário </h6>
+                <h6 class="text-white ps-3"> Avaliações dos Problemas de Acessibilidade realizadas pelo Usuário </h6>
               </div>
             </div>           
 
@@ -51,8 +51,10 @@
                         
                           @if($a->problem==0)
                             <h6 class="mb-0 text-sm"> Não </h6>      
-                          @else
+                          @elseif($a->problem==1)
                             <h6 class="mb-0 text-sm"> Sim </h6>      
+                          @else
+                          <h6 class="mb-0 text-sm"> Não tem certeza </h6>
                           @endif               
                             
                         </div>

@@ -42,9 +42,9 @@
                         <th class="text-uppercase text-sm font-weight-bolder opacity-7">Título do Problema</th>                      
                         <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Dispositivo </th>                      
                         <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Aplicativo </th>                      
-                        <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Padrão<br />de Acessibilidade </th>    
+                        <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Guia de <br />Acessibilidade </th>    
                         <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Total<br /> de Avaliações </th>
-                        <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Avaliações <br /> Realizadas </th>
+                        <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Das avaliações <br /> realizadas, acham que é um<br /> problema de acessibilidade </th>
                         <th class="text-uppercase text-sm font-weight-bolder opacity-7"> Percentual </th>
                         <th class="text-uppercase text-sm font-weight-bolder opacity-7"> &nbsp; </th>                                              
                       </tr>
@@ -66,20 +66,28 @@
                           <span style="color:#4CAF50;font-weight:500;"> 
                             Não: {{$issue->no}}
                           </span>                        
+
+                          <span style="color:#0a1d83;font-weight:500;"> 
+                            Não têm certeza: {{$issue->noSure}}
+                          </span>
                         </td>                      
                         <td>
-                        <span style="color:#F44335;margin:0px 10px;font-weight:500;"> 
+                          <span style="color:#F44335;margin:0px 10px;font-weight:500;"> 
                             {{number_format($issue->yes/$issue->total * 100,0)}}%                            
                           </span>                                                
                           
                           <span style="color:#4CAF50;font-weight:500;"> 
                             {{number_format($issue->no/$issue->total * 100,0)}}%                            
-                          </span>         
+                          </span>
+                          
+                          <span style="color:#0a1d83;margin:0px 10px;font-weight:500;"> 
+                            {{number_format($issue->noSure/$issue->total * 100,0)}}%                            
+                          </span>
                         </td>
                         <td>
-                          <a href="/problema-detalhado/{{$issue->id}}" title="Mais detalhes sobre o problema" class="btn btn-info " style="padding: 5px 10px;">
+                          <a href="/problema-detalhado/{{$issue->id}}" title="Mais detalhes sobre as avaliações realizadas" class="btn btn-info " style="padding: 5px 10px;">
                             <p class="text-xs font-weight mb-0">
-                              Detalhes
+                              Detalhes das avaliações
                             </p>                        
                           </a>                                                 
                         </td>                      
